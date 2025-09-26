@@ -1,0 +1,146 @@
+﻿<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ثبت‌نام راننده | ناجی راه</title>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/css/persian-datepicker.min.css">
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/persian-date@1.1.0/dist/persian-date.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/js/persian-datepicker.min.js"></script>
+<style>
+body {font-family: 'Vazir', sans-serif; margin:0; padding:0; background:#00c3ff;}
+.auth-wrap {display:flex; justify-content:center; align-items:center; min-height:100vh;}
+.auth-card {background:rgba(255,255,255,0.95); padding:40px 30px; border-radius:15px; box-shadow:0 8px 20px rgba(0,0,0,0.15); max-width:450px; width:90%;}
+.auth-title {text-align:center; color:#00c3ff; margin-bottom:10px; font-size:28px;}
+.auth-sub {text-align:center; color:#555; margin-bottom:20px;}
+.form-row {margin-bottom:20px; display:flex; flex-direction:column;}
+.form-row label {margin-bottom:5px; font-weight:bold; color:#333;}
+.form-row input {padding:10px 15px; border:1px solid #ccc; border-radius:8px; font-size:15px; transition:0.3s;}
+.form-row input:focus {border-color:#00c3ff; outline:none; box-shadow:0 0 5px rgba(0,195,255,0.5);}
+.actions {display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:15px;}
+.btn {padding:12px 20px; border:none; border-radius:8px; cursor:pointer; font-weight:bold; font-size:15px; transition:0.3s;}
+.btn-primary {background:#00c3ff; color:#fff;}
+.btn-primary:hover {background:#009ecb;}
+.btn-secondary {background:#ccc; color:#333; text-decoration:none; display:inline-block; text-align:center;}
+.btn-secondary:hover {background:#bbb;}
+.signup-footer {text-align:center; font-size:14px; color:#555; margin-top:10px;}
+.signup-footer a {color:#00c3ff; text-decoration:none; font-weight:bold;}
+.signup-footer a:hover {text-decoration:underline;}
+@media (max-width:500px){.actions {flex-direction:column;}} 
+</style>
+</head>
+<body>
+<div class="auth-wrap">
+  <div class="auth-card">
+    <h1 class="auth-title">ثبت‌نام راننده</h1>
+    <p class="auth-sub">لطفاً اطلاعات خود را با دقت وارد کنید</p>
+    <form id="signupForm">
+      <div class="form-row">
+        <label>نام و نام خانوادگی</label>
+        <input type="text" id="fullName" placeholder="مثلاً علی رضایی" required>
+      </div>
+      <div class="form-row">
+        <label>تاریخ تولد</label>
+        <input type="text" id="birthdate" placeholder="روز/ماه/سال" required readonly>
+      </div>
+      <div class="form-row">
+        <label>کد ملی</label>
+        <input type="text" id="nationalId" maxlength="10" placeholder="مثلاً 0012345678" required>
+      </div>
+      <div class="form-row">
+        <label>شماره پلاک راننده</label>
+        <input type="text" id="licensePlate" placeholder="مثلاً 12ب345-ایران" required>
+      </div>
+      <div class="form-row">
+        <label>شماره تماس</label>
+        <input type="tel" id="phone" placeholder="مثلاً 09123456789" required>
+      </div>
+      <div class="form-row">
+        <label>نوع خودرو</label>
+        <input type="text" id="carType" placeholder="مثلاً پژو 206" required>
+      </div>
+      <div class="form-row">
+        <label>رنگ خودرو</label>
+        <input type="text" id="carColor" placeholder="مثلاً سفید" required>
+      </div>
+      <div class="form-row">
+        <label>مدل خودرو</label>
+        <input type="text" id="carModel" placeholder="مثلاً 1399" required>
+      </div>
+      <div class="form-row">
+        <label>ایجاد رمز عبور</label>
+        <input type="password" id="password" placeholder="حداقل 6 کاراکتر" required>
+      </div>
+      <div class="form-row">
+        <label>تکرار رمز عبور</label>
+        <input type="password" id="confirmPassword" placeholder="رمز عبور را دوباره وارد کنید" required>
+      </div>
+      <div class="actions">
+        <button type="submit" class="btn btn-primary">ثبت‌نام</button>
+        <a href="driver-login.html" class="btn btn-secondary">ورود راننده</a>
+      </div>
+    </form>
+    <p class="signup-footer">اگر قبلاً ثبت‌نام کرده‌اید، برای ورود <a href="driver-login.html">اینجا کلیک کنید</a>.</p>
+  </div>
+</div>
+
+<script>
+$(document).ready(function(){
+  $('#birthdate').persianDatepicker({
+    format: 'YYYY/MM/DD',
+    autoClose: true,
+    initialValueType: 'gregorian',
+    calendar: {persian: true}
+  });
+
+  $('#signupForm').on('submit', async function(e){
+    e.preventDefault();
+
+    var pass = $('#password').val();
+    var confirmPass = $('#confirmPassword').val();
+    if(pass !== confirmPass){
+      alert('رمز عبور و تکرار آن یکسان نیست!');
+      return;
+    }
+
+    const driverData = {
+      fullName: $('#fullName').val(),
+      birthDate: $('#birthdate').val(),
+      nationalId: $('#nationalId').val(),
+      licensePlate: $('#licensePlate').val(),
+      phone: $('#phone').val(),
+      carType: $('#carType').val(),
+      carColor: $('#carColor').val(),
+      carModel: $('#carModel').val(),
+      password: pass
+    };
+
+    
+try {
+  const res = await fetch('https://naji-backend.onrender.com/api/drivers/signup', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(driverData)
+  });
+
+  const data = await res.json();
+  if(res.ok){
+    alert(data.message || "ثبت‌نام موفقیت‌آمیز بود!");
+    window.location.href = 'driver-login.html'; 
+  } else {
+    alert(data.message || "خطا در ثبت‌نام");
+  }
+} catch(err) {
+  console.error(err);
+  alert('خطا در ارتباط با سرور');
+}
+
+
+
+  });
+});
+</script>
+</body>
+</html>

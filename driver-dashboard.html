@@ -1,0 +1,323 @@
+﻿<!DOCTYPE html>
+<html lang="fa">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>داشبورد راننده حرفه‌ای</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<style>
+*{margin:0; padding:0; box-sizing:border-box; font-family:'Roboto',sans-serif;}
+body,html{height:100%; width:100%; background:#f0f2f5;}
+
+/* Map */
+#mapContainer{height:100vh; width:100%; position:relative;}
+#map{height:100%; width:100%; border-radius:8px;}
+
+/* Slide Panel Right */
+#slidePanel{
+  position:absolute;
+  top:0; right:-300px; /* مخفی خارج صفحه */
+  width:280px; height:100%;
+  background:#3b82f6; color:white;
+  padding:15px; transition:right 0.4s ease;
+  z-index:1000; overflow:auto;
+  border-top-left-radius:12px; border-bottom-left-radius:12px;
+}
+#slidePanel.open{right:0;}
+
+/* Panel Content */
+#slidePanel h2{margin-bottom:10px; text-align:center;}
+#slidePanel input, #slidePanel select{
+  width:100%; padding:10px; margin-bottom:10px; border-radius:6px; border:1px solid #d1d5db;
+}
+#slidePanel button{
+  width:100%; padding:10px; border:none; border-radius:6px; cursor:pointer; margin-top:5px;
+}
+.btn-primary{background:#3b82f6;color:white;}
+.btn-success{background:#10b981;color:white;}
+.btn-danger{background:#ef4444;color:white;}
+#photoPreview{width:100px;height:100px;border-radius:50%;object-fit:cover;margin:10px auto;display:block;}
+ul#driverInfo{list-style:none; padding-left:0; margin-bottom:10px;}
+ul#driverInfo li{padding:5px 0;}
+
+/* Toggle Button */
+#toggleBtn{
+  position:absolute; top:15px; right:15px;
+  background:#3b82f6;color:white;
+  border:none; border-radius:50%; width:50px; height:50px;
+  font-size:24px; cursor:pointer; z-index:1001;
+  display:flex; justify-content:center; align-items:center; box-shadow:0 2px 6px rgba(0,0,0,0.3);
+}
+</style>
+</head>
+<body>
+
+<div id="mapContainer">
+  <div id="map"></div>
+
+  <!-- Toggle Button -->
+  <button id="toggleBtn" onclick="togglePanel()">☰</button>
+
+  <!-- Slide Panel -->
+  <div id="slidePanel">
+    <h2>داشبورد راننده</h2>
+
+    <!-- اطلاعات راننده -->
+    <ul id="driverInfo"></ul>
+
+    <!-- آپلود عکس -->
+    <div>
+      <h3>آپلود عکس</h3>
+      <img id="photoPreview" src="" alt="پیش‌نمایش عکس">
+      <input type="file" id="photoInput" onchange="previewPhoto(event)">
+    </div>
+
+    <!-- نظر سنجی -->
+    <div>
+      <h3>نظر سنجی راننده</h3>
+      <select id="surveyRating">
+        <option value="">انتخاب کنید</option>
+        <option value="1">1 - خیلی بد</option>
+        <option value="2">2 - بد</option>
+        <option value="3">3 - متوسط</option>
+        <option value="4">4 - خوب</option>
+        <option value="5">5 - عالی</option>
+      </select>
+      <button class="btn-primary" onclick="submitSurvey()">ارسال</button>
+    </div>
+
+    <!-- فرم ثبت نام -->
+    <div>
+      <h3>ثبت نام</h3>
+      <input type="text" id="name" placeholder="نام">
+      <input type="text" id="phone" placeholder="شماره تماس">
+      <input type="text" id="carName" placeholder="نام خودرو">
+      <input type="text" id="carColor" placeholder="رنگ خودرو (مثل red یا #ff0000)">
+      <button class="btn-success" onclick="register()">ثبت نام</button>
+    </div>
+
+    <!-- دکمه‌های نقشه -->
+    <div style="margin-top:10px;">
+      <button class="btn-success" onclick="setCurrentLocation()">موقعیت من</button>
+      <button class="btn-primary" onclick="lockOrigin()">قفل مبدا</button>
+      <button class="btn-danger" onclick="unlockOrigin()">آزادسازی مبدا</button>
+      <button class="btn-primary" onclick="requestService()">درخواست</button>
+    </div>
+
+    <!-- اطلاعات مسیر -->
+    <div style="margin-top:10px; background:white; color:black; padding:10px; border-radius:8px;">
+      <strong>اطلاعات مسیر:</strong>
+      <p id="distance">فاصله: -</p>
+      <p id="duration">زمان تقریبی: -</p>
+    </div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<!-- socket.IO -->
+ <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<script>
+/* Map */
+const map = L.map('map').setView([35.6895,51.3890],13);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'&copy; OpenStreetMap'}).addTo(map);
+
+/* Slide Panel */
+function togglePanel(){ document.getElementById('slidePanel').classList.toggle('open'); }
+
+/* راننده */
+window.onload = function(){
+  const driverData = localStorage.getItem("driverData");
+  if(driverData){
+    fillDashboard(JSON.parse(driverData));
+  } else {
+    alert("ابتدا وارد شوید");
+    window.location.href = "driver-login.html";
+  }
+}
+
+function register(){
+  const data={
+    name:document.getElementById('name').value,
+    phone:document.getElementById('phone').value,
+    carName:document.getElementById('carName').value,
+    carColor:document.getElementById('carColor').value
+  };
+  localStorage.setItem("driverData",JSON.stringify(data));
+  fillDashboard(data);
+  alert("ثبت نام با موفقیت انجام شد!");
+}
+
+function fillDashboard(data){
+  const list = document.getElementById('driverInfo');
+  list.innerHTML = "";
+  const items = [
+    `نام: ${data.name}`,
+    `شماره: ${data.phone}`,
+    `خودرو: ${data.carName}`,
+    `رنگ خودرو: <span style="display:inline-block;width:15px;height:15px;background:${data.carColor};border:1px solid #000;margin-left:5px;vertical-align:middle;"></span> ${data.carColor}`
+  ];
+  items.forEach(text => {
+    const li = document.createElement('li');
+    li.innerHTML = text;
+    list.appendChild(li);
+  });
+}
+
+/* آپلود عکس */
+function previewPhoto(event){
+  const reader=new FileReader();
+  reader.onload=function(){document.getElementById('photoPreview').src=reader.result;}
+  reader.readAsDataURL(event.target.files[0]);
+}
+
+/* نظر سنجی */
+function submitSurvey(){
+  const rating=document.getElementById('surveyRating').value;
+  if(!rating){ alert("لطفا امتیاز خود را انتخاب کنید"); return; }
+  alert("با تشکر از نظر شما: "+rating+"/5");
+  document.getElementById('surveyRating').value = "";
+}
+
+/* نقشه مبدا و مقصد */
+let originMarker=null, destinationMarker=null, routeLine=null, liveMarker=null;
+
+map.on('click', function(e){
+  if(!originMarker){
+    originMarker=L.marker(e.latlng,{draggable:true}).addTo(map).bindPopup("مبدا").openPopup();
+  } else if(!destinationMarker){
+    destinationMarker=L.marker(e.latlng,{draggable:true}).addTo(map).bindPopup("مقصد").openPopup();
+  } else {
+    const choice = confirm("کدام را تغییر می‌خوای؟ OK = مبدا, Cancel = مقصد");
+    if(choice){ originMarker.setLatLng(e.latlng).bindPopup("مبدا").openPopup(); }
+    else { destinationMarker.setLatLng(e.latlng).bindPopup("مقصد").openPopup(); }
+    if(routeLine) map.removeLayer(routeLine);
+    if(liveMarker) map.removeLayer(liveMarker);
+  }
+});
+
+function setCurrentLocation(){
+  if(navigator.geolocation){
+    navigator.geolocation.getCurrentPosition(pos=>{
+      const latlng=[pos.coords.latitude,pos.coords.longitude];
+      if(originMarker){ originMarker.setLatLng(latlng); } 
+      else { originMarker=L.marker(latlng,{draggable:true}).addTo(map).bindPopup("مبدا").openPopup(); }
+      map.setView(latlng,14);
+    });
+  }else alert("امکان دریافت موقعیت وجود ندارد!");
+}
+
+function lockOrigin(){ if(originMarker){ originMarker.dragging.disable(); originMarker.bindPopup("مبدا (قفل)").openPopup(); } }
+function unlockOrigin(){ if(originMarker){ originMarker.dragging.enable(); originMarker.bindPopup("مبدا").openPopup(); } }
+
+function requestService(){
+  if(!originMarker || !destinationMarker){ alert("ابتدا مبدا و مقصد را تعیین کنید"); return; }
+  if(routeLine) map.removeLayer(routeLine);
+  if(liveMarker) map.removeLayer(liveMarker);
+
+  const origin=originMarker.getLatLng();
+  const dest=destinationMarker.getLatLng();
+  routeLine=L.polyline([origin,dest],{color:'blue',weight:4}).addTo(map);
+  map.fitBounds(routeLine.getBounds());
+
+  // فاصله و زمان تقریبی
+  const R=6371;
+  const dLat=(dest.lat-origin.lat)*Math.PI/180;
+  const dLng=(dest.lng-origin.lng)*Math.PI/180;
+  const a=Math.sin(dLat/2)**2 + Math.cos(origin.lat*Math.PI/180)*Math.cos(dest.lat*Math.PI/180)*Math.sin(dLng/2)**2;
+  const c=2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+  const distance=R*c;
+  document.getElementById('distance').innerText="فاصله تقریبی: "+distance.toFixed(2)+" km";
+  const duration=distance/50*60;
+  document.getElementById('duration').innerText="زمان تقریبی: "+duration.toFixed(0)+" دقیقه";
+
+//   // شبیه‌سازی حرکت راننده
+  let step=0, steps=100;
+  const latStep=(dest.lat-origin.lat)/steps;
+  const lngStep=(dest.lng-origin.lng)/steps;
+  liveMarker=L.marker(origin,{icon:L.icon({iconUrl:'https://cdn-icons-png.flaticon.com/512/684/684908.png',iconSize:[30,30]})}).addTo(map).bindPopup("راننده");
+  const interval=setInterval(()=>{
+    step++;
+    liveMarker.setLatLng([origin.lat+latStep*step, origin.lng+lngStep*step]);
+    if(step>=steps) clearInterval(interval);
+  },100);
+}
+// socket.IO
+
+const socket = io("https://naji-backend.onrender.com");
+
+
+function requestService() {
+  if(!originMarker || !destinationMarker){
+    alert("ابتدا مبدا و مقصد را تعیین کنید");
+    return;
+  }
+
+  const origin = originMarker.getLatLng();
+  const dest = destinationMarker.getLatLng();
+  const driverId = socket.id;
+
+  // ارسال درخواست به سرور
+  socket.emit('requestService', { driverId, origin, dest });
+  alert('درخواست شما ارسال شد و منتظر پاسخ یدک‌کش هستید...');
+
+  // شروع ارسال موقعیت زنده
+  if(navigator.geolocation){
+    startLiveTracking();
+  } else {
+    startFakeLiveTracking();
+  }
+}
+
+
+
+  socket.emit('requestService', { driverId, origin, dest });
+
+//   alert('درخواست شما ارسال شد و منتظر پاسخ یدک‌کش هستید...');
+// }
+
+// دریافت آپدیت از یدک‌کش
+socket.on('requestUpdate', (data) => {
+  if(data.status === 'accepted'){
+    alert('یدک‌کش درخواست شما را قبول کرد!');
+    // می‌توانید liveMarker را اضافه کنید
+  } else if(data.status === 'rejected'){
+    alert('یدک‌کش درخواست شما را رد کرد!');
+  }
+});
+socket.on('connect', () => {
+  console.log("راننده به سرور وصل شد:", socket.id);
+});
+// live marker
+// ارسال موقعیت راننده هر 3 ثانیه
+let liveInterval;
+
+function startLiveTracking() {
+  if(navigator.geolocation){
+    liveInterval = setInterval(() => {
+      navigator.geolocation.getCurrentPosition(pos => {
+        const latlng = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+        socket.emit('driverLocation', { driverId: socket.id, latlng });
+      });
+    }, 3000); // هر 3 ثانیه
+  } else {
+    alert("امکان دریافت موقعیت وجود ندارد!");
+  }
+}
+
+// هنگام درخواست سرویس شروع می‌کنیم
+function requestService() {
+  if(!originMarker || !destinationMarker){ alert("ابتدا مبدا و مقصد را تعیین کنید"); return; }
+
+  const origin = originMarker.getLatLng();
+  const dest = destinationMarker.getLatLng();
+  const driverId = socket.id;
+
+  socket.emit('requestService', { driverId, origin, dest });
+
+  alert('درخواست شما ارسال شد و منتظر پاسخ یدک‌کش هستید...');
+  startLiveTracking(); // شروع ارسال موقعیت زنده
+}
+
+</script>
+</body>
+</html>

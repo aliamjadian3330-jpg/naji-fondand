@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>فراموشی رمز عبور یدک‌کش</title>
+<style>
+  body { font-family: 'Tahoma', sans-serif; background:#f0f2f5; display:flex; justify-content:center; align-items:center; height:100vh; margin:0; }
+  .form-container { background:#fff; padding:25px 30px; border-radius:12px; box-shadow:0 8px 20px rgba(0,0,0,0.15); width:100%; max-width:400px; }
+  h2 { text-align:center; margin-bottom:20px; }
+  label { display:block; margin-top:15px; }
+  input { width:100%; padding:10px; margin-top:5px; border-radius:8px; border:1px solid #ccc; }
+  button { width:100%; padding:12px; margin-top:20px; border:none; border-radius:8px; background:#4CAF50; color:#fff; cursor:pointer; }
+  button:hover { background:#45a049; }
+</style>
+</head>
+<body>
+
+<div class="form-container">
+  <h2>بازیابی رمز عبور</h2>
+  <form id="forgotForm">
+    <label>کد ملی</label>
+    <input type="text" id="nationalId" required placeholder="کد ملی ۱۰ رقمی">
+
+    <label>شماره تماس</label>
+    <input type="tel" id="phone" required placeholder="مثال: 0912xxxxxxx">
+
+    <button type="submit">بازیابی رمز عبور</button>
+  </form>
+</div>
+
+<script>
+  const form = document.getElementById('forgotForm');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const nationalId = document.getElementById('nationalId').value;
+    const phone = document.getElementById('phone').value;
+
+    try {
+      const res = await fetch('https://naji-backend.onrender.com/api/tow/forgot-password', {
+
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ nationalId, phone })
+      });
+      const data = await res.json();
+      if(res.ok){
+        alert(data.message);
+      } else {
+        alert(data.message);
+      }
+    } catch(err){
+      console.error(err);
+      alert('خطا در اتصال به سرور');
+    }
+  });
+</script>
+
+</body>
+</html>

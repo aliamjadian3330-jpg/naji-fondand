@@ -1,0 +1,113 @@
+﻿<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ورود یدک‌کش | ناجی راه</title>
+<style>
+  * {margin:0; padding:0; box-sizing:border-box; font-family: 'Vazir', sans-serif;}
+  body {
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background: linear-gradient(135deg, #0c7706, #00b04f);
+  }
+  .auth-wrap {
+    background: rgba(255,255,255,0.95);
+    padding: 30px 40px;
+    border-radius: 16px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+    width: 100%;
+    max-width: 400px;
+  }
+  .auth-title {text-align:center; color:#0c7706; margin-bottom: 8px; font-size:1.8rem;}
+  .auth-sub {text-align:center; color:#555; margin-bottom: 25px; font-size:0.95rem;}
+  form {display:flex; flex-direction:column; gap:15px;}
+  label {font-weight:600; color:#333;}
+  input {width:100%; padding:10px 14px; border-radius:10px; border:1px solid #ccc; font-size:0.95rem; transition:0.2s;}
+  input:focus {border-color:#0c7706; outline:none; box-shadow:0 0 6px rgba(12,119,6,0.4);}
+  .error {color:#ff4d4f; font-size:0.85rem; display:none; margin-top:4px;}
+  .actions {display:flex; gap:10px; justify-content:center; margin-top:10px;}
+  .btn {flex:1; padding:12px 0; border:none; border-radius:10px; font-weight:700; cursor:pointer; transition:0.3s;}
+  .btn-primary {background:#0c7706; color:#fff;}
+  .btn-primary:hover {background:#059a02;}
+  .btn-secondary {background:#e0e0e0; color:#333;}
+  .btn-secondary:hover {background:#c7c7c7;}
+  .small {font-size:0.9rem; color:#0c7706; text-decoration:none; display:block; text-align:center; margin-top:12px;}
+  .small:hover {text-decoration:underline;}
+</style>
+</head>
+<body>
+<div class="auth-wrap">
+  <h1 class="auth-title">ورود یدک‌کش</h1>
+  <p class="auth-sub">برای دسترسی به حساب کاربری، وارد شوید</p>
+  <form id="loginForm">
+    <div class="form-row">
+      <label>کد ملی</label>
+      <input type="text" id="nationalId" maxlength="10" placeholder="کد ملی ۱۰ رقمی" required>
+      <div class="error" id="errNationalId">کد ملی معتبر نیست.</div>
+    </div>
+    <div class="form-row">
+      <label>رمز عبور</label>
+      <input type="password" id="password" placeholder="رمز عبور" required>
+      <div class="error" id="errPassword">رمز عبور وارد نشده.</div>
+    </div>
+    <div class="actions">
+      <button type="submit" class="btn btn-primary">ورود</button>
+      <a href="tow-signup.html" class="btn btn-secondary">ثبت‌نام یدک‌کش</a>
+    </div>
+    <a href="tow-forgot.html" class="small">فراموشی رمز عبور؟</a>
+  </form>
+</div>
+
+<script>
+const form = document.getElementById('loginForm');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const nationalId = document.getElementById('nationalId').value.trim();
+  const password = document.getElementById('password').value;
+
+  // اعتبارسنجی ساده
+  let valid = true;
+  if(!/^\d{10}$/.test(nationalId)){
+    document.getElementById('errNationalId').style.display='block';
+    valid = false;
+  } else document.getElementById('errNationalId').style.display='none';
+
+  if(!password){
+    document.getElementById('errPassword').style.display='block';
+    valid = false;
+  } else document.getElementById('errPassword').style.display='none';
+
+  if(!valid) return;
+
+  try {
+    const res = await fetch('https://naji-backend.onrender.com/api/tow/login', {
+
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ nationalId, password })
+    });
+
+    const data = await res.json();
+
+    if(res.ok){
+      // ذخیره اطلاعات یدک‌کش
+      localStorage.setItem('towUser', JSON.stringify(data.tow));
+      // هدایت به داشبورد
+      window.location.href = 'tow-dashboard.html';
+    } else {
+      alert(data.message);
+    }
+
+  } catch(err) {
+    console.error(err);
+    alert('خطا در اتصال به سرور');
+  }
+});
+</script>
+</body>
+</html>

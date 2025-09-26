@@ -1,0 +1,20 @@
+﻿window.onload = async function() {
+    const token = localStorage.getItem('driverToken');
+    if(!token){ window.location.href = 'driver-login.html'; return; }
+
+    try {
+        const res = await fetch('http://localhost:5000/api/driver/me', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if(res.ok){
+            fillDashboard(data); // تابع قبلی که اطلاعات راننده را روی داشبورد نمایش می‌دهد
+        } else {
+            alert(data.message);
+            window.location.href = 'driver-login.html';
+        }
+    } catch(err) {
+        console.error(err);
+        window.location.href = 'driver-login.html';
+    }
+}

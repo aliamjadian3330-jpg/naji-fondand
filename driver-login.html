@@ -1,0 +1,94 @@
+﻿<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ورود راننده | ناجی راه</title>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css" rel="stylesheet" type="text/css" />
+<style>
+body {font-family: 'Vazir', sans-serif; margin:0; padding:0; background:#00c3ff;}
+.auth-wrap {display:flex; justify-content:center; align-items:center; min-height:100vh;}
+.auth-card {background:rgba(255,255,255,0.95); padding:40px 30px; border-radius:15px; box-shadow:0 8px 20px rgba(0,0,0,0.15); max-width:450px; width:90%;}
+.auth-title {text-align:center; color:#00c3ff; margin-bottom:10px; font-size:28px;}
+.auth-sub {text-align:center; color:#555; margin-bottom:20px;}
+.form-row {margin-bottom:20px; display:flex; flex-direction:column;}
+.form-row label {margin-bottom:5px; font-weight:bold; color:#333;}
+.form-row input {padding:10px 15px; border:1px solid #ccc; border-radius:8px; font-size:15px; transition:0.3s;}
+.form-row input:focus {border-color:#00c3ff; outline:none; box-shadow:0 0 5px rgba(0,195,255,0.5);}
+.actions {display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:15px;}
+.btn {padding:12px 20px; border:none; border-radius:8px; cursor:pointer; font-weight:bold; font-size:15px; transition:0.3s;}
+.btn-primary {background:#00c3ff; color:#fff;}
+.btn-primary:hover {background:#009ecb;}
+.btn-secondary {background:#ccc; color:#333; text-decoration:none; display:inline-block; text-align:center;}
+.btn-secondary:hover {background:#bbb;}
+.auth-footer {text-align:center; font-size:14px; color:#555; margin-top:10px;}
+.auth-footer a {color:#00c3ff; text-decoration:none; font-weight:bold;}
+.auth-footer a:hover {text-decoration:underline;}
+.small {font-size:13px; color:#555;}
+@media (max-width:500px){.actions {flex-direction:column;}} 
+</style>
+</head>
+<body>
+<div class="auth-wrap">
+<div class="auth-card">
+<h1 class="auth-title">ورود راننده</h1>
+<p class="auth-sub">برای دسترسی به حساب کاربری، وارد شوید</p>
+<form id="loginForm">
+  <div class="form-row">
+    <label>کد ملی</label>
+    <input type="text" maxlength="10" placeholder="مثلاً 0012345678" required>
+  </div>
+  <div class="form-row">
+    <label>رمز عبور</label>
+    <input type="password" placeholder="رمز عبور خود را وارد کنید" required>
+  </div>
+  <div class="actions">
+    <button type="submit" class="btn btn-primary">ورود</button>
+    <a href="driver-signup.html" class="btn btn-secondary">ثبت‌نام راننده</a>
+  </div>
+  <div class="form-row" style="text-align:center; margin-top:12px;">
+    <a href="driver-forgot.html" class="small">فراموشی رمز عبور؟</a>
+  </div>
+</form>
+<p class="auth-footer">اگر هنوز ثبت‌نام نکرده‌اید، برای ثبت‌نام <a href="driver-signup.html">اینجا کلیک کنید</a>.</p>
+</div>
+</div>
+<script>
+document.getElementById('loginForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  alert('ورود موفقیت‌آمیز بود!');
+  // اینجا می‌توانید فرم را به سرور ارسال کنید
+});
+
+// ورود به داشبورد
+document.getElementById('loginForm').addEventListener('submit', async function(e){
+  e.preventDefault();
+  const nationalId = e.target[0].value;
+  const password = e.target[1].value;
+
+  try {
+    const res = await fetch('https://naji-backend.onrender.com/api/drivers/login', {
+
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ nationalId, password })
+    });
+
+    const data = await res.json();
+    if(res.ok){
+      // ذخیره اطلاعات کاربر در localStorage یا session
+      localStorage.setItem("driverData", JSON.stringify(data.driver));
+      // هدایت به داشبورد
+      window.location.href = "driver-dashboard.html";
+    } else {
+      alert(data.message || "خطا در ورود");
+    }
+  } catch(err){
+    console.error(err);
+    alert("خطا در اتصال به سرور");
+  }
+});
+
+</script>
+</body>
+</html>
