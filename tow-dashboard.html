@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>پنل کشویی یدک‌کش از کنار</title>
+<title>پنل کشويي يدک‌کش از کنار</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 <style>
 *{margin:0; padding:0; box-sizing:border-box; font-family:'Tahoma',sans-serif;}
@@ -58,53 +58,40 @@ body,html{height:100%; width:100%; background:#f0f2f5;}
   <div id="map"></div>
 
   <!-- Toggle Button -->
-  <button id="toggleBtn" onclick="togglePanel()">☰</button>
+  <button id="toggleBtn" onclick="togglePanel()">?</button>
 
   <!-- Slide Panel -->
   <div id="slidePanel">
-    <h2>پنل یدک‌کش</h2>
-    <input type="text" id="towName" placeholder="نام یدک‌کش">
+    <h2>پنل يدک‌کش</h2>
+    <input type="text" id="towName" placeholder="نام يدک‌کش">
     <input type="text" id="towModel" placeholder="مدل خودرو">
     <input type="text" id="towPhone" placeholder="شماره تماس">
     <input type="text" id="towPlate" placeholder="پلاک خودرو">
 
     <select id="towCity">
-      <option value="bandar">بندر امام خمینی</option>
+      <option value="bandar">بندر امام خميني</option>
     </select>
-    <img id="photoPreview" src="https://via.placeholder.com/100" alt="پیش‌نمایش">
+    <img id="photoPreview" src="https://via.placeholder.com/100" alt="پيش‌نمايش">
     <input type="file" id="photoInput" onchange="previewPhoto(event)">
-    <button class="btn-success" onclick="saveTow()">ثبت یدک‌کش</button>
-    <button class="btn-primary" onclick="receiveRequest()">دریافت درخواست‌ها</button>
-    <button class="btn-primary" onclick="setCurrentLocation()">موقعیت من</button>
+    <button class="btn-success" onclick="saveTow()">ثبت يدک‌کش</button>
+    <button class="btn-primary" onclick="receiveRequest()">دريافت درخواست‌ها</button>
+    <button class="btn-primary" onclick="setCurrentLocation()">موقعيت من</button>
     
 <div style="margin-top:10px; background:white; color:black; padding:10px; border-radius:8px;">
-  <strong>اطلاعات مسیر راننده:</strong>
+  <strong>اطلاعات مسير راننده:</strong>
   <p id="towDistance">فاصله: -</p>
-  <p id="towDuration">زمان تقریبی: -</p>
+  <p id="towDuration">زمان تقريبي: -</p>
 </div>
 
   </div>
 </div>
-<div id="driverInfoPanel" style="
-  position: fixed; bottom: 0; left: 0; right: 0;
-  background: #fff; border-top: 2px solid #ccc;
-  padding: 10px; display: none;">
-  <h3>اطلاعات راننده</h3>
+<div id="driverRequestPanel" style="display:none; position:fixed; bottom:0; left:0; right:0; background:#fff; border-top:1px solid #ccc; padding:10px; z-index:1001;">
+  <h3>درخواست راننده</h3>
   <p id="driverName">نام: -</p>
-  <p id="driverPhone">شماره: -</p>
+  <p id="driverPhone">تلفن: -</p>
   <p id="driverPlate">پلاک: -</p>
-  <button onclick="endTrip()">پایان مأموریت</button>
-</div>
-
-<p id="infoModel"></p>
-<img id="infoImage" src="" style="width:50px;height:50px;border-radius:50%;" />
-
-  <h3>اطلاعات طرف مقابل</h3>
-  <p id="infoName"></p>
-  <p id="infoPhone"></p>
-  <p id="infoPlate"></p>
-  <button id="btnEnd">پایان مأموریت</button>
-  <button id="btnCancel">لغو</button>
+  <button id="btnAcceptRequest">قبول</button>
+  <button id="btnRejectRequest">رد</button>
 </div>
 
 
@@ -113,7 +100,7 @@ body,html{height:100%; width:100%; background:#f0f2f5;}
  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
  
 <script>
-  let currentRequestId = null;
+  
 /* Map */
 const map = L.map('map').setView([30.4391,49.089],13);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
@@ -158,7 +145,6 @@ function previewPhoto(e){
   reader.readAsDataURL(e.target.files[0]);
 }
 
-
 /* Location */
 let towMarker=null;
 function setCurrentLocation(){
@@ -166,30 +152,28 @@ function setCurrentLocation(){
     navigator.geolocation.getCurrentPosition(pos=>{
       const latlng=[pos.coords.latitude,pos.coords.longitude];
       if(towMarker){ towMarker.setLatLng(latlng); }
-      else{ towMarker=L.marker(latlng).addTo(map).bindPopup("موقعیت یدک‌کش").openPopup(); }
+      else{ towMarker=L.marker(latlng).addTo(map).bindPopup("موقعيت يدک‌کش").openPopup(); }
       map.setView(latlng,14);
     });
   }
 }
-// socket.IO
 
-socket.on("receiveRequest", (data) => {
-  // وقتی راننده درخواست می‌دهد
-  document.getElementById("driverInfoPanel").style.display = "block";
-  document.getElementById("driverName").innerText = "نام: " + data.driverInfo?.fullName;
-  document.getElementById("driverPhone").innerText = "شماره: " + data.driverInfo?.phone;
-  document.getElementById("driverPlate").innerText = "پلاک: " + data.driverInfo?.plate;
-});
-
-function endTrip(){
-  socket.emit("endTrip", { requestId: "اینجا آیدی درخواست" });
-  document.getElementById("driverInfoPanel").style.display = "none";
+/* Requests */
+function receiveRequest(){
+  alert("درخواست‌هاي راننده نمايش داده مي‌شوند (شبيه‌سازي).");
 }
+// socket.IO
+let currentRequestId = null;
 
 const socket = io("https://naji-backend.onrender.com");
 
+socket.on('connect', () => {
+  console.log("يدک‌کش به سرور وصل شد:", socket.id);
+  socket.emit('registerTow'); // اين event در server.js تعريف شده
+});
 
-// ارسال موقعیت زنده هر ۳ ثانیه
+
+// ارسال موقعيت زنده هر ? ثانيه
 setInterval(() => {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(pos => {
@@ -198,56 +182,67 @@ setInterval(() => {
       socket.emit('updateTowLocation', { towId: socket.id, lat: yourLat, lng: yourLng });
     });
   }
-}, 3000); // هر ۳ ثانیه
+}, 3000); // هر ? ثانيه
 
 
 
- // id یدک‌کش
+ // id يدک‌کش
                               
 // .........................................
 socket.on('requestClosed', (info) => {
-  alert(info.message || 'این درخواست بسته شد.');
+  alert(info.message || 'اين درخواست بسته شد.');
 });
 
 // .........................................
 
 
-// دریافت درخواست راننده
-// دریافت درخواست از جانب راننده
+// دريافت درخواست راننده
+// دريافت درخواست از جانب راننده
 // هنگام اتصال
 socket.on('connect', () => {
-  console.log("یدک‌کش به سرور وصل شد:", socket.id);
+  console.log("يدک‌کش به سرور وصل شد:", socket.id);
 });
 
-
-socket.on('requestUpdate', (data) => {
-  if(data.status === 'accepted'){
-    currentRequestId = data.requestId;
-    document.getElementById('infoName').innerText = "نام: " + (data.towInfo?.fullName || data.driverInfo?.fullName);
-    document.getElementById('infoPhone').innerText = "تلفن: " + (data.towInfo?.phone || data.driverInfo?.phone);
-    document.getElementById('infoPlate').innerText = "پلاک: " + (data.towInfo?.plate || data.driverInfo?.plate);
-
-    document.getElementById('tripPanel').style.display = 'block';
-  }
-});
+// دريافت درخواست راننده
 
 
+// ايجاد يک شيء Audio براي پخش صدا
 
 
-
-
-
-// زمانی که درخواست جدید از سمت سرور دریافت می‌شود
+// زماني که درخواست جديد از سمت سرور دريافت مي‌شود
 socket.on('receiveRequest', (data) => {
-  console.log("درخواست جدید دریافت شد:", data);
-  // tv
-const driver = data.driverInfo || {};
-document.getElementById('infoName').innerText = driver.fullName || '-';
-document.getElementById('infoPhone').innerText = driver.phone || '-';
-document.getElementById('infoPlate').innerText = driver.plate || '-';
-document.getElementById('infoModel').innerText = driver.carModel || '-';
-document.getElementById('infoImage').src = driver.image || 'default.png';
-document.getElementById('tripPanel').style.display = 'block';
+  console.log("درخواست جديد دريافت شد:", data);
+  
+// دریافت درخواست راننده
+socket.on('receiveRequest', (data) => {
+  currentRequestId = data.requestId;
+  const d = data.driverInfo;
+  document.getElementById('driverName').innerText = "نام: " + (d.fullName || '-');
+  document.getElementById('driverPhone').innerText = "تلفن: " + (d.phone || '-');
+  document.getElementById('driverPlate').innerText = "پلاک: " + (d.plate || '-');
+  document.getElementById('driverRequestPanel').style.display = 'block';
+});
+
+// قبول درخواست
+document.getElementById('btnAcceptRequest').addEventListener('click', () => {
+  socket.emit('requestUpdate', { 
+    requestId: currentRequestId, 
+    status: 'accepted', 
+    towInfo: {
+      fullName: document.getElementById('towName').value || 'یدک‌کش',
+      phone: document.getElementById('towPhone').value || '',
+      plate: document.getElementById('towPlate').value || '',
+      image: document.getElementById('photoPreview').src || ''
+    }
+  });
+  document.getElementById('driverRequestPanel').style.display = 'none';
+});
+
+// رد درخواست
+document.getElementById('btnRejectRequest').addEventListener('click', () => {
+  socket.emit('requestUpdate', { requestId: currentRequestId, status: 'rejected' });
+  document.getElementById('driverRequestPanel').style.display = 'none';
+});
 
   // اطلاعات راننده
   const d = data.driverInfo || {};
@@ -257,17 +252,23 @@ document.getElementById('tripPanel').style.display = 'block';
   const ringtone = new Audio('https://cdn.pixabay.com/download/audio/2022/03/15/audio_bass-drop-12345.mp3?filename=bass-drop-3.mp3');
   ringtone.play();
 
-  // نمایش و گرفتن پاسخ
-  const accept = confirm(`راننده درخواست سرویس دارد.\n${driverText}\n\nمبدا: ${data.origin.lat.toFixed(5)}, ${data.origin.lng.toFixed(5)}\nمقصد: ${data.dest.lat.toFixed(5)}, ${data.dest.lng.toFixed(5)}\n\nقبول می‌کنید؟`);
+  // نمايش و گرفتن پاسخ
+  const accept = confirm(`راننده درخواست سرويس دارد.\n${driverText}\n\nمبدا: ${data.origin.lat.toFixed(5)}, ${data.origin.lng.toFixed(5)}\nمقصد: ${data.dest.lat.toFixed(5)}, ${data.dest.lng.toFixed(5)}\n\nقبول مي‌کنيد؟`);
   const status = accept ? 'accepted' : 'rejected';
 
-  
+  socket.emit('towInfo', {
+    fullName: "نام يدک‌کش",
+    phone: "شماره تماس",
+    plate: "پلاک",
+    image: "url عکس"
+});
 
-  // اطلاعات یدک‌کش
+
+  // اطلاعات يدک‌کش
   const towInfo = {
-    fullName: document.getElementById('towName').value || 'یدک‌کش',
+    fullName: document.getElementById('towName').value || 'يدک‌کش',
     phone: document.getElementById('towPhone').value || '',
-    towmodel: document.getElementById('towModel').value || '',
+    model: document.getElementById('towModel').value || '',
     plate: document.getElementById('towPlate') ? document.getElementById('towPlate').value : '',
     image: document.getElementById('photoPreview').src || ''
   };
@@ -279,8 +280,18 @@ document.getElementById('tripPanel').style.display = 'block';
     towInfo
   });
   
+socket.on('requestUpdate', (data) => {
+  if(data.status === 'accepted'){
+    currentRequestId = data.requestId;
+    document.getElementById('infoName').innerText = "نام: " + (data.towInfo?.fullName || data.driverInfo?.fullName);
+    document.getElementById('infoPhone').innerText = "تلفن: " + (data.towInfo?.phone || data.driverInfo?.phone);
+    document.getElementById('infoPlate').innerText = "پلاک: " + (data.towInfo?.plate || data.driverInfo?.plate);
 
-  // اگر قبول شد → نمایش راننده و مقصد و مسیر
+    document.getElementById('tripPanel').style.display = 'block';
+  }
+});
+
+  // اگر قبول شد ? نمايش راننده و مقصد و مسير
   if (status === 'accepted') {
     // مارکر راننده
     const driverMarker = L.marker([data.origin.lat, data.origin.lng], {
@@ -298,20 +309,20 @@ document.getElementById('tripPanel').style.display = 'block';
       })
     }).addTo(map).bindPopup("مقصد");
 
-    // مسیر راننده → مقصد
+    // مسير راننده ? مقصد
     drawRoute(data.origin, data.dest, "blue");
 
-    // مسیر یدک‌کش → راننده (اگر towMarker داریم)
+    // مسير يدک‌کش ? راننده (اگر towMarker داريم)
     if (towMarker) {
       drawRouteToTow(data.origin, towMarker.getLatLng());
     }
   }
 
-  alert(`شما درخواست را ${status === 'accepted' ? 'قبول' : 'رد'} کردید.`);
+  alert(`شما درخواست را ${status === 'accepted' ? 'قبول' : 'رد'} کرديد.`);
 });
 
 // live marker
-// ذخیره marker راننده
+// ذخيره marker راننده
 const driverMarkers = {}; // driverId => marker
 
 
@@ -346,18 +357,18 @@ async function drawRouteToTow(driverLatLng, towLatLng) {
     if(data.routes && data.routes.length > 0){
       const route = data.routes[0];
       const coords = route.geometry.coordinates.map(c => [c[1], c[0]]);
-      const distance = (route.distance / 1000).toFixed(2); // کیلومتر
-      const duration = Math.ceil(route.duration / 60); // دقیقه
+      const distance = (route.distance / 1000).toFixed(2); // کيلومتر
+      const duration = Math.ceil(route.duration / 60); // دقيقه
 
       if(towRouteLine) map.removeLayer(towRouteLine);
       towRouteLine = L.polyline(coords, {color:'red', weight:4}).addTo(map);
       map.fitBounds(towRouteLine.getBounds());
 
       document.getElementById('towDistance').innerText = `فاصله: ${distance} km`;
-      document.getElementById('towDuration').innerText = `زمان تقریبی: ${duration} دقیقه`;
+      document.getElementById('towDuration').innerText = `زمان تقريبي: ${duration} دقيقه`;
     }
   } catch(err){
-    console.error("خطا در دریافت مسیر:", err);
+    console.error("خطا در دريافت مسير:", err);
   }
 }
 
@@ -374,7 +385,7 @@ async function drawRoute(start, end, color = "blue") {
       map.fitBounds(coords);
     }
   } catch (err) {
-    console.error("خطا در رسم مسیر:", err);
+    console.error("خطا در رسم مسير:", err);
   }
 }
 
