@@ -3,136 +3,375 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>پنل یدک‌کش</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+<title>پنل کشويي يدک‌کش از کنار</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 <style>
-body,html{margin:0;padding:0;height:100%;font-family:sans-serif;}
-#map{height:100vh;width:100%;}
+*{margin:0; padding:0; box-sizing:border-box; font-family:'Tahoma',sans-serif;}
+body,html{height:100%; width:100%; background:#f0f2f5;}
+
+/* Map */
+#mapContainer{height:100vh; width:100%; position:relative;}
+#map{height:100%; width:100%; border:4px solid #2563eb; border-radius:8px;}
+
+/* Slide Panel from Left */
 #slidePanel{
-  position:absolute;top:0;left:-300px;width:280px;height:100%;
-  background:#2563eb;color:white;padding:15px;transition:left 0.4s;
-  z-index:1000;border-top-right-radius:12px;border-bottom-right-radius:12px;overflow:auto;
+  position:absolute;
+  top:0; left:-300px; /* پنهان شده خارج صفحه */
+  width:280px;
+  height:100%;
+  background:#2563eb;
+  color:white;
+  padding:15px;
+  transition:left 0.4s ease;
+  z-index:1000;
+  overflow:auto;
+  border-top-right-radius:12px;
+  border-bottom-right-radius:12px;
 }
 #slidePanel.open{left:0;}
-#toggleBtn{
-  position:absolute;top:15px;left:15px;width:50px;height:50px;
-  background:#2563eb;color:white;border:none;border-radius:50%;cursor:pointer;z-index:1001;
-  display:flex;justify-content:center;align-items:center;font-size:24px;
+
+/* Panel Content */
+#slidePanel h2{margin-bottom:10px; text-align:center;}
+#slidePanel input, #slidePanel select{
+  width:100%; padding:10px; margin-bottom:10px; border-radius:6px; border:1px solid #d1d5db;
 }
-input,select,button{width:100%;margin-bottom:8px;padding:8px;border-radius:6px;border:none;}
-button{cursor:pointer;}
+#slidePanel button{
+  width:100%; padding:10px; border:none; border-radius:6px; cursor:pointer; margin-top:5px;
+}
 .btn-primary{background:#2563eb;color:white;}
 .btn-success{background:#16a34a;color:white;}
 #photoPreview{width:100px;height:100px;border-radius:50%;object-fit:cover;margin:10px auto;display:block;}
+
+/* Toggle Button */
+#toggleBtn{
+  position:absolute; top:15px; left:15px;
+  background:#2563eb;color:white;
+  border:none; border-radius:50%; width:50px; height:50px;
+  font-size:24px; cursor:pointer; z-index:1001;
+  display:flex; justify-content:center; align-items:center; box-shadow:0 2px 6px rgba(0,0,0,0.3);
+}
 </style>
 </head>
 <body>
-<div id="map"></div>
-<button id="toggleBtn" onclick="togglePanel()">☰</button>
-<div id="slidePanel">
-  <h2>پنل یدک‌کش</h2>
-  <input type="text" id="towName" placeholder="نام یدک‌کش">
-  <input type="text" id="towPhone" placeholder="شماره تماس">
-  <input type="text" id="towPlate" placeholder="پلاک خودرو">
-  <input type="text" id="towModel" placeholder="مدل خودرو">
-  <img id="photoPreview" src="" alt="پیش‌نمایش">
-  <input type="file" id="photoInput" onchange="previewPhoto(event)">
-  <button class="btn-success" onclick="saveTow()">ثبت اطلاعات</button>
-  <button class="btn-primary" onclick="receiveRequests()">دریافت درخواست‌ها</button>
-  <div style="margin-top:10px;background:white;color:black;padding:10px;border-radius:8px;">
-    <strong>اطلاعات مسیر راننده:</strong>
-    <p id="towDistance">فاصله: -</p>
-    <p id="towDuration">زمان تقریبی: -</p>
-  </div>
+
+<div id="mapContainer">
+  <div id="map"></div>
+
+  <!-- Toggle Button -->
+  <button id="toggleBtn" onclick="togglePanel()">?</button>
+
+  <!-- Slide Panel -->
+  <div id="slidePanel">
+    <h2>پنل يدک‌کش</h2>
+    <input type="text" id="towName" placeholder="نام يدک‌کش">
+    <input type="text" id="towModel" placeholder="مدل خودرو">
+    <input type="text" id="towPhone" placeholder="شماره تماس">
+    <input type="text" id="towPlate" placeholder="پلاک خودرو">
+
+    <select id="towCity">
+      <option value="bandar">بندر امام خميني</option>
+    </select>
+    <img id="photoPreview" src="https://via.placeholder.com/100" alt="پيش‌نمايش">
+    <input type="file" id="photoInput" onchange="previewPhoto(event)">
+    <button class="btn-success" onclick="saveTow()">ثبت يدک‌کش</button>
+    <button class="btn-primary" onclick="receiveRequest()">دريافت درخواست‌ها</button>
+    <button class="btn-primary" onclick="setCurrentLocation()">موقعيت من</button>
+    
+<div style="margin-top:10px; background:white; color:black; padding:10px; border-radius:8px;">
+  <strong>اطلاعات مسير راننده:</strong>
+  <p id="towDistance">فاصله: -</p>
+  <p id="towDuration">زمان تقريبي: -</p>
 </div>
 
+  </div>
+</div>
+<div id="tripPanel" style="display:none; position:fixed; bottom:0; left:0; right:0; background:#fff; border-top:1px solid #ccc; padding:10px;">
+  <h3>اطلاعات طرف مقابل</h3>
+  <p id="infoName"></p>
+  <p id="infoPhone"></p>
+  <p id="infoPlate"></p>
+  <button id="btnEnd">پايان مأموريت</button>
+  <button id="btnCancel">لغو</button>
+</div>
+
+
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<!-- socket.IO -->
+ <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+ 
 <script>
-const map = L.map('map').setView([35.6895,51.3890],13);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'&copy; OpenStreetMap'}).addTo(map);
+  let currentRequestId = null;
+/* Map */
+const map = L.map('map').setView([30.4391,49.089],13);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+  attribution:'&copy; OpenStreetMap'
+}).addTo(map);
 
-function togglePanel(){document.getElementById('slidePanel').classList.toggle('open');}
+/* Slide Panel Toggle */
+function togglePanel(){
+  const panel = document.getElementById('slidePanel');
+  panel.classList.toggle('open');
+}
 
-const socket = io("https://naji-backend.onrender.com");
-let towMarker = null;
-let towRouteLine = null;
-
-// ثبت یدک‌کش
+/* Tow Functions */
 function saveTow(){
   const data = {
     fullName: document.getElementById('towName').value,
+    towModel: document.getElementById('towModel').value,
     phone: document.getElementById('towPhone').value,
-    plate: document.getElementById('towPlate').value,
-    model: document.getElementById('towModel').value,
-    image: document.getElementById('photoPreview').src
+    towCity: document.getElementById('towCity').value,
+    plate: document.getElementById('towPlate').value
+
+    
   };
-  socket.emit('towInfo', data);
-  alert("اطلاعات ثبت شد!");
+
+  fetch("https://naji-backend.onrender.com/api/tow/signup", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data)
+  })
+  .then(res => res.json())
+  .then(res => {
+    alert(res.message);
+  })
+  .catch(err => console.error(err));
 }
 
-// پیش‌نمایش عکس
+
+
 function previewPhoto(e){
-  const reader = new FileReader();
-  reader.onload = function(){document.getElementById('photoPreview').src=reader.result;}
+  const reader=new FileReader();
+  reader.onload=function(){document.getElementById('photoPreview').src=reader.result;}
   reader.readAsDataURL(e.target.files[0]);
 }
 
-// ثبت و دریافت موقعیت یدک‌کش
-socket.on('connect', () => {
-  socket.emit('registerTow');
-  console.log("یدک‌کش متصل شد:", socket.id);
-});
-
-// موقعیت زنده یدک‌کش
-setInterval(() => {
+/* Location */
+let towMarker=null;
+function setCurrentLocation(){
   if(navigator.geolocation){
-    navigator.geolocation.getCurrentPosition(pos => {
-      const latlng = [pos.coords.latitude,pos.coords.longitude];
+    navigator.geolocation.getCurrentPosition(pos=>{
+      const latlng=[pos.coords.latitude,pos.coords.longitude];
       if(towMarker){ towMarker.setLatLng(latlng); }
-      else{ towMarker = L.marker(latlng).addTo(map).bindPopup("یدک‌کش").openPopup(); }
+      else{ towMarker=L.marker(latlng).addTo(map).bindPopup("موقعيت يدک‌کش").openPopup(); }
       map.setView(latlng,14);
-      socket.emit('updateTowLocation', { lat: latlng[0], lng: latlng[1] });
     });
   }
-},3000);
-
-// دریافت درخواست‌ها
-function receiveRequests(){
-  alert("درخواست‌ها از راننده دریافت می‌شوند (شبیه‌سازی).");
 }
 
-// دریافت درخواست از راننده
-socket.on('receiveRequest', data => {
-  const accept = confirm(`راننده درخواست سرویس دارد.\nنام: ${data.driverInfo.fullName}\nشماره: ${data.driverInfo.phone}\nپلاک: ${data.driverInfo.plate}\n\nقبول می‌کنید؟`);
-  const status = accept ? 'accepted' : 'rejected';
-  socket.emit('requestUpdate',{requestId:data.requestId,status,towInfo:{
-    fullName: document.getElementById('towName').value || 'یدک‌کش',
-    phone: document.getElementById('towPhone').value || '',
-    plate: document.getElementById('towPlate').value || '',
-    model: document.getElementById('towModel').value || '',
-    image: document.getElementById('photoPreview').src || ''
-  }});
-  if(status==='accepted') drawRouteToTow(data.origin,towMarker.getLatLng());
+/* Requests */
+function receiveRequest(){
+  alert("درخواست‌هاي راننده نمايش داده مي‌شوند (شبيه‌سازي).");
+}
+// socket.IO
+
+const socket = io("https://naji-backend.onrender.com");
+
+socket.on('connect', () => {
+  console.log("يدک‌کش به سرور وصل شد:", socket.id);
+  socket.emit('registerTow'); // اين event در server.js تعريف شده
 });
 
-async function drawRouteToTow(driverLatLng, towLatLng){
-  try{
-    const url = `https://router.project-osrm.org/route/v1/driving/${towLatLng.lng},${towLatLng.lat};${driverLatLng.lng},${driverLatLng.lat}?overview=full&geometries=geojson`;
-    const res = await fetch(url); const data = await res.json();
-    if(data.routes.length>0){
-      const route = data.routes[0];
-      const coords = route.geometry.coordinates.map(c=>[c[1],c[0]]);
-      const distance = (route.distance/1000).toFixed(2);
-      const duration = Math.ceil(route.duration/60);
-      if(towRouteLine) map.removeLayer(towRouteLine);
-      towRouteLine = L.polyline(coords,{color:'red',weight:4}).addTo(map);
-      map.fitBounds(towRouteLine.getBounds());
-      document.getElementById('towDistance').innerText=`فاصله: ${distance} km`;
-      document.getElementById('towDuration').innerText=`زمان تقریبی: ${duration} دقیقه`;
+
+// ارسال موقعيت زنده هر ? ثانيه
+setInterval(() => {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(pos => {
+      const yourLat = pos.coords.latitude;
+      const yourLng = pos.coords.longitude;
+      socket.emit('updateTowLocation', { towId: socket.id, lat: yourLat, lng: yourLng });
+    });
+  }
+}, 3000); // هر ? ثانيه
+
+
+
+ // id يدک‌کش
+                              
+// .........................................
+socket.on('requestClosed', (info) => {
+  alert(info.message || 'اين درخواست بسته شد.');
+});
+
+// .........................................
+
+
+// دريافت درخواست راننده
+// دريافت درخواست از جانب راننده
+// هنگام اتصال
+socket.on('connect', () => {
+  console.log("يدک‌کش به سرور وصل شد:", socket.id);
+});
+
+// دريافت درخواست راننده
+
+
+// ايجاد يک شيء Audio براي پخش صدا
+
+
+// زماني که درخواست جديد از سمت سرور دريافت مي‌شود
+socket.on('receiveRequest', (data) => {
+  console.log("درخواست جديد دريافت شد:", data);
+
+  // اطلاعات راننده
+  const d = data.driverInfo || {};
+  const driverText = `نام: ${d.fullName || '-'}\nشماره: ${d.phone || '-'}\nپلاک: ${d.plate || '-'}`;
+
+  // پخش صدا
+  const ringtone = new Audio('https://cdn.pixabay.com/download/audio/2022/03/15/audio_bass-drop-12345.mp3?filename=bass-drop-3.mp3');
+  ringtone.play();
+
+  // نمايش و گرفتن پاسخ
+  const accept = confirm(`راننده درخواست سرويس دارد.\n${driverText}\n\nمبدا: ${data.origin.lat.toFixed(5)}, ${data.origin.lng.toFixed(5)}\nمقصد: ${data.dest.lat.toFixed(5)}, ${data.dest.lng.toFixed(5)}\n\nقبول مي‌کنيد؟`);
+  const status = accept ? 'accepted' : 'rejected';
+
+  socket.emit('towInfo', {
+    fullName: "نام يدک‌کش",
+    phone: "شماره تماس",
+    plate: "پلاک",
+    image: "url عکس"
+});
+
+
+  // اطلاعات يدک‌کش
+  const towInfo = {
+    fullName: document.getElementById('towName').value || 'يدک‌کش',
+    phone: document.getElementById('towPhone').value || '',
+    model: document.getElementById('towModel').value || '',
+    plate: document.getElementById('towPlate') ? document.getElementById('towPlate').value : '',
+    image: document.getElementById('photoPreview').src || ''
+  };
+
+  // ارسال به سرور
+  socket.emit('requestUpdate', {
+    requestId: data.requestId,
+    status,
+    towInfo
+  });
+  
+socket.on('requestUpdate', (data) => {
+  if(data.status === 'accepted'){
+    currentRequestId = data.requestId;
+    document.getElementById('infoName').innerText = "نام: " + (data.towInfo?.fullName || data.driverInfo?.fullName);
+    document.getElementById('infoPhone').innerText = "تلفن: " + (data.towInfo?.phone || data.driverInfo?.phone);
+    document.getElementById('infoPlate').innerText = "پلاک: " + (data.towInfo?.plate || data.driverInfo?.plate);
+
+    document.getElementById('tripPanel').style.display = 'block';
+  }
+});
+
+  // اگر قبول شد ? نمايش راننده و مقصد و مسير
+  if (status === 'accepted') {
+    // مارکر راننده
+    const driverMarker = L.marker([data.origin.lat, data.origin.lng], {
+      icon: L.icon({
+        iconUrl: "https://cdn-icons-png.flaticon.com/512/684/684908.png",
+        iconSize: [30, 30]
+      })
+    }).addTo(map).bindPopup("راننده");
+
+    // مارکر مقصد
+    const destMarker = L.marker([data.dest.lat, data.dest.lng], {
+      icon: L.icon({
+        iconUrl: "https://cdn-icons-png.flaticon.com/512/149/149060.png",
+        iconSize: [30, 30]
+      })
+    }).addTo(map).bindPopup("مقصد");
+
+    // مسير راننده ? مقصد
+    drawRoute(data.origin, data.dest, "blue");
+
+    // مسير يدک‌کش ? راننده (اگر towMarker داريم)
+    if (towMarker) {
+      drawRouteToTow(data.origin, towMarker.getLatLng());
     }
-  }catch(err){console.error(err);}
+  }
+
+  alert(`شما درخواست را ${status === 'accepted' ? 'قبول' : 'رد'} کرديد.`);
+});
+
+// live marker
+// ذخيره marker راننده
+const driverMarkers = {}; // driverId => marker
+
+
+socket.on('updateDriverLocation', (data) => {
+  const { driverId, lat, lng } = data;
+  const latlng = [lat, lng];
+
+  if(driverMarkers[driverId]){
+    driverMarkers[driverId].setLatLng(latlng);
+  } else {
+    driverMarkers[driverId] = L.marker(latlng, {
+      icon: L.icon({
+        iconUrl: 'https://cdn-icons-png.flaticon.com/512/684/684908.png',
+        iconSize: [30, 30]
+      })
+    }).addTo(map).bindPopup(`راننده: ${driverId}`);
+  }
+});
+
+
+
+
+
+let towRouteLine = null;
+
+async function drawRouteToTow(driverLatLng, towLatLng) {
+  try {
+    const url = `https://router.project-osrm.org/route/v1/driving/${driverLatLng.lng},${driverLatLng.lat};${towLatLng.lng},${towLatLng.lat}?overview=full&geometries=geojson`;
+    const res = await fetch(url);
+    const data = await res.json();
+
+    if(data.routes && data.routes.length > 0){
+      const route = data.routes[0];
+      const coords = route.geometry.coordinates.map(c => [c[1], c[0]]);
+      const distance = (route.distance / 1000).toFixed(2); // کيلومتر
+      const duration = Math.ceil(route.duration / 60); // دقيقه
+
+      if(towRouteLine) map.removeLayer(towRouteLine);
+      towRouteLine = L.polyline(coords, {color:'red', weight:4}).addTo(map);
+      map.fitBounds(towRouteLine.getBounds());
+
+      document.getElementById('towDistance').innerText = `فاصله: ${distance} km`;
+      document.getElementById('towDuration').innerText = `زمان تقريبي: ${duration} دقيقه`;
+    }
+  } catch(err){
+    console.error("خطا در دريافت مسير:", err);
+  }
 }
+
+
+async function drawRoute(start, end, color = "blue") {
+  try {
+    const url = `https://router.project-osrm.org/route/v1/driving/${start.lng},${start.lat};${end.lng},${end.lat}?overview=full&geometries=geojson`;
+    const res = await fetch(url);
+    const data = await res.json();
+
+    if (data.routes && data.routes.length > 0) {
+      const coords = data.routes[0].geometry.coordinates.map(c => [c[1], c[0]]);
+      L.polyline(coords, { color, weight: 4 }).addTo(map);
+      map.fitBounds(coords);
+    }
+  } catch (err) {
+    console.error("خطا در رسم مسير:", err);
+  }
+}
+
+
+
+
+
+
+document.getElementById('btnEnd').addEventListener('click', () => {
+  socket.emit('endTrip', { requestId: currentRequestId });
+  document.getElementById('tripPanel').style.display = 'none';
+});
+
+document.getElementById('btnCancel').addEventListener('click', () => {
+  socket.emit('cancelTrip', { requestId: currentRequestId });
+  document.getElementById('tripPanel').style.display = 'none';
+});
+
 </script>
 </body>
 </html>
