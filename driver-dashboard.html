@@ -112,13 +112,16 @@ ul#driverInfo li{padding:5px 0;}
     </div>
   </div>
 </div>
-<div id="driverRequestPanel" style="display:none; position:fixed; bottom:0; left:0; right:0; background:#fff; border-top:1px solid #ccc; padding:10px; z-index:1001;">
-  <h3>درخواست راننده</h3>
-  <p id="driverName">نام: -</p>
-  <p id="driverPhone">تلفن: -</p>
-  <p id="driverPlate">پلاک: -</p>
-  <button id="btnAcceptRequest">قبول</button>
-  <button id="btnRejectRequest">رد</button>
+<!-- پنل پایین راننده -->
+<div id="tripPanel" style="display:none; position:fixed; bottom:0; left:0; right:0; background:#fff; border-top:2px solid #3b82f6; padding:15px; z-index:1001; box-shadow:0 -2px 8px rgba(0,0,0,0.2);">
+  <h3>اطلاعات یدک‌کش</h3>
+  <p id="infoTowName">نام: -</p>
+  <p id="infoTowPhone">تلفن: -</p>
+  <p id="infoTowPlate">پلاک: -</p>
+  <p id="towDistance">فاصله: -</p>
+  <p id="towDuration">زمان تقریبی: -</p>
+  <button id="btnCancelTrip" style="background:#ef4444; color:#fff; padding:10px; margin:5px; border:none; border-radius:8px;">لغو درخواست</button>
+  <button id="btnEndTrip" style="background:#10b981; color:#fff; padding:10px; margin:5px; border:none; border-radius:8px;">پایان مأموریت</button>
 </div>
 
 
@@ -221,40 +224,21 @@ function lockOrigin(){ if(originMarker){ originMarker.dragging.disable(); origin
 function unlockOrigin(){ if(originMarker){ originMarker.dragging.enable(); originMarker.bindPopup("مبدا").openPopup(); } }
 
 
-
-
-
-
-
-
-document.getElementById('btnEnd').addEventListener('click', () => {
-  socket.emit('endTrip', { requestId: currentRequestId });
-  document.getElementById('tripPanel').style.display = 'none';
-});
-
-document.getElementById('btnCancel').addEventListener('click', () => {
-  socket.emit('cancelTrip', { requestId: currentRequestId });
-  document.getElementById('tripPanel').style.display = 'none';
-});
-
-
-
 // socket.IO
 let currentRequestId = null;
 const socket = io("https://naji-backend.onrender.com");
-
-
-
 
 //   alert('درخواست شما ارسال شد و منتظر پاسخ يدک‌کش هستيد...');
 // }
 
 // دريافت آپديت از يدک‌کش
 
+// --- وقتی یدک‌کش درخواست رو قبول کرد
 socket.on('requestUpdate', (data) => {
   if(data.status === 'accepted'){
     currentRequestId = data.requestId;
     const tow = data.towInfo;
+
     document.getElementById('infoTowName').innerText = "نام: " + tow.fullName;
     document.getElementById('infoTowPhone').innerText = "تلفن: " + tow.phone;
     document.getElementById('infoTowPlate').innerText = "پلاک: " + tow.plate;
@@ -262,19 +246,30 @@ socket.on('requestUpdate', (data) => {
   }
 });
 
-// لغو درخواست
+// --- دریافت موقعیت زنده یدک‌کش و رسم مسیر
+socket.on('towLocation', (data) => {
+  if(currentRequestId && data.towId){
+    const driverLatLng = originMarker.getLatLng();
+    const towLatLng = { lat: data.lat, lng: data.lng };
+    drawRouteToTow(driverLatLng, towLatLng);
+  }
+});
+
+// --- لغو درخواست
 document.getElementById('btnCancelTrip').addEventListener('click', () => {
   if(currentRequestId){
     socket.emit('cancelTrip', { requestId: currentRequestId });
     document.getElementById('tripPanel').style.display = 'none';
+    if(towRouteLine) map.removeLayer(towRouteLine);
   }
 });
 
-// پایان مأموریت
+// --- پایان مأموریت
 document.getElementById('btnEndTrip').addEventListener('click', () => {
   if(currentRequestId){
     socket.emit('endTrip', { requestId: currentRequestId });
     document.getElementById('tripPanel').style.display = 'none';
+    if(towRouteLine) map.removeLayer(towRouteLine);
   }
 });
 
