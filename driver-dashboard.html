@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>داشبورد راننده حرفه‌ای</title>
+<title>داشبورد راننده حرفه‌اي</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 <style>
 *{margin:0; padding:0; box-sizing:border-box; font-family:'Roboto',sans-serif;}
@@ -16,7 +16,7 @@ body,html{height:100%; width:100%; background:#f0f2f5;}
 /* Slide Panel Right */
 #slidePanel{
   position:absolute;
-  top:0; right:-300px; /* مخفی خارج صفحه */
+  top:0; right:-300px; /* مخفي خارج صفحه */
   width:280px; height:100%;
   background:#3b82f6; color:white;
   padding:15px; transition:right 0.4s ease;
@@ -56,7 +56,7 @@ ul#driverInfo li{padding:5px 0;}
   <div id="map"></div>
 
   <!-- Toggle Button -->
-  <button id="toggleBtn" onclick="togglePanel()">☰</button>
+  <button id="toggleBtn" onclick="togglePanel()">?</button>
 
   <!-- Slide Panel -->
   <div id="slidePanel">
@@ -68,20 +68,20 @@ ul#driverInfo li{padding:5px 0;}
     <!-- آپلود عکس -->
     <div>
       <h3>آپلود عکس</h3>
-      <img id="photoPreview" src="" alt="پیش‌نمایش عکس">
+      <img id="photoPreview" src="" alt="پيش‌نمايش عکس">
       <input type="file" id="photoInput" onchange="previewPhoto(event)">
     </div>
 
-    <!-- نظر سنجی -->
+    <!-- نظر سنجي -->
     <div>
-      <h3>نظر سنجی راننده</h3>
+      <h3>نظر سنجي راننده</h3>
       <select id="surveyRating">
-        <option value="">انتخاب کنید</option>
-        <option value="1">1 - خیلی بد</option>
+        <option value="">انتخاب کنيد</option>
+        <option value="1">1 - خيلي بد</option>
         <option value="2">2 - بد</option>
         <option value="3">3 - متوسط</option>
         <option value="4">4 - خوب</option>
-        <option value="5">5 - عالی</option>
+        <option value="5">5 - عالي</option>
       </select>
       <button class="btn-primary" onclick="submitSurvey()">ارسال</button>
     </div>
@@ -92,54 +92,42 @@ ul#driverInfo li{padding:5px 0;}
       <input type="text" id="name" placeholder="نام">
       <input type="text" id="phone" placeholder="شماره تماس">
       <input type="text" id="carName" placeholder="نام خودرو">
-      <input type="text" id="carColor" placeholder="رنگ خودرو (مثل red یا #ff0000)">
+      <input type="text" id="carColor" placeholder="رنگ خودرو (مثل red يا #ff0000)">
       <button class="btn-success" onclick="register()">ثبت نام</button>
     </div>
 
-    <!-- دکمه‌های نقشه -->
+    <!-- دکمه‌هاي نقشه -->
     <div style="margin-top:10px;">
-      <button class="btn-success" onclick="setCurrentLocation()">موقعیت من</button>
+      <button class="btn-success" onclick="setCurrentLocation()">موقعيت من</button>
       <button class="btn-primary" onclick="lockOrigin()">قفل مبدا</button>
-      <button class="btn-danger" onclick="unlockOrigin()">آزادسازی مبدا</button>
+      <button class="btn-danger" onclick="unlockOrigin()">آزادسازي مبدا</button>
       <button class="btn-primary" onclick="requestService()">درخواست</button>
     </div>
 
-    <!-- اطلاعات مسیر -->
+    <!-- اطلاعات مسير -->
     <div style="margin-top:10px; background:white; color:black; padding:10px; border-radius:8px;">
-      <strong>اطلاعات مسیر:</strong>
+      <strong>اطلاعات مسير:</strong>
       <p id="distance">فاصله: -</p>
-      <p id="duration">زمان تقریبی: -</p>
+      <p id="duration">زمان تقريبي: -</p>
     </div>
   </div>
 </div>
-<!-- پنل پایین صفحه -->
-<div id="towInfoPanel" style="
-  position: fixed; bottom: 0; left: 0; right: 0;
-  background: #fff; border-top: 2px solid #ccc;
-  padding: 10px; display: none;">
-  <h3>اطلاعات یدک‌کش</h3>
-  <p id="towName">نام: -</p>
-  <p id="towPhone">شماره: -</p>
-  <p id="towPlate">پلاک: -</p>
-  <button onclick="cancelRequest()">لغو درخواست</button>
+<div id="driverRequestPanel" style="display:none; position:fixed; bottom:0; left:0; right:0; background:#fff; border-top:1px solid #ccc; padding:10px; z-index:1001;">
+  <h3>درخواست راننده</h3>
+  <p id="driverName">نام: -</p>
+  <p id="driverPhone">تلفن: -</p>
+  <p id="driverPlate">پلاک: -</p>
+  <button id="btnAcceptRequest">قبول</button>
+  <button id="btnRejectRequest">رد</button>
 </div>
 
-  <p id="infoModel"></p> <!-- مدل خودرو یا نوع یدک‌کش -->
-<img id="infoImage" src="" style="width:50px;height:50px;border-radius:50%;" />
 
-  <h3>اطلاعات طرف مقابل</h3>
-  <p id="infoName"></p>
-  <p id="infoPhone"></p>
-  <p id="infoPlate"></p>
-  <button id="btnEnd">پایان مأموریت</button>
-  <button id="btnCancel">لغو</button>
-</div>
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <!-- socket.IO -->
  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 <script>
-  let currentRequestId = null
+  
 /* Map */
 const map = L.map('map').setView([35.6895,51.3890],13);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'&copy; OpenStreetMap'}).addTo(map);
@@ -153,7 +141,7 @@ window.onload = function(){
   if(driverData){
     fillDashboard(JSON.parse(driverData));
   } else {
-    alert("ابتدا وارد شوید");
+    alert("ابتدا وارد شويد");
     window.location.href = "driver-login.html";
   }
 }
@@ -167,7 +155,7 @@ function register(){
   };
   localStorage.setItem("driverData",JSON.stringify(data));
   fillDashboard(data);
-  alert("ثبت نام با موفقیت انجام شد!");
+  alert("ثبت نام با موفقيت انجام شد!");
 }
 
 function fillDashboard(data){
@@ -193,10 +181,10 @@ function previewPhoto(event){
   reader.readAsDataURL(event.target.files[0]);
 }
 
-/* نظر سنجی */
+/* نظر سنجي */
 function submitSurvey(){
   const rating=document.getElementById('surveyRating').value;
-  if(!rating){ alert("لطفا امتیاز خود را انتخاب کنید"); return; }
+  if(!rating){ alert("لطفا امتياز خود را انتخاب کنيد"); return; }
   alert("با تشکر از نظر شما: "+rating+"/5");
   document.getElementById('surveyRating').value = "";
 }
@@ -210,7 +198,7 @@ map.on('click', function(e){
   } else if(!destinationMarker){
     destinationMarker=L.marker(e.latlng,{draggable:true}).addTo(map).bindPopup("مقصد").openPopup();
   } else {
-    const choice = confirm("کدام را تغییر می‌خوای؟ OK = مبدا, Cancel = مقصد");
+    const choice = confirm("کدام را تغيير مي‌خواي؟ OK = مبدا, Cancel = مقصد");
     if(choice){ originMarker.setLatLng(e.latlng).bindPopup("مبدا").openPopup(); }
     else { destinationMarker.setLatLng(e.latlng).bindPopup("مقصد").openPopup(); }
     if(routeLine) map.removeLayer(routeLine);
@@ -226,7 +214,7 @@ function setCurrentLocation(){
       else { originMarker=L.marker(latlng,{draggable:true}).addTo(map).bindPopup("مبدا").openPopup(); }
       map.setView(latlng,14);
     });
-  }else alert("امکان دریافت موقعیت وجود ندارد!");
+  }else alert("امکان دريافت موقعيت وجود ندارد!");
 }
 
 function lockOrigin(){ if(originMarker){ originMarker.dragging.disable(); originMarker.bindPopup("مبدا (قفل)").openPopup(); } }
@@ -252,49 +240,46 @@ document.getElementById('btnCancel').addEventListener('click', () => {
 
 
 // socket.IO
-socket.on("requestUpdate", (data) => {
-  if (data.status === "accepted") {
-    document.getElementById("towInfoPanel").style.display = "block";
-    document.getElementById("towName").innerText = "نام: " + data.towInfo?.fullName;
-    document.getElementById("towPhone").innerText = "شماره: " + data.towInfo?.phone;
-    document.getElementById("towPlate").innerText = "پلاک: " + data.towInfo?.plate;
-  }
-});
-
-function cancelRequest(){
-  socket.emit("cancelTrip", { requestId: "اینجا آیدی درخواست" });
-  document.getElementById("towInfoPanel").style.display = "none";
-}
-
+let currentRequestId = null;
 const socket = io("https://naji-backend.onrender.com");
 
 
 
 
-//   alert('درخواست شما ارسال شد و منتظر پاسخ یدک‌کش هستید...');
+//   alert('درخواست شما ارسال شد و منتظر پاسخ يدک‌کش هستيد...');
 // }
 
-// دریافت آپدیت از یدک‌کش
+// دريافت آپديت از يدک‌کش
 
 socket.on('requestUpdate', (data) => {
   if(data.status === 'accepted'){
     currentRequestId = data.requestId;
-    const info = data.towInfo || data.driverInfo;
-
-    document.getElementById('infoName').innerText = info.fullName || '-';
-    document.getElementById('infoPhone').innerText = info.phone || '-';
-    document.getElementById('infoPlate').innerText = info.plate || '-';
-    document.getElementById('infoModel').innerText = info.towModel || info.carModel || '-';
-    document.getElementById('infoImage').src = info.image || 'default.png';
-
+    const tow = data.towInfo;
+    document.getElementById('infoTowName').innerText = "نام: " + tow.fullName;
+    document.getElementById('infoTowPhone').innerText = "تلفن: " + tow.phone;
+    document.getElementById('infoTowPlate').innerText = "پلاک: " + tow.plate;
     document.getElementById('tripPanel').style.display = 'block';
   }
 });
 
+// لغو درخواست
+document.getElementById('btnCancelTrip').addEventListener('click', () => {
+  if(currentRequestId){
+    socket.emit('cancelTrip', { requestId: currentRequestId });
+    document.getElementById('tripPanel').style.display = 'none';
+  }
+});
 
+// پایان مأموریت
+document.getElementById('btnEndTrip').addEventListener('click', () => {
+  if(currentRequestId){
+    socket.emit('endTrip', { requestId: currentRequestId });
+    document.getElementById('tripPanel').style.display = 'none';
+  }
+});
 
 // live marker
-// ارسال موقعیت راننده هر 3 ثانیه
+// ارسال موقعيت راننده هر 3 ثانيه
 let liveInterval;
 
 
@@ -305,11 +290,11 @@ function startLiveTracking() {
       navigator.geolocation.getCurrentPosition(pos => {
         const latlng = { lat: pos.coords.latitude, lng: pos.coords.longitude };
 
-        // ارسال موقعیت به سرور
+        // ارسال موقعيت به سرور
         socket.emit('driverLocation', { driverId: socket.id, lat: latlng.lat, lng: latlng.lng });
 
 
-        // به‌روزرسانی یا ساخت مارکر راننده
+        // به‌روزرساني يا ساخت مارکر راننده
         if(!liveMarker){
           liveMarker = L.marker(latlng, {
             icon: L.icon({
@@ -321,20 +306,20 @@ function startLiveTracking() {
           liveMarker.setLatLng(latlng);
         }
       });
-    }, 3000); // هر 3 ثانیه
+    }, 3000); // هر 3 ثانيه
   } else {
-    alert("امکان دریافت موقعیت وجود ندارد!");
+    alert("امکان دريافت موقعيت وجود ندارد!");
   }
 }
 
 
 
 
-// هنگام درخواست سرویس شروع می‌کنیم
-// جایگزین کامل requestService در فرانت راننده
+// هنگام درخواست سرويس شروع مي‌کنيم
+// جايگزين کامل requestService در فرانت راننده
 async function requestService() {
   if (!originMarker || !destinationMarker) {
-    alert("ابتدا مبدا و مقصد را تعیین کنید");
+    alert("ابتدا مبدا و مقصد را تعيين کنيد");
     return;
   }
 
@@ -344,15 +329,15 @@ async function requestService() {
   // اطلاعات راننده از localStorage
   const driverData = JSON.parse(localStorage.getItem("driverData")) || {};
 
-  // رسم مسیر محلی (اختیاری: برای نمایش راننده قبل از ارسال)
+  // رسم مسير محلي (اختياري: براي نمايش راننده قبل از ارسال)
   await getRoute(origin, dest);
 
-  // فقط یکبار emit کن با تمامِ driverInfo
+  // فقط يکبار emit کن با تمامِ driverInfo
   socket.emit("requestService", {
     driverId: socket.id,
     origin,
     dest,
-    driverInfo: { // کلیدهای استاندارد: fullName, phone, plate, image
+    driverInfo: { // کليدهاي استاندارد: fullName, phone, plate, image
       fullName: driverData.name || '',
       phone: driverData.phone || '',
       plate: driverData.plate || '',
@@ -360,8 +345,8 @@ async function requestService() {
     }
   });
 
-  alert("درخواست شما ارسال شد و منتظر پاسخ یدک‌کش هستید...");
-  // شروع ارسال موقعیت زنده
+  alert("درخواست شما ارسال شد و منتظر پاسخ يدک‌کش هستيد...");
+  // شروع ارسال موقعيت زنده
   startLiveTracking();
 }
 
@@ -378,20 +363,20 @@ async function getRoute(origin, destination) {
     if(data.routes && data.routes.length > 0){
       const route = data.routes[0];
       const coords = route.geometry.coordinates.map(c => [c[1], c[0]]);
-      const distance = (route.distance / 1000).toFixed(2); // کیلومتر
-      const duration = Math.ceil(route.duration / 60); // دقیقه
+      const distance = (route.distance / 1000).toFixed(2); // کيلومتر
+      const duration = Math.ceil(route.duration / 60); // دقيقه
 
       if(routeLine) map.removeLayer(routeLine);
       routeLine = L.polyline(coords, {color:'blue', weight:4}).addTo(map);
       map.fitBounds(routeLine.getBounds());
 
       document.getElementById('distance').innerText = `فاصله: ${distance} km`;
-      document.getElementById('duration').innerText = `زمان تقریبی: ${duration} دقیقه`;
+      document.getElementById('duration').innerText = `زمان تقريبي: ${duration} دقيقه`;
 
       return { distance, duration };
     }
   } catch(err){
-    console.error("خطا در دریافت مسیر:", err);
+    console.error("خطا در دريافت مسير:", err);
   }
 }
 
@@ -414,10 +399,10 @@ async function drawRouteToTow(driverLatLng, towLatLng) {
       map.fitBounds(towRouteLine.getBounds());
 
       document.getElementById('towDistance').innerText = `فاصله: ${distance} km`;
-      document.getElementById('towDuration').innerText = `زمان تقریبی: ${duration} دقیقه`;
+      document.getElementById('towDuration').innerText = `زمان تقريبي: ${duration} دقيقه`;
     }
   } catch(err){
-    console.error("خطا در دریافت مسیر:", err);
+    console.error("خطا در دريافت مسير:", err);
   }
 }
 
