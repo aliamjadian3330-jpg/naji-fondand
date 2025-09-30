@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fa">
 <head>
 <meta charset="UTF-8">
@@ -85,7 +85,17 @@ body,html{height:100%; width:100%; background:#f0f2f5;}
 
   </div>
 </div>
-<div id="tripPanel" style="display:none; position:fixed; bottom:0; left:0; right:0; background:#fff; border-top:1px solid #ccc; padding:10px;">
+<div id="driverInfoPanel" style="
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: #fff; border-top: 2px solid #ccc;
+  padding: 10px; display: none;">
+  <h3>اطلاعات راننده</h3>
+  <p id="driverName">نام: -</p>
+  <p id="driverPhone">شماره: -</p>
+  <p id="driverPlate">پلاک: -</p>
+  <button onclick="endTrip()">پایان مأموریت</button>
+</div>
+
 <p id="infoModel"></p>
 <img id="infoImage" src="" style="width:50px;height:50px;border-radius:50%;" />
 
@@ -162,6 +172,19 @@ function setCurrentLocation(){
   }
 }
 // socket.IO
+
+socket.on("receiveRequest", (data) => {
+  // وقتی راننده درخواست می‌دهد
+  document.getElementById("driverInfoPanel").style.display = "block";
+  document.getElementById("driverName").innerText = "نام: " + data.driverInfo?.fullName;
+  document.getElementById("driverPhone").innerText = "شماره: " + data.driverInfo?.phone;
+  document.getElementById("driverPlate").innerText = "پلاک: " + data.driverInfo?.plate;
+});
+
+function endTrip(){
+  socket.emit("endTrip", { requestId: "اینجا آیدی درخواست" });
+  document.getElementById("driverInfoPanel").style.display = "none";
+}
 
 const socket = io("https://naji-backend.onrender.com");
 
