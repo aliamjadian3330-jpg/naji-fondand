@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fa">
 <head>
 <meta charset="UTF-8">
@@ -112,7 +112,18 @@ ul#driverInfo li{padding:5px 0;}
     </div>
   </div>
 </div>
-<div id="tripPanel" style="display:none; position:fixed; bottom:0; left:0; right:0; background:#fff; border-top:1px solid #ccc; padding:10px;">
+<!-- پنل پایین صفحه -->
+<div id="towInfoPanel" style="
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: #fff; border-top: 2px solid #ccc;
+  padding: 10px; display: none;">
+  <h3>اطلاعات یدک‌کش</h3>
+  <p id="towName">نام: -</p>
+  <p id="towPhone">شماره: -</p>
+  <p id="towPlate">پلاک: -</p>
+  <button onclick="cancelRequest()">لغو درخواست</button>
+</div>
+
   <p id="infoModel"></p> <!-- مدل خودرو یا نوع یدک‌کش -->
 <img id="infoImage" src="" style="width:50px;height:50px;border-radius:50%;" />
 
@@ -241,6 +252,19 @@ document.getElementById('btnCancel').addEventListener('click', () => {
 
 
 // socket.IO
+socket.on("requestUpdate", (data) => {
+  if (data.status === "accepted") {
+    document.getElementById("towInfoPanel").style.display = "block";
+    document.getElementById("towName").innerText = "نام: " + data.towInfo?.fullName;
+    document.getElementById("towPhone").innerText = "شماره: " + data.towInfo?.phone;
+    document.getElementById("towPlate").innerText = "پلاک: " + data.towInfo?.plate;
+  }
+});
+
+function cancelRequest(){
+  socket.emit("cancelTrip", { requestId: "اینجا آیدی درخواست" });
+  document.getElementById("towInfoPanel").style.display = "none";
+}
 
 const socket = io("https://naji-backend.onrender.com");
 
