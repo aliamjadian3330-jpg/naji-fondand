@@ -13,11 +13,11 @@
 
   /* پنل کشویی از چپ */
   #slidePanel{
-    position:absolute; top:0; left:-320px; width:300px; height:100%;
-    background:#2563eb; color:#fff; padding:16px; transition:left .35s ease;
+    position:absolute; top:0; right:-320px; width:300px; height:100%;
+    background:#2563eb; color:#fff; padding:16px; transition:right.35s ease;
     z-index:1200; overflow:auto; border-top-right-radius:14px; border-bottom-right-radius:14px;
   }
-  #slidePanel.open{ left:0 }
+  #slidePanel.open{ right:0 }
 
   #slidePanel input, #slidePanel select, #slidePanel button{
     width:100%; padding:10px; margin-top:8px; border-radius:8px; border:1px solid rgba(255,255,255,0.08);
@@ -26,7 +26,7 @@
   #slidePanel h2{ text-align:center; margin-bottom:8px }
 
   #toggleBtn{
-    position:absolute; top:14px; left:14px; z-index:1300;
+    position:absolute; top:14px; right:14px; z-index:1300;
     width:52px; height:52px; border-radius:50%; border:none; cursor:pointer;
     background:#2563eb; color:#fff; box-shadow:0 6px 18px rgba(0,0,0,0.18);
     display:flex; align-items:center; justify-content:center; font-size:20px;
@@ -76,7 +76,6 @@
 
     <select id="towCity">
       <option value="bandar">بندر امام خميني</option>
-      <option value="tehran">تهران</option>
     </select>
 
     <img id="photoPreview" src="https://via.placeholder.com/100" alt="پيش‌نمايش" />
@@ -94,39 +93,233 @@
   </div>
 </div>
 
-<!-- پنل پايين: نمايش درخواست راننده -->
+<!-- پنل پایین: نمایش درخواست راننده -->
 <div id="driverRequestPanel" role="dialog" aria-modal="true">
-  <div class="row">
+  <div class="request-header">
+    <h3>🚘 درخواست جدید</h3>
+  </div>
+  <div class="request-body">
     <img id="reqDriverImage" src="https://via.placeholder.com/64" alt="driver" />
-    <div style="flex:1">
-      <div id="driverName"><strong>نام:</strong> -</div>
-      <div id="driverPhone"><strong>تلفن:</strong> -</div>
-      <div id="driverCoords" style="font-size:13px;color:#444"><strong>مبدا:</strong> -</div>
-      <div id="driverDest" style="font-size:13px;color:#444"><strong>مقصد:</strong> -</div>
-    </div>
-    <div style="display:flex;flex-direction:column;gap:8px">
-      <button id="btnAcceptRequest" class="btn-success">قبول</button>
-      <button id="btnRejectRequest" class="btn-danger">رد</button>
+    <div class="driver-info">
+      <p id="driverName"><strong>نام:</strong> -</p>
+      <p id="driverPhone"><strong>تلفن:</strong> -</p>
+      <p id="driverCoords"><strong>مبدا:</strong> -</p>
+      <p id="driverDest"><strong>مقصد:</strong> -</p>
     </div>
   </div>
+  <div class="request-actions">
+    <button id="btnRejectRequest" class="btn btn-danger">❌ رد</button>
+    <button id="btnAcceptRequest" class="btn btn-success">✔ قبول</button>
+  </div>
 </div>
+<style>
+  #driverRequestPanel {
+  display: none; /* پیش‌فرض مخفی */
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: #fff;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.2);
+  padding: 20px;
+  font-family: "Vazirmatn", sans-serif;
+  z-index: 2000;
+  animation: slideUp 0.4s ease;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.request-header {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.request-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #2563eb;
+}
+
+.request-body {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 10px 0;
+}
+
+.request-body img {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #2563eb;
+}
+
+.driver-info p {
+  margin: 4px 0;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.request-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+  gap: 10px;
+}
+
+.btn {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-success {
+  background: #10b981;
+  color: #fff;
+}
+
+.btn-success:hover {
+  background: #059669;
+}
+
+.btn-danger {
+  background: #ef4444;
+  color: #fff;
+}
+
+.btn-danger:hover {
+  background: #dc2626;
+}
+
+</style>
 
 <!-- پنل ماموريت براي يدک‌کش (پس از قبول) -->
+<!-- پنل مأموریت یدک‌کش -->
 <div id="towTripPanel" role="status">
-  <div style="display:flex;gap:12px;align-items:center">
+  <div class="trip-header">
+    <h3>🚚 مأموریت جاری</h3>
+  </div>
+  <div class="trip-body">
     <img id="tripDriverImage" src="https://via.placeholder.com/64" alt="driver" />
-    <div style="flex:1">
-      <div id="tripDriverName"><strong>نام:</strong> -</div>
-      <div id="tripDriverPhone"><strong>تلفن:</strong> -</div>
-      <div id="tripDriverPlate"><strong>پلاک:</strong> -</div>
+    <div class="trip-info">
+      <p id="tripDriverName"><strong>نام:</strong> -</p>
+      <p id="tripDriverPhone"><strong>تلفن:</strong> -</p>
+      <p id="tripDriverPlate"><strong>پلاک:</strong> -</p>
     </div>
-    <div class="actions">
-      <button id="btnTowEnd" class="btn-success">پایان مأموریت</button>
-      <button id="btnTowCancel" class="btn-danger">لغو مأموریت</button>
+    <div class="trip-actions">
+      <button id="btnTowEnd" class="btn btn-success">✔ پایان مأموریت</button>
+      <button id="btnTowCancel" class="btn btn-danger">❌ لغو مأموریت</button>
     </div>
   </div>
 </div>
+<style>
+  #towTripPanel {
+  display: none; /* پیش‌فرض مخفی */
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: #fff;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.2);
+  padding: 20px;
+  font-family: "Vazirmatn", sans-serif;
+  z-index: 2000;
+  animation: slideUp 0.4s ease;
+}
 
+@keyframes slideUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.trip-header {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.trip-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #2563eb;
+}
+
+.trip-body {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.trip-body img {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #2563eb;
+}
+
+.trip-info p {
+  margin: 4px 0;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.trip-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.btn {
+  padding: 10px 14px;
+  border: none;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-success {
+  background: #10b981;
+  color: #fff;
+}
+
+.btn-success:hover {
+  background: #059669;
+}
+
+.btn-danger {
+  background: #ef4444;
+  color: #fff;
+}
+
+.btn-danger:hover {
+  background: #dc2626;
+}
+
+/* واکنشگرایی موبایل */
+@media (max-width: 768px){
+  .trip-body {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .trip-actions {
+    flex-direction: row;
+    width: 100%;
+  }
+  .trip-actions .btn {
+    flex: 1;
+  }
+}
+
+</style>
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 <script>
