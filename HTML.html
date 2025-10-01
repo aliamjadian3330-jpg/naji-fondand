@@ -1,26 +1,122 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fa">
 <head>
   <meta charset="UTF-8">
-  <title>صفحه انتظار</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>در انتظار یدک‌کش</title>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap" rel="stylesheet">
   <style>
+    * { margin:0; padding:0; box-sizing:border-box; font-family: 'Vazirmatn', sans-serif;}
+    html, body { height:100%; overflow:hidden; }
+
+    body {
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      flex-direction:column;
+      background: linear-gradient(120deg, #1a2a6c, #b21f1f, #fdbb2d);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      color: #fff;
+    }
+
+    @keyframes gradientBG {
+      0% {background-position:0% 50%;}
+      50% {background-position:100% 50%;}
+      100% {background-position:0% 50%;}
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 30px;
+      text-align:center;
+      text-shadow: 2px 2px 12px rgba(0,0,0,0.3);
+    }
+
+    #requestBtn {
+      padding: 16px 40px;
+      font-size: 1.2rem;
+      border:none;
+      border-radius:12px;
+      background: #ff6a00;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      cursor:pointer;
+      transition: all 0.3s ease;
+    }
+
+    #requestBtn:hover {
+      transform: translateY(-3px);
+      background: #ff8c42;
+    }
+
     #waitingScreen {
-      display: none;
-      text-align: center;
-      margin-top: 50px;
-      font-size: 24px;
-      color: #333;
+      display:none;
+      margin-top: 40px;
+      text-align:center;
+      position:relative;
+    }
+
+    .spinner {
+      width: 70px;
+      height: 70px;
+      border: 8px solid rgba(255,255,255,0.2);
+      border-top: 8px solid #fff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 15px auto;
+      box-shadow: 0 0 15px rgba(255,255,255,0.4);
+    }
+
+    @keyframes spin { 0% {transform:rotate(0deg);} 100% {transform:rotate(360deg);} }
+
+    #waitingText {
+      font-size: 1.3rem;
+      line-height: 1.5;
+      text-shadow: 1px 1px 5px rgba(0,0,0,0.4);
+    }
+
+    /* ذرات شناور */
+    .particle {
+      position:absolute;
+      width:8px;
+      height:8px;
+      background: rgba(255,255,255,0.5);
+      border-radius:50%;
+      animation: float 6s linear infinite;
+    }
+
+    @keyframes float {
+      0% {transform: translateY(0) translateX(0);}
+      50% {transform: translateY(-180px) translateX(50px);}
+      100% {transform: translateY(-360px) translateX(-30px);}
+    }
+
+    /* واکنش‌گرایی موبایل */
+    @media (max-width: 768px){
+      h1 { font-size:1.5rem; }
+      #requestBtn { padding:12px 30px; font-size:1rem; }
+      #waitingText { font-size:1.1rem; }
+      .spinner { width:60px; height:60px; border-width:6px; }
     }
   </style>
 </head>
 <body>
-  <button id="requestBtn">درخواست سرویس</button>
+  <h1>درخواست رابزنید تا موقعیت شما ارسال شود</h1>
+
+  <button id="requestBtn">درخواست یدکش</button>
 
   <div id="waitingScreen">
-    در حال یافتن یدک‌کش... لطفاً صبر کنید.
+    <div class="spinner"></div>
+    <div id="waitingText">درخواست شما به یدکش های اطراف ارسال شد منتظر پذیرش درخواست از سمت یدکش باشید...</div>
   </div>
 
+  <!-- ذرات شناور -->
+  <div class="particle" style="top:90%; left:10%; animation-duration:8s;"></div>
+  <div class="particle" style="top:80%; left:70%; animation-duration:6s;"></div>
+  <div class="particle" style="top:85%; left:40%; animation-duration:7s;"></div>
+  <div class="particle" style="top:95%; left:80%; animation-duration:5s;"></div>
+
   <script src="https://cdn.socket.io/4.7.1/socket.io.min.js"></script>
-  <script src="waiting.js"></script> <!-- اینجا کد JS صفحه انتظار -->
+  <script src="waiting.js"></script>
 </body>
 </html>
