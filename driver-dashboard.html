@@ -189,18 +189,106 @@ ul#driverInfo li{padding:5px 0;}
 
 </style>
 <!-- پنل پایین راننده -->
-<div id="tripPanel" style="display:none; position:fixed; bottom:0; left:0; right:0; background:#fff; border-top:2px solid #3b82f6; padding:15px; z-index:1001; box-shadow:0 -2px 8px rgba(0,0,0,0.2);">
-  <h3>اطلاعات یدک‌کش</h3>
-  <p id="infoTowName">نام: -</p>
-  <p id="infoTowPhone">تلفن: -</p>
-  <p id="infoTowPlate">پلاک: -</p>
-  <p id="towDistance">فاصله: -</p>
-  <p id="towDuration">زمان تقریبی: -</p>
-  <button id="btnCancelTrip" style="background:#ef4444; color:#fff; padding:10px; margin:5px; border:none; border-radius:8px;">لغو درخواست</button>
-  <button id="btnEndTrip" style="background:#10b981; color:#fff; padding:10px; margin:5px; border:none; border-radius:8px;">پایان مأموریت</button>
+<div id="tripPanel">
+  <div class="trip-header">
+    <h3>📌 اطلاعات یدک‌کش</h3>
+  </div>
+  <div class="trip-content">
+    <div class="trip-info">
+      <p><strong>نام:</strong> <span id="infoTowName">-</span></p>
+      <p><strong>تلفن:</strong> <span id="infoTowPhone">-</span></p>
+      <p><strong>پلاک:</strong> <span id="infoTowPlate">-</span></p>
+      <p><strong>فاصله:</strong> <span id="towDistance">-</span></p>
+      <p><strong>زمان تقریبی:</strong> <span id="towDuration">-</span></p>
+    </div>
+  </div>
+  <div class="trip-actions">
+    <button id="btnCancelTrip" class="btn btn-cancel">لغو درخواست</button>
+    <button id="btnEndTrip" class="btn btn-end">پایان مأموریت</button>
+  </div>
 </div>
+<style>
+  #tripPanel {
+  display: none;
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: #fff;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  border-top: 3px solid #2563eb;
+  padding: 20px;
+  z-index: 1001;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.25);
+  font-family: "Vazirmatn", sans-serif;
+  animation: slideUp 0.4s ease;
+}
 
+@keyframes slideUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
 
+.trip-header {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.trip-header h3 {
+  font-size: 1.3rem;
+  color: #2563eb;
+  margin: 0;
+}
+
+.trip-content {
+  padding: 10px 0;
+}
+
+.trip-info p {
+  margin: 6px 0;
+  font-size: 1rem;
+  color: #333;
+}
+
+.trip-info strong {
+  color: #111;
+}
+
+.trip-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  gap: 10px;
+}
+
+.btn {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-cancel {
+  background: #ef4444;
+  color: #fff;
+}
+
+.btn-cancel:hover {
+  background: #dc2626;
+}
+
+.btn-end {
+  background: #10b981;
+  color: #fff;
+}
+
+.btn-end:hover {
+  background: #059669;
+}
+
+</style>
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <!-- socket.IO -->
