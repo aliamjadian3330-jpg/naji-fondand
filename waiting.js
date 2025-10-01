@@ -28,6 +28,7 @@ socket.on("requestUpdate", (data) => {
   } else if (data.status === "rejected") {
     waitingText.innerText = "یدک‌کش رد کرد، در حال یافتن یدک‌کش دیگر...";
   } else if (data.status === "expired") {
-    waitingText.innerText = "درخواست منقضی شد!";
+    waitingText.innerText = "یدکشی پیدا نشد صفحه را رفرش کنید ومجدد درخواست بزنید!";
   }
 });
+
