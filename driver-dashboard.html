@@ -6,48 +6,142 @@
 <title>داشبورد راننده حرفه‌اي</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 <style>
-*{margin:0; padding:0; box-sizing:border-box; font-family:'Roboto',sans-serif;}
-body,html{height:100%; width:100%; background:#f0f2f5;}
+/* پایه */
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Roboto',sans-serif; }
+html, body { height:100%; width:100%; background:#f0f2f5; }
 
 /* Map */
-#mapContainer{height:100vh; width:100%; position:relative;}
-#map{height:100%; width:100%; border-radius:8px;}
+#mapContainer { height:100vh; width:100%; position:relative; }
+#map { height:100%; width:100%; border-radius:8px; }
 
 /* Slide Panel Right */
-#slidePanel{
+#slidePanel {
   position:absolute;
-  top:0; right:-300px; /* مخفي خارج صفحه */
-  width:280px; height:100%;
-  background:#3b82f6; color:white;
-  padding:15px; transition:right 0.4s ease;
-  z-index:1000; overflow:auto;
-  border-top-left-radius:12px; border-bottom-left-radius:12px;
+  top:0; right:-320px; /* مخفی خارج صفحه */
+  width:300px; height:100%;
+  background: #2563eb;
+  color:white;
+  padding:20px;
+  transition:right 0.4s ease, box-shadow 0.3s ease;
+  z-index:1000;
+  overflow-y:auto;
+  border-top-left-radius:16px;
+  border-bottom-left-radius:16px;
+  box-shadow: -4px 0 20px rgba(0,0,0,0.15);
 }
-#slidePanel.open{right:0;}
+#slidePanel.open { right:0; }
 
 /* Panel Content */
-#slidePanel h2{margin-bottom:10px; text-align:center;}
-#slidePanel input, #slidePanel select{
-  width:100%; padding:10px; margin-bottom:10px; border-radius:6px; border:1px solid #d1d5db;
+#slidePanel h2 {
+  margin-bottom:15px;
+  text-align:center;
+  font-size:1.3rem;
+  letter-spacing:1px;
 }
-#slidePanel button{
-  width:100%; padding:10px; border:none; border-radius:6px; cursor:pointer; margin-top:5px;
+#slidePanel h3 {
+  margin:12px 0 8px;
+  font-size:1rem;
+  border-bottom:1px solid rgba(255,255,255,0.3);
+  padding-bottom:4px;
 }
-.btn-primary{background:#3b82f6;color:white;}
-.btn-success{background:#10b981;color:white;}
-.btn-danger{background:#ef4444;color:white;}
-#photoPreview{width:100px;height:100px;border-radius:50%;object-fit:cover;margin:10px auto;display:block;}
-ul#driverInfo{list-style:none; padding-left:0; margin-bottom:10px;}
-ul#driverInfo li{padding:5px 0;}
+
+/* فرم و دکمه‌ها */
+#slidePanel input, #slidePanel select {
+  width:100%;
+  padding:10px;
+  margin-bottom:12px;
+  border-radius:8px;
+  border:1px solid #d1d5db;
+  font-size:0.95rem;
+}
+#slidePanel button {
+  width:100%;
+  padding:10px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  margin-top:8px;
+  font-size:0.95rem;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+#slidePanel button:hover {
+  transform: translateY(-2px);
+}
+.btn-primary { background:#3b82f6; color:white; }
+.btn-primary:hover { background:#60a5fa; }
+.btn-success { background:#10b981; color:white; }
+.btn-success:hover { background:#059669; }
+.btn-danger { background:#ef4444; color:white; }
+.btn-danger:hover { background:#dc2626; }
+
+/* عکس راننده */
+#photoPreview {
+  width:100px;
+  height:100px;
+  border-radius:50%;
+  object-fit:cover;
+  margin:10px auto;
+  display:block;
+  border:2px solid white;
+  box-shadow:0 2px 8px rgba(0,0,0,0.2);
+}
+
+/* لیست اطلاعات راننده */
+ul#driverInfo {
+  list-style:none;
+  padding-left:0;
+  margin-bottom:15px;
+}
+ul#driverInfo li {
+  padding:6px 0;
+  font-size:0.95rem;
+  border-bottom:1px solid rgba(255,255,255,0.2);
+}
 
 /* Toggle Button */
-#toggleBtn{
-  position:absolute; top:15px; right:15px;
-  background:#3b82f6;color:white;
-  border:none; border-radius:50%; width:50px; height:50px;
-  font-size:24px; cursor:pointer; z-index:1001;
-  display:flex; justify-content:center; align-items:center; box-shadow:0 2px 6px rgba(0,0,0,0.3);
+#toggleBtn {
+  position:absolute;
+  top:15px;
+  right:15px;
+  background:#3b82f6;
+  color:white;
+  border:none;
+  border-radius:50%;
+  width:50px; height:50px;
+  font-size:24px;
+  cursor:pointer;
+  z-index:1001;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  box-shadow:0 4px 12px rgba(0,0,0,0.3);
+  transition: transform 0.2s ease, background 0.2s ease;
 }
+#toggleBtn:hover {
+  transform: scale(1.1);
+  background:#60a5fa;
+}
+
+/* اطلاعات مسیر */
+#slidePanel > div:last-child {
+  margin-top:15px;
+  background:white;
+  color:black;
+  padding:12px;
+  border-radius:12px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.1);
+  font-size:0.9rem;
+}
+
+/* responsive موبایل */
+@media (max-width: 768px) {
+  #slidePanel { width:260px; right:-280px; padding:15px; }
+  #slidePanel h2 { font-size:1.1rem; }
+  #slidePanel h3 { font-size:0.95rem; }
+  #slidePanel input, #slidePanel select, #slidePanel button { font-size:0.9rem; }
+  #photoPreview { width:80px; height:80px; }
+}
+
 </style>
 </head>
 <body>
@@ -87,6 +181,7 @@ ul#driverInfo li{padding:5px 0;}
     </div>
 <hr>
  <select id="towCity">
+      <option value="bandar">انتخاب منطقه</option>
       <option value="bandar">بندرامام خمینی (ره)</option>
     </select>
 
