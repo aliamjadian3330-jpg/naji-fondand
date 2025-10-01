@@ -362,18 +362,6 @@ html, body {height:100%; width:100%; background:#f0f2f5;}
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 <script>
-  function previewPhoto(event){
-  const reader = new FileReader();
-  reader.onload = function(){
-    document.getElementById('photoPreview').src = reader.result;
-  }
-  reader.readAsDataURL(event.target.files[0]);
-}
-
-function removePhoto(){
-  document.getElementById('photoPreview').src = "https://via.placeholder.com/100";
-  document.getElementById('photoInput').value = ""; // ریست کردن input فایل
-}
 /*
   فایل کامل و تمیزِ پنل يدک‌کش
   - یک بار listenerها تعریف شده‌اند
