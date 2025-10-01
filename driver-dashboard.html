@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>داشبورد راننده حرفه‌ای</title>
+<title>داشبورد راننده حرفه‌اي</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 <style>
 *{margin:0; padding:0; box-sizing:border-box; font-family:'Roboto',sans-serif;}
@@ -16,7 +16,7 @@ body,html{height:100%; width:100%; background:#f0f2f5;}
 /* Slide Panel Right */
 #slidePanel{
   position:absolute;
-  top:0; right:-300px;
+  top:0; right:-300px; /* مخفي خارج صفحه */
   width:280px; height:100%;
   background:#3b82f6; color:white;
   padding:15px; transition:right 0.4s ease;
@@ -25,6 +25,7 @@ body,html{height:100%; width:100%; background:#f0f2f5;}
 }
 #slidePanel.open{right:0;}
 
+/* Panel Content */
 #slidePanel h2{margin-bottom:10px; text-align:center;}
 #slidePanel input, #slidePanel select{
   width:100%; padding:10px; margin-bottom:10px; border-radius:6px; border:1px solid #d1d5db;
@@ -47,35 +48,6 @@ ul#driverInfo li{padding:5px 0;}
   font-size:24px; cursor:pointer; z-index:1001;
   display:flex; justify-content:center; align-items:center; box-shadow:0 2px 6px rgba(0,0,0,0.3);
 }
-
-/* پنل انتظار */
-#waitingPanel{
-  display:none;
-  position:fixed;
-  top:0; left:0; right:0; bottom:0;
-  background: rgba(0,0,0,0.6);
-  z-index:2000;
-  display:flex; justify-content:center; align-items:center;
-}
-#waitingPanelContent{
-  background:white; color:#111;
-  padding:25px 35px;
-  border-radius:12px;
-  text-align:center;
-  box-shadow:0 8px 20px rgba(0,0,0,0.3);
-  width:300px;
-}
-#waitingPanelContent h2{margin-bottom:15px;}
-
-/* پنل ماموریت */
-#tripPanel{
-  display:none; position:fixed;
-  bottom:0; left:0; right:0;
-  background:#fff; border-top:2px solid #3b82f6;
-  padding:15px; z-index:1001; box-shadow:0 -2px 8px rgba(0,0,0,0.2);
-}
-#tripPanel p{margin:5px 0;}
-#tripPanel button{padding:10px; margin:5px; border:none; border-radius:8px; cursor:pointer;}
 </style>
 </head>
 <body>
@@ -90,14 +62,31 @@ ul#driverInfo li{padding:5px 0;}
   <div id="slidePanel">
     <h2>داشبورد راننده</h2>
 
+    <!-- اطلاعات راننده -->
     <ul id="driverInfo"></ul>
 
+    <!-- آپلود عکس -->
     <div>
       <h3>آپلود عکس</h3>
       <img id="photoPreview" src="" alt="پيش‌نمايش عکس">
       <input type="file" id="photoInput" onchange="previewPhoto(event)">
     </div>
 
+    <!-- نظر سنجي -->
+    <div>
+      <h3>نظر سنجي راننده</h3>
+      <select id="surveyRating">
+        <option value="">انتخاب کنيد</option>
+        <option value="1">1 - خيلي بد</option>
+        <option value="2">2 - بد</option>
+        <option value="3">3 - متوسط</option>
+        <option value="4">4 - خوب</option>
+        <option value="5">5 - عالي</option>
+      </select>
+      <button class="btn-primary" onclick="submitSurvey()">ارسال</button>
+    </div>
+
+    <!-- فرم ثبت نام -->
     <div>
       <h3>ثبت نام</h3>
       <input type="text" id="name" placeholder="نام">
@@ -108,13 +97,16 @@ ul#driverInfo li{padding:5px 0;}
       <button class="btn-success" onclick="register()">ثبت نام</button>
     </div>
 
+    <!-- دکمه‌هاي نقشه -->
     <div style="margin-top:10px;">
       <button class="btn-success" onclick="setCurrentLocation()">موقعيت من</button>
       <button class="btn-primary" onclick="lockOrigin()">قفل مبدا</button>
       <button class="btn-danger" onclick="unlockOrigin()">آزادسازي مبدا</button>
       <button class="btn-primary" onclick="requestService()">درخواست</button>
+
     </div>
 
+    <!-- اطلاعات مسير -->
     <div style="margin-top:10px; background:white; color:black; padding:10px; border-radius:8px;">
       <strong>اطلاعات مسير:</strong>
       <p id="distance">فاصله: -</p>
@@ -122,31 +114,42 @@ ul#driverInfo li{padding:5px 0;}
     </div>
   </div>
 </div>
-
 <!-- پنل انتظار -->
-<div id="waitingPanel">
-  <div id="waitingPanelContent">
-    <h2>منتظر قبول درخواست توسط یدک‌کش هستید...</h2>
-    <p>لطفاً منتظر بمانید.</p>
+<div id="waitingPanel" style="display:none;">
+  <div style="background:white;color:#111;padding:30px 40px;border-radius:12px;text-align:center;box-shadow:0 10px 25px rgba(0,0,0,0.3);min-width:280px;">
+    <h2 style="margin-bottom:15px;">در انتظار قبول درخواست...</h2>
+    <p>لطفاً صبر کنید، به محض قبول توسط یدک‌کش اطلاع داده می‌شود.</p>
+    <div style="margin-top:20px;">
+      <div class="loader" style="border:4px solid #f3f3f3;border-top:4px solid #3b82f6;border-radius:50%;width:40px;height:40px;margin:0 auto;animation:spin 1s linear infinite;"></div>
+    </div>
   </div>
 </div>
 
-<!-- پنل ماموریت -->
-<div id="tripPanel">
+<style>
+@keyframes spin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
+@keyframes fadeIn{0%{opacity:0;}100%{opacity:1;}}
+</style>
+
+<!-- پنل پایین راننده -->
+<div id="tripPanel" style="display:none; position:fixed; bottom:0; left:0; right:0; background:#fff; border-top:2px solid #3b82f6; padding:15px; z-index:1001; box-shadow:0 -2px 8px rgba(0,0,0,0.2);">
   <h3>اطلاعات یدک‌کش</h3>
   <p id="infoTowName">نام: -</p>
   <p id="infoTowPhone">تلفن: -</p>
   <p id="infoTowPlate">پلاک: -</p>
   <p id="towDistance">فاصله: -</p>
   <p id="towDuration">زمان تقریبی: -</p>
-  <button id="btnCancelTrip" class="btn-danger">لغو درخواست</button>
-  <button id="btnEndTrip" class="btn-success">پایان مأموریت</button>
+  <button id="btnCancelTrip" style="background:#ef4444; color:#fff; padding:10px; margin:5px; border:none; border-radius:8px;">لغو درخواست</button>
+  <button id="btnEndTrip" style="background:#10b981; color:#fff; padding:10px; margin:5px; border:none; border-radius:8px;">پایان مأموریت</button>
 </div>
 
+
+
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<!-- socket.IO -->
+ <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 <script>
-/* ========== نقشه ========== */
+  
+/* Map */
 const map = L.map('map').setView([35.6895,51.3890],13);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'&copy; OpenStreetMap'}).addTo(map);
 
@@ -154,11 +157,14 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'&
 function togglePanel(){ document.getElementById('slidePanel').classList.toggle('open'); }
 
 /* راننده */
-let originMarker=null, destinationMarker=null, routeLine=null, liveMarker=null;
-
 window.onload = function(){
   const driverData = localStorage.getItem("driverData");
-  if(driverData){ fillDashboard(JSON.parse(driverData)); }
+  if(driverData){
+    fillDashboard(JSON.parse(driverData));
+  } else {
+    alert("ابتدا وارد شويد");
+    window.location.href = "driver-login.html";
+  }
 }
 
 function register(){
@@ -171,7 +177,7 @@ function register(){
   };
   localStorage.setItem("driverData",JSON.stringify(data));
   fillDashboard(data);
-  alert("ثبت نام با موفقیت انجام شد!");
+  alert("ثبت نام با موفقيت انجام شد!");
 }
 
 function fillDashboard(data){
@@ -183,7 +189,11 @@ function fillDashboard(data){
     `خودرو: ${data.carName}`,
     `رنگ خودرو: <span style="display:inline-block;width:15px;height:15px;background:${data.carColor};border:1px solid #000;margin-left:5px;vertical-align:middle;"></span> ${data.carColor}`
   ];
-  items.forEach(text => { const li = document.createElement('li'); li.innerHTML = text; list.appendChild(li); });
+  items.forEach(text => {
+    const li = document.createElement('li');
+    li.innerHTML = text;
+    list.appendChild(li);
+  });
 }
 
 /* آپلود عکس */
@@ -193,10 +203,29 @@ function previewPhoto(event){
   reader.readAsDataURL(event.target.files[0]);
 }
 
+/* نظر سنجي */
+function submitSurvey(){
+  const rating=document.getElementById('surveyRating').value;
+  if(!rating){ alert("لطفا امتياز خود را انتخاب کنيد"); return; }
+  alert("با تشکر از نظر شما: "+rating+"/5");
+  document.getElementById('surveyRating').value = "";
+}
+
 /* نقشه مبدا و مقصد */
+let originMarker=null, destinationMarker=null, routeLine=null, liveMarker=null;
+
 map.on('click', function(e){
-  if(!originMarker){ originMarker=L.marker(e.latlng,{draggable:true}).addTo(map).bindPopup("مبدا").openPopup();}
-  else if(!destinationMarker){ destinationMarker=L.marker(e.latlng,{draggable:true}).addTo(map).bindPopup("مقصد").openPopup();}
+  if(!originMarker){
+    originMarker=L.marker(e.latlng,{draggable:true}).addTo(map).bindPopup("مبدا").openPopup();
+  } else if(!destinationMarker){
+    destinationMarker=L.marker(e.latlng,{draggable:true}).addTo(map).bindPopup("مقصد").openPopup();
+  } else {
+    const choice = confirm("کدام را تغيير مي‌خواي؟ OK = مبدا, Cancel = مقصد");
+    if(choice){ originMarker.setLatLng(e.latlng).bindPopup("مبدا").openPopup(); }
+    else { destinationMarker.setLatLng(e.latlng).bindPopup("مقصد").openPopup(); }
+    if(routeLine) map.removeLayer(routeLine);
+    if(liveMarker) map.removeLayer(liveMarker);
+  }
 });
 
 function setCurrentLocation(){
@@ -207,90 +236,221 @@ function setCurrentLocation(){
       else { originMarker=L.marker(latlng,{draggable:true}).addTo(map).bindPopup("مبدا").openPopup(); }
       map.setView(latlng,14);
     });
-  }else alert("امکان دریافت موقعیت وجود ندارد!");
+  }else alert("امکان دريافت موقعيت وجود ندارد!");
 }
+
 function lockOrigin(){ if(originMarker){ originMarker.dragging.disable(); originMarker.bindPopup("مبدا (قفل)").openPopup(); } }
 function unlockOrigin(){ if(originMarker){ originMarker.dragging.enable(); originMarker.bindPopup("مبدا").openPopup(); } }
 
-/* socket.IO */
-const socket = io("https://naji-backend.onrender.com");
-let currentRequestId = null;
-let liveInterval = null;
 
-/* ارسال درخواست */
-function requestService() {
-  if (!originMarker || !destinationMarker){ alert("ابتدا مبدا و مقصد را تعیین کنید"); return; }
+// socket.IO
+let currentRequestId = null;
+const socket = io("https://naji-backend.onrender.com");
+
+//   alert('درخواست شما ارسال شد و منتظر پاسخ يدک‌کش هستيد...');
+// }
+
+// دريافت آپديت از يدک‌کش
+
+// --- وقتی یدک‌کش درخواست رو قبول کرد
+socket.on('requestUpdate', (data) => {
+  if(data.status === 'accepted'){
+    currentRequestId = data.requestId;
+    const tow = data.towInfo;
+
+    document.getElementById('waitingPanel').style.display = 'none';
+    document.getElementById('infoTowName').innerText = "نام: " + tow.fullName;
+    document.getElementById('infoTowPhone').innerText = "تلفن: " + tow.phone;
+    document.getElementById('infoTowPlate').innerText = "پلاک: " + tow.plate;
+    document.getElementById('tripPanel').style.display = 'block';
+  }
+});
+
+// --- دریافت موقعیت زنده یدک‌کش و رسم مسیر
+socket.on('towLocation', (data) => {
+  if(currentRequestId && data.towId){
+    const driverLatLng = originMarker.getLatLng();
+    const towLatLng = { lat: data.lat, lng: data.lng };
+    drawRouteToTow(driverLatLng, towLatLng);
+  }
+});
+
+// --- لغو درخواست
+document.getElementById('btnCancelTrip').addEventListener('click', () => {
+  if(currentRequestId){
+    socket.emit('cancelTrip', { requestId: currentRequestId });
+    document.getElementById('tripPanel').style.display = 'none';
+    if(towRouteLine) map.removeLayer(towRouteLine);
+  }
+});
+
+// --- پایان مأموریت
+document.getElementById('btnEndTrip').addEventListener('click', () => {
+  if(currentRequestId){
+    socket.emit('endTrip', { requestId: currentRequestId });
+    document.getElementById('tripPanel').style.display = 'none';
+    if(towRouteLine) map.removeLayer(towRouteLine);
+  }
+});
+
+// live marker
+// ارسال موقعيت راننده هر 3 ثانيه
+let liveInterval;
+
+
+
+function startLiveTracking() {
+  if(navigator.geolocation){
+    liveInterval = setInterval(() => {
+      navigator.geolocation.getCurrentPosition(pos => {
+        const latlng = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+
+        // ارسال موقعيت به سرور
+        socket.emit('driverLocation', { driverId: socket.id, lat: latlng.lat, lng: latlng.lng });
+
+
+        // به‌روزرساني يا ساخت مارکر راننده
+        if(!liveMarker){
+          liveMarker = L.marker(latlng, {
+            icon: L.icon({
+              iconUrl: 'https://cdn-icons-png.flaticon.com/512/684/684908.png',
+              iconSize: [30,30]
+            })
+          }).addTo(map).bindPopup("راننده");
+        } else {
+          liveMarker.setLatLng(latlng);
+        }
+      });
+    }, 3000); // هر 3 ثانيه
+  } else {
+    alert("امکان دريافت موقعيت وجود ندارد!");
+  }
+}
+
+
+
+
+// هنگام درخواست سرويس شروع مي‌کنيم
+async function requestService() {
+  if (!originMarker || !destinationMarker) {
+    alert("ابتدا مبدا و مقصد را تعيين کنيد");
+    return;
+  }
+
   const origin = originMarker.getLatLng();
   const dest = destinationMarker.getLatLng();
   const driverData = JSON.parse(localStorage.getItem("driverData")) || {};
 
-  // نمایش پنل انتظار
-  document.getElementById('waitingPanel').style.display='flex';
+  await getRoute(origin, dest);
 
   socket.emit("requestService", {
     driverId: socket.id,
     origin,
     dest,
-    driverInfo: { fullName: driverData.name||'', phone: driverData.phone||'', plate: driverData.plate||'', image: document.getElementById('photoPreview').src||null }
+    driverInfo: {
+      fullName: driverData.name || '',
+      phone: driverData.phone || '',
+      plate: driverData.plate || '',
+      image: document.getElementById('photoPreview').src || null
+    }
   });
 
-  // شروع ارسال موقعیت زنده
+  // 👈 فقط اینجا نمایش بده
+  document.getElementById('waitingPanel').style.display = 'flex';
+
   startLiveTracking();
 }
 
-/* Live Tracking */
-function startLiveTracking(){
-  if(navigator.geolocation){
-    liveInterval = setInterval(()=>{
-      navigator.geolocation.getCurrentPosition(pos=>{
-        const latlng={lat:pos.coords.latitude,lng:pos.coords.longitude};
-        socket.emit('driverLocation',{driverId:socket.id,lat:latlng.lat,lng:latlng.lng});
-        if(!liveMarker){
-          liveMarker=L.marker(latlng,{icon:L.icon({iconUrl:'https://cdn-icons-png.flaticon.com/512/684/684908.png',iconSize:[30,30]})}).addTo(map).bindPopup("راننده");
-        } else liveMarker.setLatLng(latlng);
-      });
-    },3000);
+
+
+
+async function getRoute(origin, destination) {
+  try {
+    const url = `https://router.project-osrm.org/route/v1/driving/${origin.lng},${origin.lat};${destination.lng},${destination.lat}?overview=full&geometries=geojson`;
+    
+    const res = await fetch(url);
+    const data = await res.json();
+
+    if(data.routes && data.routes.length > 0){
+      const route = data.routes[0];
+      const coords = route.geometry.coordinates.map(c => [c[1], c[0]]);
+      const distance = (route.distance / 1000).toFixed(2); // کيلومتر
+      const duration = Math.ceil(route.duration / 60); // دقيقه
+
+      if(routeLine) map.removeLayer(routeLine);
+      routeLine = L.polyline(coords, {color:'blue', weight:4}).addTo(map);
+      map.fitBounds(routeLine.getBounds());
+
+      document.getElementById('distance').innerText = `فاصله: ${distance} km`;
+      document.getElementById('duration').innerText = `زمان تقريبي: ${duration} دقيقه`;
+
+      return { distance, duration };
+    }
+  } catch(err){
+    console.error("خطا در دريافت مسير:", err);
   }
 }
 
-/* دریافت قبول درخواست از یدک‌کش */
-socket.on('requestUpdate', (data) => {
-  if(data.status==='accepted'){
-    currentRequestId = data.requestId;
-    const tow = data.towInfo;
+let towRouteLine = null;
 
-    // مخفی کردن پنل انتظار
-    document.getElementById('waitingPanel').style.display='none';
+async function drawRouteToTow(driverLatLng, towLatLng) {
+  try {
+    const url = `https://router.project-osrm.org/route/v1/driving/${towLatLng.lng},${towLatLng.lat};${driverLatLng.lng},${driverLatLng.lat}?overview=full&geometries=geojson`;
+    const res = await fetch(url);
+    const data = await res.json();
 
-    // نمایش پنل ماموریت
-    document.getElementById('tripPanel').style.display='block';
-    document.getElementById('infoTowName').innerText = "نام: " + tow.fullName;
-    document.getElementById('infoTowPhone').innerText = "تلفن: " + tow.phone;
-    document.getElementById('infoTowPlate').innerText = "پلاک: " + tow.plate;
+    if(data.routes && data.routes.length > 0){
+      const route = data.routes[0];
+      const coords = route.geometry.coordinates.map(c => [c[1], c[0]]);
+      const distance = (route.distance / 1000).toFixed(2);
+      const duration = Math.ceil(route.duration / 60);
+
+      if(towRouteLine) map.removeLayer(towRouteLine);
+      towRouteLine = L.polyline(coords, {color:'red', weight:4}).addTo(map);
+      map.fitBounds(towRouteLine.getBounds());
+
+      document.getElementById('towDistance').innerText = `فاصله: ${distance} km`;
+      document.getElementById('towDuration').innerText = `زمان تقريبي: ${duration} دقيقه`;
+    }
+  } catch(err){
+    console.error("خطا در دريافت مسير:", err);
   }
-});
-
-/* لغو و پایان ماموریت */
-document.getElementById('btnCancelTrip').addEventListener('click',()=>{
-  if(currentRequestId){
-    socket.emit('cancelTrip',{requestId:currentRequestId});
-    cleanupRequest();
-  }
-});
-document.getElementById('btnEndTrip').addEventListener('click',()=>{
-  if(currentRequestId){
-    socket.emit('endTrip',{requestId:currentRequestId});
-    cleanupRequest();
-  }
-});
-
-function cleanupRequest(){
-  currentRequestId=null;
-  document.getElementById('tripPanel').style.display='none';
-  document.getElementById('waitingPanel').style.display='none';
-  if(liveInterval){ clearInterval(liveInterval); liveInterval=null; }
-  if(liveMarker){ map.removeLayer(liveMarker); liveMarker=null; }
 }
+
+function cleanupRequest() {
+  currentRequestId = null;
+
+  // بستن پنل اطلاعات یدکش
+  document.getElementById('tripPanel').style.display = 'none';
+
+  // پاک کردن مسیر یدکش
+  if (towRouteLine) {
+    map.removeLayer(towRouteLine);
+    towRouteLine = null;
+  }
+  
+  // توقف ارسال لوکیشن زنده راننده
+  if (liveInterval) {
+    clearInterval(liveInterval);
+    liveInterval = null;
+  }
+  // می‌تونی اگه خواستی مسیر مبدا-مقصد راننده رو هم پاک کنی
+  // if (routeLine) { map.removeLayer(routeLine); routeLine = null; }
+}
+
+socket.on('tripEnded', (info) => {
+  alert(info.message || "ماموریت پایان یافت توسط یدک‌کش");
+  // اینجا هر UI که خواستی تغییر بده، مثلاً پنل ماموریت رو ببند
+  cleanupRequest();
+});
+
+socket.on('tripCanceled', (info) => {
+  alert(info.message || "ماموریت لغو شد توسط یدک‌کش");
+  cleanupRequest();
+});
+
+
 </script>
 </body>
 </html>
+
