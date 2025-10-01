@@ -115,21 +115,79 @@ ul#driverInfo li{padding:5px 0;}
   </div>
 </div>
 <!-- پنل انتظار -->
-<div id="waitingPanel" style="display:none;">
-  <div style="background:white;color:#111;padding:30px 40px;border-radius:12px;text-align:center;box-shadow:0 10px 25px rgba(0,0,0,0.3);min-width:280px;">
-    <h2 style="margin-bottom:15px;">در انتظار قبول درخواست...</h2>
-    <p>لطفاً صبر کنید، به محض قبول توسط یدک‌کش اطلاع داده می‌شود.</p>
-    <div style="margin-top:20px;">
-      <div class="loader" style="border:4px solid #f3f3f3;border-top:4px solid #3b82f6;border-radius:50%;width:40px;height:40px;margin:0 auto;animation:spin 1s linear infinite;"></div>
-    </div>
-  </div>
+<!-- پنل انتظار -->
+<div id="waitingPanel">
+  <div class="spinner"></div>
+  <div id="waitingText">ما درخواست شما را به یدکش های اطراف فرستادیم <br>...لطفا منتظر پذیرش توسط یدکشان باشید </div>
+
+  <!-- ذرات شناور -->
+  <div class="particle" style="top:90%; left:10%; animation-duration:8s;"></div>
+  <div class="particle" style="top:80%; left:70%; animation-duration:6s;"></div>
+  <div class="particle" style="top:85%; left:40%; animation-duration:7s;"></div>
+  <div class="particle" style="top:95%; left:80%; animation-duration:5s;"></div>
 </div>
-
 <style>
-@keyframes spin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
-@keyframes fadeIn{0%{opacity:0;}100%{opacity:1;}}
-</style>
+  #waitingPanel {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: linear-gradient(120deg, #1a2a6c, #b21f1f, #fdbb2d);
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
+  color: #fff;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  text-align: center;
+}
 
+@keyframes gradientBG {
+  0% {background-position:0% 50%;}
+  50% {background-position:100% 50%;}
+  100% {background-position:0% 50%;}
+}
+
+.spinner {
+  width: 70px;
+  height: 70px;
+  border: 8px solid rgba(255,255,255,0.2);
+  border-top: 8px solid #fff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 20px auto;
+  box-shadow: 0 0 15px rgba(255,255,255,0.4);
+}
+
+@keyframes spin { 
+  0% {transform:rotate(0deg);} 
+  100% {transform:rotate(360deg);} 
+}
+
+#waitingText {
+  font-size: 1.3rem;
+  line-height: 1.5;
+  text-shadow: 1px 1px 5px rgba(0,0,0,0.4);
+}
+
+/* ذرات شناور */
+.particle {
+  position:absolute;
+  width:8px;
+  height:8px;
+  background: rgba(255,255,255,0.5);
+  border-radius:50%;
+  animation: float 6s linear infinite;
+}
+
+@keyframes float {
+  0% {transform: translateY(0) translateX(0);}
+  50% {transform: translateY(-180px) translateX(50px);}
+  100% {transform: translateY(-360px) translateX(-30px);}
+}
+
+</style>
 <!-- پنل پایین راننده -->
 <div id="tripPanel" style="display:none; position:fixed; bottom:0; left:0; right:0; background:#fff; border-top:2px solid #3b82f6; padding:15px; z-index:1001; box-shadow:0 -2px 8px rgba(0,0,0,0.2);">
   <h3>اطلاعات یدک‌کش</h3>
@@ -331,17 +389,15 @@ function startLiveTracking() {
 
 
 // هنگام درخواست سرويس شروع مي‌کنيم
-async function requestService() {
+function requestService() {
   if (!originMarker || !destinationMarker) {
-    alert("ابتدا مبدا و مقصد را تعيين کنيد");
+    alert("ابتدا مبدا و مقصد را تعیین کنید");
     return;
   }
 
   const origin = originMarker.getLatLng();
   const dest = destinationMarker.getLatLng();
   const driverData = JSON.parse(localStorage.getItem("driverData")) || {};
-
-  await getRoute(origin, dest);
 
   socket.emit("requestService", {
     driverId: socket.id,
@@ -355,12 +411,11 @@ async function requestService() {
     }
   });
 
-  // 👈 فقط اینجا نمایش بده
+  // ✅ فقط اینجا نمایش داده بشه
   document.getElementById('waitingPanel').style.display = 'flex';
 
   startLiveTracking();
 }
-
 
 
 
