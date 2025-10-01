@@ -1,0 +1,26 @@
+﻿<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <title>صفحه انتظار</title>
+  <style>
+    #waitingScreen {
+      display: none;
+      text-align: center;
+      margin-top: 50px;
+      font-size: 24px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <button id="requestBtn">درخواست سرویس</button>
+
+  <div id="waitingScreen">
+    در حال یافتن یدک‌کش... لطفاً صبر کنید.
+  </div>
+
+  <script src="https://cdn.socket.io/4.7.1/socket.io.min.js"></script>
+  <script src="waiting.js"></script> <!-- اینجا کد JS صفحه انتظار -->
+</body>
+</html>
