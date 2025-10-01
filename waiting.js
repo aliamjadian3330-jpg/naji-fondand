@@ -8,16 +8,6 @@ requestBtn.addEventListener("click", () => {
   waitingScreen.style.display = "block";
   requestBtn.disabled = true;
 
-  socket.emit("requestService", {
-    origin: { lat: 35.7, lng: 51.4 },
-    dest: { lat: 35.8, lng: 51.5 },
-    driverInfo: {
-      fullName: "علی",
-      phone: "09123456789",
-      plate: "IR123",
-      image: ""
-    }
-  });
 });
 
 socket.on("requestUpdate", (data) => {
@@ -31,4 +21,5 @@ socket.on("requestUpdate", (data) => {
     waitingText.innerText = "یدکشی پیدا نشد صفحه را رفرش کنید ومجدد درخواست بزنید!";
   }
 });
+
 
