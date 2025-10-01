@@ -92,6 +92,7 @@ ul#driverInfo li{padding:5px 0;}
       <input type="text" id="name" placeholder="نام">
       <input type="text" id="phone" placeholder="شماره تماس">
       <input type="text" id="carName" placeholder="نام خودرو">
+      <input type="text" id="plate" placeholder="پلاک خودرو">
       <input type="text" id="carColor" placeholder="رنگ خودرو (مثل red يا #ff0000)">
       <button class="btn-success" onclick="register()">ثبت نام</button>
     </div>
@@ -154,6 +155,7 @@ function register(){
     name:document.getElementById('name').value,
     phone:document.getElementById('phone').value,
     carName:document.getElementById('carName').value,
+    plate: document.getElementById('plate').value,
     carColor:document.getElementById('carColor').value
   };
   localStorage.setItem("driverData",JSON.stringify(data));
@@ -401,8 +403,40 @@ async function drawRouteToTow(driverLatLng, towLatLng) {
   }
 }
 
+function cleanupRequest() {
+  currentRequestId = null;
+
+  // بستن پنل اطلاعات یدکش
+  document.getElementById('tripPanel').style.display = 'none';
+
+  // پاک کردن مسیر یدکش
+  if (towRouteLine) {
+    map.removeLayer(towRouteLine);
+    towRouteLine = null;
+  }
+  
+  // توقف ارسال لوکیشن زنده راننده
+  if (liveInterval) {
+    clearInterval(liveInterval);
+    liveInterval = null;
+  }
+  // می‌تونی اگه خواستی مسیر مبدا-مقصد راننده رو هم پاک کنی
+  // if (routeLine) { map.removeLayer(routeLine); routeLine = null; }
+}
+
+socket.on('tripEnded', (info) => {
+  alert(info.message || "ماموریت پایان یافت توسط یدک‌کش");
+  // اینجا هر UI که خواستی تغییر بده، مثلاً پنل ماموریت رو ببند
+  cleanupRequest();
+});
+
+socket.on('tripCanceled', (info) => {
+  alert(info.message || "ماموریت لغو شد توسط یدک‌کش");
+  cleanupRequest();
+});
 
 
 </script>
 </body>
 </html>
+
