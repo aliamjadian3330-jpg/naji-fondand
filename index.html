@@ -1,0 +1,1467 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ناجي راه</title>
+    <!-- <link rel="stylesheet" href="../naji rah/stylee.css"> -->
+    <link rel="shortcut icon" href="logo7.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+
+    <!-- css -->
+     <style>
+      /* ================== عمومی ================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+  
+}
+
+body {
+  font-family: "Vazir", sans-serif;
+  direction: rtl;
+  background-color: #f5f5f5;
+  line-height: 1.6;
+  height: 5000px;
+}
+
+/* ================== Header Top ================== */
+.header_top {
+  background-color: rgb(255, 128, 0);
+  color: rgb(12, 119, 6);
+  text-align: center;
+  padding: 0.5rem;
+  font-size: 1.6rem;
+  font-weight: bold;
+}
+/* پنل افقی بالای سایت */
+.top-panel-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  background-color: #444;
+  padding: 0.8rem;
+  flex-wrap: wrap;
+  border-bottom: 2px solid orange;
+}
+
+.tab-btn {
+  background-color:#444444;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-size: large;
+  cursor: pointer;
+  transition: transform 0.3s, background-color 0.3s;
+}
+
+.tab-btn:hover, .tab-btn.active {
+  background-color:#0c7706;
+  transform: scale(1.05);
+}
+
+/* محتواهننننننننننننننننننننننننننننننننننننای تب‌ها */
+
+.info-tab {
+  background: linear-gradient(135deg, rgba(179,174,174,0.8), rgba(200,200,200,0.6));
+  border-radius: 15px;
+  padding: 2rem;
+  max-width: 950px;
+  margin: 2rem auto;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+}
+
+.info-tab:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(135deg, rgba(179,174,174,0.9), rgba(220,220,220,0.8));
+}
+
+/* محتوای داخلی */
+.info-tab h3 {
+  font-size: 2rem;
+  color: #0c7706;
+  margin-bottom: 1rem;
+}
+
+.info-tab p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #333;
+}
+
+.sign-tab, .login-tab {
+  transition: transform 0.3s, background-color 0.3s;
+}
+
+.sign-tab:hover, .login-tab:hover {
+  transform: scale(1.1);
+}
+
+
+/* .............................................. */
+/* ================== Top Panel Tabs - Modern ================== */
+.top-panel-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  background: linear-gradient(90deg, #444, #555);
+  padding: 1rem 0;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  flex-wrap: wrap;
+  transition: all 0.3s ease;
+}
+
+.tab-btn {
+  position: relative;
+  background: linear-gradient(135deg, #0c7706, #66bb6a);
+  color: white;
+  border: none;
+  padding: 0.7rem 1.5rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.tab-btn::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+  width: 100%;
+  background: orange;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease;
+}
+
+.tab-btn:hover::after, .tab-btn.active::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.tab-btn:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+}
+
+.tab-btn.active {
+  background: linear-gradient(135deg, #4caf50, #087f23);
+}
+
+/* ================== Tab Content Modern ================== */
+.tab-content {
+  display: none;
+  padding: 2rem 2.5rem;
+  margin: 2rem auto;
+  max-width: 950px;
+  background: linear-gradient(145deg, rgba(255,255,255,0.95), rgba(240,240,240,0.8));
+  border-radius: 20px;
+  box-shadow: 0 15px 25px rgba(0,0,0,0.15);
+  font-size: 1.15rem;
+  line-height: 1.7;
+  transition: all 0.5s ease;
+}
+
+.tab-content.active {
+  display: block;
+  animation: fadeSlide 0.5s ease forwards;
+}
+
+@keyframes fadeSlide {
+  0% { opacity: 0; transform: translateY(20px);}
+  100% { opacity: 1; transform: translateY(0);}
+}
+
+/* ================== Sign & Login Buttons ================== */
+.sign-tab, .login-tab {
+  display: inline-block;
+  margin-right: 1.5%;
+  padding: 0.7rem 1.5rem;
+  border-radius: 15px;
+  font-weight: bold;
+  font-family: Arial, Helvetica, sans-serif;
+  text-decoration: none;
+  border: 2px solid transparent;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.sign-tab {
+  background: linear-gradient(135deg, #ff6f00, #ff9800);
+  border-color: #e65100;
+}
+
+.sign-tab:hover {
+  background: linear-gradient(135deg, #e65100, #ff6f00);
+  transform: scale(1.05) translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+}
+
+.login-tab {
+  background: linear-gradient(135deg, #2196f3, #64b5f6);
+  border-color: #1565c0;
+}
+
+.login-tab:hover {
+  background: linear-gradient(135deg, #1565c0, #2196f3);
+  transform: scale(1.05) translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+}
+
+
+
+/* ================== Header Main - Modern & Professional ================== */
+.header {
+  background: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.2) 100%),
+              url('background-yadk.jpg') no-repeat center center / cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 75vh;
+  text-align: center;
+  color: white;
+  padding: 3rem 1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.25);
+  z-index: 0;
+}
+
+.header_box {
+  max-width: 850px;
+  z-index: 1;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  padding: 2rem;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.header_box:hover {
+  transform: scale(1.03);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+}
+
+.font_Naji {
+  font-size: 4rem;
+  color: #00FF00;
+  font-family: 'Impact', sans-serif;
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+  animation: pulse 2s infinite alternate;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.05); }
+}
+
+.header_box h1 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin: 1rem 0;
+  line-height: 1.4;
+  color: #fff;
+  text-shadow: 1px 1px 6px rgba(0,0,0,0.6);
+}
+
+.header_box h2 {
+  font-size: 1.3rem;
+  color: #ddd;
+  font-weight: 400;
+  margin-bottom: 2rem;
+  text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.btn {
+  text-decoration: none;
+  border: 2px solid #fff;
+  padding: 0.8rem 1.8rem;
+  color: #fff;
+  border-radius: 12px;
+  font-family: 'Impact', sans-serif;
+  font-weight: 700;
+  text-align: center;
+  transition: all 0.4s ease;
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(6px);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0.2);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+  z-index: 0;
+}
+
+.btn:hover::after {
+  transform: scaleX(1);
+}
+
+.btn:hover {
+  background-color: #0c7706;
+  color: #fff;
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+  border-color: #0c7706;
+  z-index: 1;
+}
+
+.btn span {
+  position: relative;
+  z-index: 1;
+}
+/* ================== Header Main - Mobile Optimization ================== */
+@media (max-width: 768px) {
+  .header {
+    min-height: 60vh;
+    padding: 2rem 1rem;
+  }
+
+  .header_box {
+    padding: 1.5rem;
+    border-radius: 16px;
+  }
+
+  .font_Naji {
+    font-size: 3rem;
+  }
+
+  .header_box h1 {
+    font-size: 1.8rem;
+  }
+
+  .header_box h2 {
+    font-size: 1rem;
+  }
+
+  .links {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .btn {
+    width: 90%;
+    padding: 0.7rem 1.2rem;
+    font-size: 0.95rem;
+  }
+}
+
+/* ================== Services Section ================== */
+.text_info {
+  text-align: center;
+  background-color: #cccccc;
+  font-size: x-large;
+}
+
+.services {
+  background-color: #ccc;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  padding: 2rem;
+  gap: 1.5rem;
+  
+}
+
+.service {
+  background: white;
+  border-radius: 10px;
+  padding: 1rem;
+  width: 250px;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  margin-top: 8vh;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.service:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+.service img {
+  max-width: 100px; /* تصاویر کوچکتر */
+  height: auto;
+  margin-bottom: 1rem;
+}
+
+.service h3 {
+  font-size: 1.1rem;
+  color: #333;
+}
+
+
+/* ================== Article Section ================== */
+.article_piccher {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  background-color: #f0f0f0;
+  padding: 4vh 2vw;
+  gap: 2rem;
+}
+
+.article_image {
+  width: 45%;
+  display: flex;
+  justify-content: center;
+}
+
+.article_image img {
+  width: 80%; /* تصاویر کوچک‌تر */
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+}
+
+.article_text {
+  background-color: rgba(200,200,200,0.3); /* پس‌زمینه طوسی */
+  width: 45%;
+  padding: 2rem;
+  border-radius: 12px;
+  color: #000;
+  direction: rtl;
+}
+
+.article_text_one {
+  text-align: center;
+  font-size: 2.5rem;
+  font-style: italic;
+  margin-bottom: 2rem;
+}
+
+.article_text_two {
+  text-align: center;
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+.article_text_tree {
+  text-align: justify;
+  font-size: 1rem;
+  line-height: 2.2; /* بهتر شدن خوانایی */
+  font-weight: bold;
+  color: #000;
+}
+
+/* ================== Article 2 Section ================== */
+.article_img2 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  padding: 2rem;
+  background-color:#cccccc;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+  direction: rtl;
+}
+
+.article_image_wrapper {
+  flex: 1 1 40%;
+  text-align: center;
+}
+
+.article_image_wrapper img {
+  max-width: 90%; /* تصاویر کوچک‌تر */
+  height: auto;
+  border-radius: 12px;
+}
+
+.article_text2 {
+  flex: 1 1 50%;
+  background-color: rgba(200,200,200,0.3); /* پس‌زمینه طوسی */
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+  font-family: IRANSansMobile-fa, sans-serif;
+  font-size: 1.1rem;
+  line-height: 2.2;
+  text-align: justify;
+  color:#000;
+  font-weight: bold;
+}
+
+/* ================== Footer ================== */
+.footer {
+  background-color: #222;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 1.5rem;
+}
+
+.footer-links {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.footer-links a {
+  color: white;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: color 0.3s;
+}
+
+.footer-links a:hover {
+  color: orange;
+}
+
+.social-icons {
+  display: flex;
+  gap: 1rem;
+}
+
+.social-icons a {
+  color: white;
+  font-size: 1.5rem;
+  transition: transform 0.3s, color 0.3s;
+}
+
+.social-icons a:hover {
+  color: #25D366; /* سبز واتساپ */
+  transform: scale(1.2);
+}
+
+/* ================== Responsive ================== */
+@media (max-width: 768px) {
+  .header_box h1 {
+    font-size: 1.4rem;
+  }
+
+  .header_box h2 {
+    font-size: 1rem;
+  }
+
+  .links {
+    flex-direction: column;
+  }
+
+  .services {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .service {
+    width: 90%;
+  }
+
+  .article_piccher {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .article_image, .article_text,
+  .article_image_wrapper, .article_text2 {
+    width: 90%;
+  }
+
+  .article_img2 {
+    flex-direction: column;
+    padding: 1rem;
+  }
+
+  .article_text2 {
+    padding: 1.5rem;
+    font-size: 1rem;
+  }
+}
+.why-us {
+  text-align: center;
+  padding: 4rem 2rem;
+  background-color: rgba(240, 240, 240, 0.5);
+  
+}
+
+.why-us h2 {
+  font-size: 3rem;
+  margin-bottom: 3rem;
+  color: #222;
+}
+
+.why-us-cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 3rem;
+  font-weight: bold;
+}
+
+.why-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  width: 220px;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.why-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+.why-card i {
+  font-size: 2rem;
+  color: orange;
+  margin-bottom: 1rem;
+}
+
+.why-card h3 {
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.why-card p {
+  font-size: 1rem;
+  color: #555;
+  line-height: 1.5;
+}
+
+/* ریسپانسیو */
+@media (max-width: 768px) {
+  .why-us-cards {
+      flex-direction: column;
+      align-items: center;
+  }
+}
+/* فرم ثبت نام پنل پنل های  بالا */
+/* auth.css */
+*{box-sizing:border-box} html,body{margin:0}
+body{font-family:"Vazir",Tahoma,Arial;direction:rtl;background:#969796}
+.auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+.auth-card{width:100%;max-width:480px;background:#fff;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.08);padding:24px}
+.auth-title{margin:0 0 8px;font-size:1.5rem;font-weight:800;color:#222;text-align:center}
+.auth-sub{margin:0 0 20px;text-align:center;color:#666}
+.form-row{margin-bottom:14px}
+label{display:block;margin-bottom:6px;color:#222;font-weight:700}
+input,select{width:100%;padding:12px 14px;border:1px solid #ddd;border-radius:10px;font-size:15px;background:#fff}
+input:focus,select:focus{outline:none;border-color:#0c7706;box-shadow:0 0 0 3px rgba(12,119,6,.08)}
+.helper{font-size:.85rem;color:#777;margin-top:6px}
+.actions{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
+.btn{appearance:none;border:0;border-radius:10px;padding:12px 16px;font-weight:800;cursor:pointer}
+.btn-primary{background:#0c7706;color:#fff}
+.btn-secondary{background:#eee}
+.hr{height:1px;background:#eee;margin:14px 0}
+.error{color:#b30000;font-size:.9rem;margin-top:6px;display:none}
+.error.show{display:block}
+.link{color:#0c7706;text-decoration:none}
+.small{font-size:.9rem;color:#666}
+.center{text-align:center}
+/* داشبورد راننده */
+body {
+  font-family: "Vazir", sans-serif;
+  background-color: #f9f9f9;
+  margin: 0;
+  padding: 0;
+  direction: rtl;
+}
+
+.dashboard-header {
+  background: orange;
+  color: white;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.dashboard-header h1 {
+  margin: 0;
+}
+
+.dashboard-header nav a {
+  margin-right: 1rem;
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.dashboard-header nav a:hover {
+  text-decoration: underline;
+}
+
+.dashboard-main {
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.card h2 {
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.btn {
+  background: green;
+  color: white;
+  border: none;
+  padding: 0.7rem 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+.btn:hover {
+  background: darkgreen;
+}
+
+/* فرم درخواست */
+.request-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.request-form input,
+.request-form textarea {
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+/* جدول */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  border: 1px solid #ddd;
+  padding: 0.6rem;
+  text-align: center;
+}
+
+.table th {
+  background: #f2f2f2;
+  color: #333;
+}
+
+/* ریسپانسیو */
+@media (max-width: 900px) {
+  .dashboard-main {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ================== استایل نظر سنجی ================== */
+.feedback-section {
+  background-color: #f0f0f0;
+  padding: 4rem 2rem;
+  text-align: center;
+  direction: rtl;
+}
+
+.feedback-container {
+  max-width: 600px;
+  margin: 0 auto;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.feedback-container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+}
+
+.feedback-container h2 {
+  font-size: 2rem;
+  color: #222;
+  margin-bottom: 0.5rem;
+}
+
+.feedback-container p {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 1.5rem;
+}
+
+.feedback-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.feedback-form input,
+.feedback-form textarea {
+  padding: 0.8rem 1rem;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  resize: none;
+}
+
+.feedback-form input:focus,
+.feedback-form textarea:focus {
+  outline: none;
+  border-color: #0c7706;
+  box-shadow: 0 0 0 3px rgba(12,119,6,0.1);
+}
+
+.feedback-form button {
+  background-color: #0c7706;
+  color: #fff;
+  border: none;
+  padding: 0.8rem 1.2rem;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.feedback-form button:hover {
+  background-color: #075005;
+  transform: scale(1.05);
+}
+
+/* ریسپانسیو */
+@media (max-width: 768px) {
+  .feedback-container {
+    padding: 1.5rem;
+  }
+
+  .feedback-container h2 {
+    font-size: 1.5rem;
+  }
+
+  .feedback-form input,
+  .feedback-form textarea {
+    font-size: 0.95rem;
+  }
+}
+
+/* ================== استایل ویجت ================== */
+.support-widget {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  font-family: "Vazir", sans-serif;
+  z-index: 9999;
+}
+
+/* دکمه شناور */
+.support-toggle {
+  background-color: #0c7706;
+  color: white;
+  padding: 0.8rem 1rem;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  transition: transform 0.3s, box-shadow 0.3s;
+  animation: pulse 2s infinite;
+}
+
+.support-toggle:hover {
+  transform: scale(1.05);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.3);
+}
+
+/* انیمیشن پالس */
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(12,119,6,0.4); }
+  50% { box-shadow: 0 0 15px 5px rgba(12,119,6,0.4); }
+}
+
+/* پنل پشتیبانی */
+.support-panel {
+  position: absolute;
+  bottom: 60px;
+  right: 0;
+  width: 320px;
+  max-width: 90vw;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 12px 25px rgba(0,0,0,0.3);
+  overflow: hidden;
+  display: none;
+  flex-direction: column;
+}
+
+/* هدر پنل */
+.support-header {
+  background-color: #0c7706;
+  color: white;
+  padding: 0.8rem 1rem;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* دکمه بستن */
+.close-btn {
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.close-btn:hover { transform: rotate(90deg); }
+
+/* بدنه پنل */
+.support-body {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.support-body p {
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+/* فرم */
+.support-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.support-form input,
+.support-form textarea {
+  padding: 0.6rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 0.95rem;
+  width: 100%;
+}
+
+.support-form input:focus,
+.support-form textarea:focus {
+  outline: none;
+  border-color: #0c7706;
+  box-shadow: 0 0 0 3px rgba(12,119,6,0.1);
+}
+
+.support-form button {
+  background-color: #0c7706;
+  color: white;
+  border: none;
+  padding: 0.6rem;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.support-form button:hover {
+  background-color: #075005;
+}
+
+/* ریسپانسیو موبایل */
+@media(max-width: 768px){
+  .support-panel { width: 90vw; }
+}
+
+
+/* ================== استایل تماس با ما ================== */
+.contact-us {
+  background-color: #adacac;
+  padding: 4rem 2rem;
+  font-family: "Vazir", sans-serif;
+}
+
+.contact-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.contact-container h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  color: #0c7706;
+  margin-bottom: 1rem;
+}
+
+.contact-container p {
+  text-align: center;
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 3rem;
+}
+
+.contact-content {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+/* فرم */
+.contact-form {
+  flex: 1 1 45%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.contact-form input,
+.contact-form textarea {
+  padding: 0.8rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  width: 100%;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  outline: none;
+  border-color: #0c7706;
+  box-shadow: 0 0 0 3px rgba(12,119,6,0.1);
+}
+
+.contact-form button {
+  background-color: #0c7706;
+  color: white;
+  border: none;
+  padding: 0.8rem;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.contact-form button:hover {
+  background-color: #075005;
+}
+
+/* اطلاعات تماس */
+.contact-info {
+  flex: 1 1 45%;
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.contact-info h3 {
+  margin-bottom: 1rem;
+  color: #0c7706;
+}
+
+.contact-info p {
+  font-size: 1rem;
+  margin-bottom: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.social-links {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.social-links a {
+  color: #0c7706;
+  font-size: 1.5rem;
+  transition: transform 0.3s, color 0.3s;
+}
+
+.social-links a:hover {
+  transform: scale(1.2);
+  color: #075005;
+}
+
+/* ریسپانسیو */
+@media(max-width: 900px) {
+  .contact-content {
+    flex-direction: column;
+  }
+  .contact-form, .contact-info {
+    flex: 1 1 100%;
+  }
+}
+     </style>
+</head>
+
+<body>
+
+  
+    <!-- Header -->
+    <div class="header_top">
+        <img src="logo7.png" alt=" ناجي راه" width="90.6px">
+        <p>«نگران نباش، امداد نزديکتر از هميشه است.»</p>
+    </div>
+<!-- پنل بالای سایت -->
+<div class="top-panel-tabs">
+  <button class="tab-btn active" data-tab="driver">راننده</button>
+  <button class="tab-btn" data-tab="tow">یدک‌کش</button>
+  <button class="tab-btn" data-tab="mechanic">مکانیک</button>
+  <button class="tab-btn" data-tab="electric">برق‌کار</button>
+  <button class="tab-btn" data-tab="about">درباره ناجی راه</button>
+</div>
+
+<!-- محتواهای تب‌ها -->
+<div class="info-tab">
+<div class="tab-content ive" id="driver">
+  <h3>ثبت‌نام راننده</h3>
+  <p>فرم یا اطلاعات مربوط به راننده.
+    ◀️
+    <a class="sign-tab" href="driver-signup.html"target="_blank">
+      
+      ثبت نام
+    
+    </a>
+    <a class="login-tab" href="driver-login.html"target="_blank">
+      ورود
+    </a>
+</p>
+</div>
+
+<div class="tab-content" id="tow">
+  <h3>ثبت‌نام یدک‌کش</h3>
+  <p>فرم یا اطلاعات مربوط به یدک‌کش
+    ◀️
+    <a class="sign-tab" href="tow-signup.html"target="_blank">
+      
+      ثبت نام
+    
+    </a>
+    <a class="login-tab" href="tow-login.html"target="_blank">
+      ورود
+    </a>
+</p>
+</div>
+
+<div class="tab-content" id="mechanic">
+  <h3>ثبت‌نام مکانیک</h3>
+  <p>فرم یا اطلاعات مربوط به مکانیک <span style="color:red ;">(بزودی فعال میشود)</span></p>
+</div>
+
+<div class="tab-content" id="electric">
+  <h3>ثبت‌نام برق‌کار</h3>
+  <p>فرم یا اطلاعات مربوط به برق‌کار <span style="color:red ;">(بزودی فعال میشود)</span></p>
+</div>
+
+<div class="tab-content" id="about">
+  <h3>درباره ناجی راه</h3>
+  <p>
+      «ناجی راه» یک پلتفرم حرفه‌ای برای ارائه خدمات یدک‌کش، مکانیک و برق‌کار در جاده‌ها است.
+      هدف ما کاهش زمان انتظار، ارائه خدمات سریع و قابل اعتماد و افزایش امنیت رانندگان است.
+  </p>
+   </div>
+</div>
+
+    <header class="header">
+        <div class="header_box">
+            <h1>
+               <span class="font_Naji">Naji</span><br>
+               </h1>
+               <h1 style="font-weight:bolder; font-size:35px;">
+                <span style="color:#00FF00 ;">ناجي راه</span>!راه حل تمام جاده‌ها و ناجي تمام رانندگان!
+            </h1>
+            <h2>(ناجي راه؛ همراهي مطمئن در مسير سفرتان)</h2>
+        </div>
+    </header>
+
+    <!-- خدمات -->
+    <div class="text_info">
+        <h1>
+    يک اپليکيشن   <span style="color:red;">ضروري </span>، براي هر راننده
+        </h1>
+    </div>
+    <section class="services">       
+        <div class="service">
+            <a href="driver-signup.html" target="_blank">
+            <img src="tt.png" alt="يدک کش">
+            </a>
+            <h3>درخواست<br>يدک‌کش</h3>
+        </div>
+        <div class="service">
+            <a href="">
+            <img src="caring2.png" alt="مکانيک">
+            </a>
+            <h3>درخواست<br>مکانيک <span style="color:red ;">(بزودی)</span></h3>
+        </div>
+        <div class="service">
+            <a href="" target="_blank">
+            <img src="برقکار22.png" alt=" برقکار">
+            </a>
+            <h3>درخواست<br>برقکار <span style="color:red ;">(بزودی)</span></h3>
+        </div>
+    </section>
+    
+<!-- .............................................................................. -->
+<!-- شروع معرفي پلتفرم ناجي راه -->
+<article>
+    <div class="article_piccher">
+      <div class="article_image">
+        <img src="imging3.png" alt="خرابي خودرو">
+      </div>
+      <div class="article_text">
+        <h1 class="article_text_one">ناجي راه</h1>
+        <h2 class="article_text_two">
+          تجربه‌ي سفري راحت‌تر و سريع‌تر و<br>ايمن‌تر با اپليکيشن <span style="color:rgba(137, 0, 0, 0.827);">ناجي راه</span>
+        </h2>
+        <p class="article_text_tree">
+          اين سرويس با هدف کاهش زمان انتظار، افزايش شفافيت در قيمت و دسترسي آسان به خدمات يدک‌کش، برق خودرو و مکانيکي راه‌اندازي شده است.
+          هدف ما از راه‌اندازي اين پلتفرم، نبود يک راهکار ساده، سريع و قابل اعتماد براي دريافت خدمات امدادي خودرو، مخصوصاً در جاده‌ها و شرايط بحراني بود.
+          در بسياري از مواقع، رانندگان يا اطلاعي از خدمات اطراف ندارند، يا بايد از طريق تماس‌هاي متعدد و با عدم قطعيت بالا مشکل را حل کنند. «ناجي راه» اين فرآيند را ديجيتالي، سريع و کاربرمحور طراحي کرده است.
+        </p>
+      </div>
+    </div>
+</article>
+<!-- ......................................level........................................ -->
+<article>
+    <div class="web">
+      <div class="article_box">
+        <div class="article_img2">
+          <div class="article_image_wrapper">
+            <img src="imging4.png" alt="مشکلات برق خودرو">
+          </div>
+          <div class="article_text2">
+            <p>
+              ? پشتيباني کامل از مشکلات برق در بيابان:  
+              باتري تمام شد؟ برق‌کار سيار ما با دستگاه‌هاي پرتابل و استارتر فوري اعزام مي‌شود.  
+              دينام مشکل دارد؟ تشخيص سريع در محل و اعلام وضعيت واقعي (تعمير يا حمل فوري).  
+              فيوز سوخت؟ چراغ خاموش شد؟ قطعات استاندارد همراه با برق‌کار وجود دارد.  
+              اتصالات قطع يا معيوب‌اند؟ برق‌کاران ما با ابزار کامل و تجربه‌ي جاده‌اي، مشکل را سريع حل مي‌کنند.  
+              استارت نمي‌زند؟ ما فقط تشخيص نمي‌دهيم؛ در محل راه‌اندازي مي‌کنيم.  
+              <br><br>
+              ?? تفاوت ما:  
+              برق‌کاران ما از قبل آموزش ديده‌اند براي شرايط جاده‌اي و بياباني، نه فقط تعمير در مغازه.  
+              ابزار کامل، باتري پرتابل، استارت اضطراري و قطعات مصرفي هميشه همراه برق‌کار است.  
+              موقعيت مکاني راننده دقيق تشخيص داده مي‌شود؛ نيازي به توضيح لوکيشن نيست.  
+              زمان رسيدن نيرو به شما به‌صورت زنده نمايش داده مي‌شود.  
+              <br><br>
+              ?? با «ناجي راه»، مشکلات برقي در بيابان پايان مي‌يابد؛  
+              نه توقفي، نه نگراني، نه خاموشي.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </article>
+  
+
+<!-- پايان معرفي پلتفرم ناجي راه -->
+<!-- شروع فوتر -->
+<footer class="why-us">
+  <h2>چرا ما؟</h2>
+  <div class="why-us-cards">
+      <div class="why-card">
+          <i class="fas fa-shield-alt"></i>
+          <h3>امنیت بالا</h3>
+          <p>خدمات قابل اعتماد و سریع برای رانندگان در جاده.</p>
+      </div>
+      <div class="why-card">
+          <i class="fas fa-clock"></i>
+          <h3>رسیدگی سریع</h3>
+          <p>اعزام فوری یدک‌کش و تعمیرکار به محل شما.</p>
+      </div>
+      <div class="why-card">
+          <i class="fas fa-tools"></i>
+          <h3>تخصص حرفه‌ای</h3>
+          <p>تیم مکانیک و برقکار آموزش دیده و حرفه‌ای.</p>
+      </div>
+      <div class="why-card">
+          <i class="fas fa-map-marker-alt"></i>
+          <h3>پوشش گسترده</h3>
+          <p>خدمات در اکثر جاده‌های اصلی و بین‌شهری.</p>
+      </div>
+  </div>
+  <!-- ================== نظر سنجی ================== -->
+<section class="feedback-section">
+  <div class="feedback-container">
+    <h2>نظر شما برای ما اهمیت دارد</h2>
+    <p>سوال یا پیشنهاد خود را وارد کنید تا به آن پاسخ دهیم</p>
+    <form action="https://formspree.io/f/yourFormID" method="POST" class="feedback-form">
+      <input type="text" name="name" placeholder="نام شما" required>
+      <input type="email" name="email" placeholder="ایمیل (اختیاری)">
+      <textarea name="message" rows="4" placeholder="نظر یا سوال شما..." required></textarea>
+      <button type="submit">ارسال نظر</button>
+    </form>
+  </div>
+</section>
+<!-- .................................................. -->
+ <!-- ================== پشتیبانی 24 ساعته حرفه‌ای ================== -->
+<div class="support-widget">
+  <div class="support-toggle">
+    <i class="fas fa-headset"></i>
+    <span>پشتیبانی ۲۴ ساعته</span>
+  </div>
+  <div class="support-panel">
+    <div class="support-header">
+      <span>پشتیبانی آنلاین</span>
+      <i class="fas fa-times close-btn"></i>
+    </div>
+    <div class="support-body">
+      <p>سوالی داری؟ همین حالا پیام بده!</p>
+      <form class="support-form" action="https://formspree.io/f/yourFormID" method="POST">
+        <input type="text" name="name" placeholder="نام شما" required>
+        <input type="email" name="email" placeholder="ایمیل شما" required>
+        <textarea name="message" rows="4" placeholder="پیام شما..." required></textarea>
+        <button type="submit">ارسال پیام</button>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- ............................................. -->
+ <!-- ================== تماس با ما ================== -->
+<div class="call">
+ <section class="contact-us">
+  <div class="contact-container">
+    <h2>تماس با ما</h2>
+    <p>هر سوال یا مشکلی دارید، با ما در ارتباط باشید. ما همیشه آماده پاسخگویی هستیم!</p>
+
+    <div class="contact-content">
+      <!-- فرم تماس -->
+      <form class="contact-form" action="https://formspree.io/f/yourFormID" method="POST">
+        <input type="text" name="name" placeholder="نام شما" required>
+        <input type="email" name="email" placeholder="ایمیل شما" required>
+        <input type="text" name="subject" placeholder="موضوع پیام" required>
+        <textarea name="message" rows="5" placeholder="پیام شما..." required></textarea>
+        <button type="submit">ارسال پیام</button>
+      </form>
+
+      <!-- اطلاعات تماس -->
+      <div class="contact-info">
+        <h3>راه‌های ارتباطی</h3>
+        <p><i class="fas fa-map-marker-alt"></i> آدرس: تهران، ایران</p>
+        <p><i class="fas fa-phone"></i> شماره تماس: +98 912 345 6789</p>
+        <p><i class="fas fa-envelope"></i> ایمیل: info@naji-rah.com</p>
+        <h3>شبکه‌های اجتماعی</h3>
+        <div class="social-links">
+          <a href="https://wa.me/yourNumber" target="_blank"><i class="fab fa-whatsapp"></i></a>
+          <a href="https://instagram.com/yourPage" target="_blank"><i class="fab fa-instagram"></i></a>
+          <a href="https://t.me/yourTelegram" target="_blank"><i class="fab fa-telegram"></i></a>
+          <a href="https://twitter.com/yourProfile" target="_blank"><i class="fab fa-twitter"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- نقشه گوگل -->
+    <div class="map">
+      <iframe 
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3239.123456789!2d51.123456789!3d35.123456789!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3f8e0123456789%3A0x123456789abcdef!2sYour+Location!5e0!3m2!1sen!2sir!4v1696212345678!5m2!1sen!2sir" 
+        width="100%" 
+        height="350" 
+        style="border:0;" 
+        allowfullscreen="" 
+        loading="lazy" 
+        referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+  </div>
+</section>
+</div>
+</footer>
+
+
+<footer class="footer">
+  <div class="footer-links">
+    <a href="#">کار و عملکرد ناجي راه</a>
+    <a href="#">فرصت‌هاي شغلي</a>
+    <a href="#">شرايط و قوانين</a>
+    <a href="#">سوالات متداول</a>
+    <a href="#">درباره ما</a>
+    <a href="#">تماس با ما</a>
+  </div>
+  <div class="social-icons">
+
+    <a href="https://wa.me/yourNumber" target="_blank"><i class="fab fa-whatsapp"></i></a>
+    <a href="https://instagram.com/yourPage" target="_blank"><i class="fab fa-instagram"></i></a>
+    <a href="https://youtube.com/yourChannel" target="_blank"><i class="fab fa-youtube"></i></a>
+    <a href="https://t.me/yourTelegram" target="_blank"><i class="fab fa-telegram"></i></a>
+    <a href="https://twitter.com/yourProfile" target="_blank"><i class="fab fa-twitter"></i></a>
+  </div>
+  <p>&copy; 2025 ناجی راه. تمام حقوق محفوظ است.</p>
+</footer>
+
+<!-- پایان فوتر -->
+<!-- <script src="js.js"></script> -->
+ <script>
+  
+
+  const tabs = document.querySelectorAll('.tab-btn');
+  const contents = document.querySelectorAll('.tab-content');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      // غیرفعال کردن تب‌ها و محتواهای قبلی
+      tabs.forEach(t => t.classList.remove('active'));
+      contents.forEach(c => c.classList.remove('active'));
+
+      // فعال کردن تب و محتوای انتخابی
+      tab.classList.add('active');
+      const activeContent = document.getElementById(tab.dataset.tab);
+      activeContent.classList.add('active');
+    });
+  });
+
+// ...................................................
+  const toggleBtn = document.querySelector('.support-toggle');
+const supportPanel = document.querySelector('.support-panel');
+const closeBtn = document.querySelector('.close-btn');
+
+toggleBtn.addEventListener('click', () => {
+  supportPanel.style.display = supportPanel.style.display === "flex" ? "none" : "flex";
+});
+
+closeBtn.addEventListener('click', () => {
+  supportPanel.style.display = "none";
+});
+
+ </script>
+</body>
+
+</html>
