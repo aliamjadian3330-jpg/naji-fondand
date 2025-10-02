@@ -68,7 +68,7 @@
 <div id="mapContainer">
   <div id="map"></div>
 
-  <button id="toggleBtn" onclick="togglePanel()">?ردذذاد</button>
+  <button id="toggleBtn" onclick="togglePanel()">د</button>
 
   <div id="slidePanel" aria-hidden="true">
     <h2>داشبورد يدکش</h2>
@@ -300,7 +300,8 @@ socket.on('receiveRequest', async (data) => {
   document.getElementById('driverRequestPanel').style.display = 'block';
 
   // پخش صدا براي جلب توجه
-  const audio = new Audio('/sounds/Apple Ringtone 4.mp3');
+  const audio = new Audio('https://naji-backend.onrender.com/sounds/Apple%20Ringtone%204.mp3');
+audio.play().catch(err => console.warn(err));
 
 
 
@@ -437,5 +438,6 @@ console.log("tow panel loaded");
 </script>
 </body>
 </html>
+
 
 
