@@ -68,7 +68,7 @@
 <div id="mapContainer">
   <div id="map"></div>
 
-  <button id="toggleBtn" onclick="togglePanel()">☰</button>
+  <button id="toggleBtn" onclick="togglePanel()">؟</button>
 
   <div id="slidePanel" aria-hidden="true">
     <h2>داشبورد یدکش</h2>
@@ -300,7 +300,10 @@ socket.on('receiveRequest', async (data) => {
   document.getElementById('driverRequestPanel').style.display = 'block';
 
   // پخش صدا برای جلب توجه
-  try { new Audio('https://cdn.pixabay.com/download/audio/2022/03/15/audio_bass-drop-12345.mp3?filename=bass-drop-3.mp3').play(); } catch(e){}
+  // در سمت کلاینت (یدک‌کش)
+const audio = new Audio('https://freesound.org/data/previews/827/827736_1287355-lq.mp3');
+audio.play();
+
 
   // اضافه کردن مارکر راننده و مقصد به نقشه
   driverMarker = L.marker([data.origin.lat, data.origin.lng], {
@@ -435,4 +438,5 @@ console.log("tow panel loaded");
 </script>
 </body>
 </html>
+
 
