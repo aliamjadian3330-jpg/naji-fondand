@@ -11,25 +11,151 @@
 <script src="https://cdn.jsdelivr.net/npm/persian-date@1.1.0/dist/persian-date.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/js/persian-datepicker.min.js"></script>
 <style>
-body {font-family: 'Vazir', sans-serif; margin:0; padding:0; background:#00c3ff;}
-.auth-wrap {display:flex; justify-content:center; align-items:center; min-height:100vh;}
-.auth-card {background:rgba(255,255,255,0.95); padding:40px 30px; border-radius:15px; box-shadow:0 8px 20px rgba(0,0,0,0.15); max-width:450px; width:90%;}
-.auth-title {text-align:center; color:#00c3ff; margin-bottom:10px; font-size:28px;}
-.auth-sub {text-align:center; color:#555; margin-bottom:20px;}
-.form-row {margin-bottom:20px; display:flex; flex-direction:column;}
-.form-row label {margin-bottom:5px; font-weight:bold; color:#333;}
-.form-row input {padding:10px 15px; border:1px solid #ccc; border-radius:8px; font-size:15px; transition:0.3s;}
-.form-row input:focus {border-color:#00c3ff; outline:none; box-shadow:0 0 5px rgba(0,195,255,0.5);}
-.actions {display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:15px;}
-.btn {padding:12px 20px; border:none; border-radius:8px; cursor:pointer; font-weight:bold; font-size:15px; transition:0.3s;}
-.btn-primary {background:#00c3ff; color:#fff;}
-.btn-primary:hover {background:#009ecb;}
-.btn-secondary {background:#ccc; color:#333; text-decoration:none; display:inline-block; text-align:center;}
-.btn-secondary:hover {background:#bbb;}
-.signup-footer {text-align:center; font-size:14px; color:#555; margin-top:10px;}
-.signup-footer a {color:#00c3ff; text-decoration:none; font-weight:bold;}
-.signup-footer a:hover {text-decoration:underline;}
-@media (max-width:500px){.actions {flex-direction:column;}} 
+  /* تنظیمات اولیه و فونت */
+  body {
+    font-family: 'Vazir', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #00c3ff, #009ecb);
+  }
+
+  /* تنظیمات فرم و المان‌ها */
+  .auth-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: rgba(0, 0, 0, 0.1);
+  }
+
+  .auth-card {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 40px 30px;
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    max-width: 450px;
+    width: 90%;
+    transition: 0.3s;
+  }
+
+  .auth-card:hover {
+    transform: scale(1.02);
+  }
+
+  .auth-title {
+    text-align: center;
+    color: #00c3ff;
+    margin-bottom: 10px;
+    font-size: 32px;
+    font-weight: bold;
+  }
+
+  .auth-sub {
+    text-align: center;
+    color: #555;
+    margin-bottom: 20px;
+    font-size: 16px;
+  }
+
+  .form-row {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .form-row label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+  }
+
+  .form-row input {
+    padding: 12px 18px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 16px;
+    transition: 0.3s;
+    background: #f7f7f7;
+  }
+
+  .form-row input:focus {
+    border-color: #00c3ff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 195, 255, 0.5);
+    background: #fff;
+  }
+
+  .actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+
+  .btn {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+    transition: 0.3s;
+    display: inline-block;
+    width: 100%;
+  }
+
+  .btn-primary {
+    background: #00c3ff;
+    color: white;
+  }
+
+  .btn-primary:hover {
+    background: #009ecb;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 195, 255, 0.2);
+  }
+
+  .btn-secondary {
+    background: #ccc;
+    color: #333;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+  }
+
+  .btn-secondary:hover {
+    background: #bbb;
+    transform: translateY(-2px);
+  }
+
+  .signup-footer {
+    text-align: center;
+    font-size: 14px;
+    color: #555;
+    margin-top: 10px;
+  }
+
+  .signup-footer a {
+    color: #00c3ff;
+    text-decoration: none;
+    font-weight: bold;
+  }
+
+  .signup-footer a:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 500px) {
+    .actions {
+      flex-direction: column;
+    }
+    .btn {
+      width: 100%;
+    }
+  }
+
 </style>
 </head>
 <body>
@@ -145,4 +271,5 @@ try {
 </script>
 </body>
 </html>
+
 
