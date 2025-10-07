@@ -1,160 +1,182 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ثبت‌نام راننده | ناجی راه</title>
-  <link rel="shortcut icon" href="logo7.png">
 <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/css/persian-datepicker.min.css">
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/persian-date@1.1.0/dist/persian-date.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/js/persian-datepicker.min.js"></script>
-<style>
-  /* تنظیمات اولیه و فونت */
-  body {
-    font-family: 'Vazir', sans-serif;
-    margin: 0;
-    padding: 0;
-    background: linear-gradient(135deg, #00c3ff, #009ecb);
-  }
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-  /* تنظیمات فرم و المان‌ها */
-  .auth-wrap {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background: rgba(0, 0, 0, 0.1);
+<style>
+  @import url('https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css');
+
+body {
+  font-family: 'Vazir', sans-serif;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(135deg, #00c3ff, #4be1ec);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* کارت فرم اصلی */
+.auth-card {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 40px 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  max-width: 420px;
+  width: 90%;
+  animation: fadeInUp 0.8s ease;
+  backdrop-filter: blur(5px);
+}
+
+/* انیمیشن ورود فرم */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.auth-title {
+  text-align: center;
+  color: #00b6f1;
+  margin-bottom: 8px;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.auth-sub {
+  text-align: center;
+  color: #555;
+  margin-bottom: 25px;
+  font-size: 15px;
+}
+
+.form-row {
+  margin-bottom: 18px;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-row label {
+  margin-bottom: 6px;
+  font-weight: bold;
+  color: #333;
+  font-size: 14px;
+}
+
+.form-row input {
+  padding: 12px 15px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 15px;
+  transition: 0.3s ease;
+  background: #fff;
+}
+
+.form-row input:focus {
+  border-color: #00c3ff;
+  outline: none;
+  box-shadow: 0 0 8px rgba(0, 195, 255, 0.4);
+}
+
+/* دکمه‌ها */
+.actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+.btn {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 15px;
+  transition: all 0.3s ease;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #00c3ff, #009ecb);
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(0, 195, 255, 0.4);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 195, 255, 0.5);
+}
+
+.btn-secondary {
+  background: #e0e0e0;
+  color: #333;
+  text-decoration: none;
+  text-align: center;
+}
+
+.btn-secondary:hover {
+  background: #d0d0d0;
+}
+
+/* فوتر */
+.signup-footer {
+  text-align: center;
+  font-size: 14px;
+  color: #555;
+  margin-top: 10px;
+}
+
+.signup-footer a {
+  color: #00b6f1;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.signup-footer a:hover {
+  text-decoration: underline;
+}
+
+/* حالت موبایل */
+@media (max-width: 600px) {
+  body {
+    background: linear-gradient(135deg, #00b6f1, #64eaff);
   }
 
   .auth-card {
-    background: rgba(255, 255, 255, 0.95);
-    padding: 40px 30px;
-    border-radius: 20px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-    max-width: 450px;
-    width: 90%;
-    transition: 0.3s;
-  }
-
-  .auth-card:hover {
-    transform: scale(1.02);
+    padding: 30px 20px;
+    border-radius: 15px;
   }
 
   .auth-title {
-    text-align: center;
-    color: #00c3ff;
-    margin-bottom: 10px;
-    font-size: 32px;
-    font-weight: bold;
-  }
-
-  .auth-sub {
-    text-align: center;
-    color: #555;
-    margin-bottom: 20px;
-    font-size: 16px;
-  }
-
-  .form-row {
-    margin-bottom: 20px;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .form-row label {
-    margin-bottom: 5px;
-    font-weight: bold;
-    color: #333;
-  }
-
-  .form-row input {
-    padding: 12px 18px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    font-size: 16px;
-    transition: 0.3s;
-    background: #f7f7f7;
-  }
-
-  .form-row input:focus {
-    border-color: #00c3ff;
-    outline: none;
-    box-shadow: 0 0 5px rgba(0, 195, 255, 0.5);
-    background: #fff;
-  }
-
-  .actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 15px;
-    margin-bottom: 20px;
+    font-size: 24px;
   }
 
   .btn {
-    padding: 12px 20px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 16px;
-    transition: 0.3s;
-    display: inline-block;
     width: 100%;
+    padding: 14px;
   }
 
-  .btn-primary {
-    background: #00c3ff;
-    color: white;
+  .actions {
+    flex-direction: column;
   }
-
-  .btn-primary:hover {
-    background: #009ecb;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0, 195, 255, 0.2);
-  }
-
-  .btn-secondary {
-    background: #ccc;
-    color: #333;
-    text-decoration: none;
-    display: inline-block;
-    text-align: center;
-  }
-
-  .btn-secondary:hover {
-    background: #bbb;
-    transform: translateY(-2px);
-  }
-
-  .signup-footer {
-    text-align: center;
-    font-size: 14px;
-    color: #555;
-    margin-top: 10px;
-  }
-
-  .signup-footer a {
-    color: #00c3ff;
-    text-decoration: none;
-    font-weight: bold;
-  }
-
-  .signup-footer a:hover {
-    text-decoration: underline;
-  }
-
-  @media (max-width: 500px) {
-    .actions {
-      flex-direction: column;
-    }
-    .btn {
-      width: 100%;
-    }
-  }
+}
 
 </style>
 </head>
@@ -212,24 +234,57 @@
     <p class="signup-footer">اگر قبلاً ثبت‌نام کرده‌اید، برای ورود <a href="driver-login.html">اینجا کلیک کنید</a>.</p>
   </div>
 </div>
-
 <script>
 $(document).ready(function(){
   $('#birthdate').persianDatepicker({
     format: 'YYYY/MM/DD',
     autoClose: true,
     initialValueType: 'gregorian',
-    calendar: {persian: true}
+    calendar: { persian: true }
   });
 
   $('#signupForm').on('submit', async function(e){
     e.preventDefault();
 
-    var pass = $('#password').val();
-    var confirmPass = $('#confirmPassword').val();
-    if(pass !== confirmPass){
-      alert('رمز عبور و تکرار آن یکسان نیست!');
+    const pass = $('#password').val().trim();
+    const confirmPass = $('#confirmPassword').val().trim();
+
+    // بررسی تطابق رمز عبور
+    if (pass !== confirmPass) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'عدم تطابق رمز عبور',
+        text: 'رمز عبور و تکرار آن یکسان نیست. لطفاً مجدداً بررسی کنید.',
+        confirmButtonText: 'باشه',
+        confirmButtonColor: '#3085d6'
+      });
       return;
+    }
+
+    // بررسی فیلدهای خالی
+    const requiredFields = [
+      { id: '#fullName', name: 'نام و نام خانوادگی' },
+      { id: '#birthdate', name: 'تاریخ تولد' },
+      { id: '#nationalId', name: 'کد ملی' },
+      { id: '#licensePlate', name: 'پلاک خودرو' },
+      { id: '#phone', name: 'شماره تماس' },
+      { id: '#carType', name: 'نوع خودرو' },
+      { id: '#carColor', name: 'رنگ خودرو' },
+      { id: '#carModel', name: 'مدل خودرو' },
+      { id: '#password', name: 'رمز عبور' }
+    ];
+
+    for (let field of requiredFields) {
+      if (!$(field.id).val().trim()) {
+        Swal.fire({
+          icon: 'info',
+          title: 'فیلد ناقص',
+          text: `لطفاً فیلد "${field.name}" را تکمیل کنید.`,
+          confirmButtonText: 'متوجه شدم',
+          confirmButtonColor: '#3085d6'
+        });
+        return;
+      }
     }
 
     const driverData = {
@@ -244,32 +299,50 @@ $(document).ready(function(){
       password: pass
     };
 
-    
-try {
-  const res = await fetch('https://naji-backend.onrender.com/api/drivers/signup', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify(driverData)
-  });
+    try {
+      const res = await fetch('http://localhost:5000/api/drivers/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(driverData)
+      });
 
-  const data = await res.json();
-  if(res.ok){
-    alert(data.message || "ثبت‌نام موفقیت‌آمیز بود!");
-    window.location.href = 'driver-login.html'; 
-  } else {
-    alert(data.message || "خطا در ثبت‌نام");
-  }
-} catch(err) {
-  console.error(err);
-  alert('خطا در ارتباط با سرور');
-}
+      const data = await res.json();
 
+      if (res.ok) {
+        Swal.fire({
+          icon: 'success',
+          title: 'ثبت‌نام موفق!',
+          text: data.message || 'ثبت‌نام شما با موفقیت انجام شد.',
+          showConfirmButton: false,
+          timer: 2000,
+          timerProgressBar: true,
+          willClose: () => {
+            window.location.href = 'driver-login.html';
+          }
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'خطا در ثبت‌نام',
+          text: data.message || 'در فرآیند ثبت‌نام مشکلی پیش آمده است. لطفاً دوباره تلاش کنید.',
+          confirmButtonText: 'باشه',
+          confirmButtonColor: '#d33'
+        });
+      }
 
-
+    } catch (err) {
+      console.error(err);
+      Swal.fire({
+        icon: 'error',
+        title: 'عدم ارتباط با سرور',
+        text: 'در حال حاضر ارتباط با سرور ممکن نیست. لطفاً بعداً دوباره تلاش کنید.',
+        confirmButtonText: 'باشه',
+        confirmButtonColor: '#d33'
+      });
+    }
   });
 });
 </script>
+
 </body>
 </html>
-
-
