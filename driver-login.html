@@ -1,253 +1,248 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>ورود راننده | ناجی راه</title>
-<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css" rel="stylesheet" type="text/css" />
-<style>
-  @import url('https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css');
 
+<!-- فونت فارسی وزیـــر -->
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css" rel="stylesheet">
+
+<!-- آیکون‌ها -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
+
+<!-- Animate.css برای انیمیشن‌ها -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css">
+
+<style>
+:root {
+  --primary: #00c3ff;
+  --primary-dark: #009ecb;
+  --success: #4caf50;
+  --error: #f44336;
+  --radius: 16px;
+  --transition: 0.4s ease;
+}
+
+/* پس‌زمینه موجی */
 body {
   font-family: 'Vazir', sans-serif;
   margin: 0;
   padding: 0;
-  background: linear-gradient(135deg, #00c3ff, #62e8ff);
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
-  overflow-x: hidden;
+  overflow: hidden;
+  background: linear-gradient(135deg, #00c3ff, #007bff);
+  position: relative;
 }
-
-/* انیمیشن ورود نرم کارت */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+body::before, body::after {
+  content: '';
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  top: -50%;
+  left: -50%;
+  border-radius: 40%;
+  background: radial-gradient(circle at center, rgba(255,255,255,0.1), transparent 70%);
+  animation: wave 15s infinite alternate ease-in-out;
+  z-index: 0;
 }
+body::after { animation-delay: 7.5s; }
+@keyframes wave { 0% { transform: rotate(0deg) scale(1); } 100% { transform: rotate(15deg) scale(1.1); } }
 
-/* کارت احراز هویت */
+/* کارت ورود */
 .auth-card {
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(8px);
-  padding: 40px 30px;
-  border-radius: 18px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-  max-width: 430px;
+  position: relative;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 45px 35px;
+  border-radius: var(--radius);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+  max-width: 420px;
   width: 90%;
-  animation: fadeInUp 0.8s ease;
+  backdrop-filter: blur(10px);
+  z-index: 1;
+  animation: fadeInUp 1s ease;
 }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
 
-/* عنوان اصلی */
-.auth-title {
-  text-align: center;
-  color: #00b8f1;
-  margin-bottom: 8px;
-  font-size: 28px;
-  font-weight: bold;
-}
+.auth-title { text-align: center; color: var(--primary); font-size: 30px; margin-bottom: 8px; font-weight: bold; }
+.auth-sub { text-align: center; color: #555; margin-bottom: 25px; font-size: 15px; }
 
-/* زیرعنوان */
-.auth-sub {
-  text-align: center;
-  color: #555;
-  margin-bottom: 25px;
-  font-size: 15px;
-}
-
-/* فیلدهای فرم */
-.form-row {
-  margin-bottom: 18px;
-  display: flex;
-  flex-direction: column;
-}
-
-.form-row label {
-  margin-bottom: 6px;
-  font-weight: bold;
-  color: #333;
-  font-size: 14px;
-}
-
+.form-row { margin-bottom: 18px; display: flex; flex-direction: column; }
+.form-row label { margin-bottom: 5px; font-weight: bold; color: #333; }
 .form-row input {
   padding: 12px 15px;
   border: 1px solid #ccc;
-  border-radius: 10px;
+  border-radius: 12px;
   font-size: 15px;
-  background: #fff;
-  transition: all 0.3s ease;
+  transition: var(--transition);
 }
-
 .form-row input:focus {
-  border-color: #00c3ff;
-  box-shadow: 0 0 10px rgba(0, 195, 255, 0.4);
+  border-color: var(--primary);
+  box-shadow: 0 0 12px rgba(0,195,255,0.5);
   outline: none;
-}
-
-/* دکمه‌ها */
-.actions {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-bottom: 15px;
 }
 
 .btn {
   padding: 12px 20px;
   border: none;
-  border-radius: 10px;
+  border-radius: 12px;
   cursor: pointer;
   font-weight: bold;
   font-size: 15px;
-  transition: all 0.3s ease;
+  transition: var(--transition);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
 }
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-primary:hover { background: var(--primary-dark); transform: scale(1.05); }
+.btn-secondary { background: #ddd; color: #333; text-decoration: none; }
+.btn-secondary:hover { background: #ccc; transform: scale(1.05); }
 
-.btn-primary {
-  background: linear-gradient(135deg, #00c3ff, #00a9d9);
-  color: #fff;
-  box-shadow: 0 4px 10px rgba(0, 195, 255, 0.4);
+.actions { display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-top:10px; }
+
+.auth-footer { text-align:center; margin-top:20px; color:#555; font-size:14px; }
+.auth-footer a { color: var(--primary); text-decoration:none; font-weight:bold; }
+.auth-footer a:hover { text-decoration:underline; }
+
+.small { font-size:13px; color:#555; }
+
+@media(max-width:500px){ .actions{ flex-direction:column; } }
+
+/* Alert Box */
+.alert-box {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-60px);
+  min-width: 280px;
+  max-width: 90%;
+  background: #fff;
+  padding: 15px 20px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1000;
+  transition: transform 0.5s ease, opacity 0.5s ease;
 }
+.alert-box.show { transform: translateX(-50%) translateY(0); opacity: 1; pointer-events: all; }
+.alert-box.fade-out { transform: translateX(-50%) translateY(-60px); opacity: 0; }
+.alert-box.success { border-left: 6px solid var(--success); }
+.alert-box.error { border-left: 6px solid var(--error); }
+.alert-box i { font-size: 22px; }
 
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 18px rgba(0, 195, 255, 0.5);
-}
-
-.btn-secondary {
-  background: #e0e0e0;
-  color: #333;
-  text-decoration: none;
-  text-align: center;
-}
-
-.btn-secondary:hover {
-  background: #d0d0d0;
-}
-
-/* فوتر */
-.auth-footer {
-  text-align: center;
-  font-size: 14px;
-  color: #555;
-  margin-top: 15px;
-}
-
-.auth-footer a {
-  color: #00b6f1;
-  text-decoration: none;
-  font-weight: bold;
-  transition: color 0.3s;
-}
-
-.auth-footer a:hover {
-  color: #008ec2;
-  text-decoration: underline;
-}
-
-/* متن کوچک */
-.small {
-  font-size: 13px;
-  color: #666;
-}
-
-/* حالت موبایل */
-@media (max-width: 600px) {
-  body {
-    background: linear-gradient(135deg, #00b6f1, #63e0ff);
-    padding: 20px;
-  }
-
-  .auth-card {
-    padding: 30px 20px;
-    border-radius: 15px;
-  }
-
-  .auth-title {
-    font-size: 24px;
-  }
-
-  .btn {
-    width: 100%;
-    padding: 14px;
-  }
-
-  .actions {
-    flex-direction: column;
-  }
-}
+@keyframes shakeX { 0%,100% { transform: translateX(0); } 20%,60% { transform: translateX(-6px); } 40%,80% { transform: translateX(6px); } }
+.animate__shakeX { animation: shakeX 0.6s ease-in-out; }
 
 </style>
 </head>
-<body>
-<div class="auth-wrap">
-<div class="auth-card">
-<h1 class="auth-title">ورود راننده</h1>
-<p class="auth-sub">برای دسترسی به حساب کاربری، وارد شوید</p>
-<form id="loginForm">
-  <div class="form-row">
-    <label>کد ملی</label>
-    <input type="text" maxlength="10" placeholder="مثلاً 0012345678" required>
-  </div>
-  <div class="form-row">
-    <label>رمز عبور</label>
-    <input type="password" placeholder="رمز عبور خود را وارد کنید" required>
-  </div>
-  <div class="actions">
-    <button type="submit" class="btn btn-primary">ورود</button>
-    <a href="driver-signup.html" class="btn btn-secondary">ثبت‌نام راننده</a>
-  </div>
-  <div class="form-row" style="text-align:center; margin-top:12px;">
-    <a href="driver-forgot.html" class="small">فراموشی رمز عبور؟</a>
-  </div>
-</form>
-<p class="auth-footer">اگر هنوز ثبت‌نام نکرده‌اید، برای ثبت‌نام <a href="driver-signup.html">اینجا کلیک کنید</a>.</p>
-</div>
-</div>
-<script>
-document.getElementById('loginForm').addEventListener('submit', function(e){
-  e.preventDefault();
-  alert('ورود موفقیت‌آمیز بود!');
-  // اینجا می‌توانید فرم را به سرور ارسال کنید
-});
 
-// ورود به داشبورد
+<body>
+  <div class="auth-card">
+    <h1 class="auth-title"><i class="ri-steering-2-fill"></i> ورود راننده</h1>
+    <p class="auth-sub">برای دسترسی به حساب خود وارد شوید</p>
+
+    <form id="loginForm">
+      <div class="form-row">
+        <label>کد ملی</label>
+        <input type="text" id="nationalId" maxlength="10" placeholder="مثلاً 0012345678" required>
+      </div>
+      <div class="form-row">
+        <label>رمز عبور</label>
+        <input type="password" id="password" placeholder="رمز عبور خود را وارد کنید" required>
+      </div>
+
+      <div class="actions">
+        <button type="submit" class="btn btn-primary"><i class="ri-login-circle-line"></i> ورود</button>
+        <a href="driver-signup.html" class="btn btn-secondary"><i class="ri-user-add-line"></i> ثبت‌نام راننده</a>
+      </div>
+
+      <div class="form-row" style="text-align:center; margin-top:12px;">
+        <a href="driver-forgot.html" class="small"><i class="ri-lock-unlock-line"></i> فراموشی رمز عبور؟</a>
+      </div>
+    </form>
+
+    <p class="auth-footer">اگر هنوز ثبت‌نام نکرده‌اید، <a href="driver-signup.html">اینجا کلیک کنید</a>.</p>
+  </div>
+
+  <!-- Alert Box -->
+  <div id="alertBox" class="alert-box"><i></i><span></span></div>
+
+<script>
+function showAlert(message, type="success"){
+  const box = document.getElementById("alertBox");
+  const icon = box.querySelector("i");
+  const text = box.querySelector("span");
+
+  box.className = `alert-box ${type} animate__animated`;
+  icon.className = type === "success" ? "ri-check-line" : "ri-error-warning-line";
+  text.textContent = message;
+
+  box.classList.add("animate__fadeInDown","show");
+
+  // shake کارت روی خطا
+  if(type==="error"){
+    const card = document.querySelector('.auth-card');
+    card.classList.add("animate__animated","animate__shakeX");
+    card.addEventListener('animationend',()=> card.classList.remove("animate__animated","animate__shakeX"), {once:true});
+  }
+
+  // مخفی شدن خودکار
+  setTimeout(()=>{
+    box.classList.remove("animate__fadeInDown");
+    box.classList.add("animate__fadeOutUp");
+    box.addEventListener('animationend', function handler(){
+      box.classList.remove("show","animate__fadeOutUp");
+      box.removeEventListener('animationend', handler);
+    });
+  },3500);
+}
+
+// Login form
 document.getElementById('loginForm').addEventListener('submit', async function(e){
   e.preventDefault();
-  const nationalId = e.target[0].value;
-  const password = e.target[1].value;
+  const nationalId = document.getElementById('nationalId').value.trim();
+  const password = document.getElementById('password').value.trim();
+
+  if(!nationalId || !password){
+    showAlert("لطفاً تمام فیلدها را پر کنید.","error");
+    return;
+  }
 
   try {
-    const res = await fetch('http://localhost:5000/api/drivers/login', {
-
-
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ nationalId, password })
+    const res = await fetch('/api/drivers/login',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({nationalId,password})
     });
 
     const data = await res.json();
     if(res.ok){
-      // ذخیره اطلاعات کاربر در localStorage یا session
       localStorage.setItem("driverData", JSON.stringify(data.driver));
-      // هدایت به داشبورد
-      window.location.href = "driver-dashboard.html";
+      showAlert("ورود موفقیت‌آمیز بود! در حال انتقال...","success");
+
+      const card = document.querySelector('.auth-card');
+      card.style.transition="0.6s";
+      card.style.transform="scale(0.95)";
+      card.style.opacity="0";
+      setTimeout(()=> window.location.href="driver-dashboard.html",1500);
     } else {
-      alert(data.message || "خطا در ورود");
+      showAlert(data.message || "کد ملی یا رمز عبور نادرست است.","error");
     }
   } catch(err){
     console.error(err);
-    alert("خطا در اتصال به سرور");
+    showAlert("خطا در اتصال به سرور. دوباره تلاش کنید.","error");
   }
 });
-
 </script>
 </body>
 </html>
