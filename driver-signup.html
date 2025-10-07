@@ -4,199 +4,205 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ثبت‌نام راننده | ناجی راه</title>
-<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css" rel="stylesheet" type="text/css" />
+
+<!-- فونت فارسی وزیـــر -->
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css" rel="stylesheet">
+
+<!-- Persian Datepicker -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/css/persian-datepicker.min.css">
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/persian-date@1.1.0/dist/persian-date.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/js/persian-datepicker.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <style>
-body {font-family: 'Vazir', sans-serif; margin:0; padding:0; background:#00c3ff;}
-.auth-wrap {display:flex; justify-content:center; align-items:center; min-height:100vh;}
-.auth-card {background:rgba(255,255,255,0.95); padding:40px 30px; border-radius:15px; box-shadow:0 8px 20px rgba(0,0,0,0.15); max-width:450px; width:90%;}
-.auth-title {text-align:center; color:#00c3ff; margin-bottom:10px; font-size:28px;}
-.auth-sub {text-align:center; color:#555; margin-bottom:20px;}
-.form-row {margin-bottom:20px; display:flex; flex-direction:column;}
-.form-row label {margin-bottom:5px; font-weight:bold; color:#333;}
-.form-row input {padding:10px 15px; border:1px solid #ccc; border-radius:8px; font-size:15px; transition:0.3s;}
-.form-row input:focus {border-color:#00c3ff; outline:none; box-shadow:0 0 5px rgba(0,195,255,0.5);}
-.actions {display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:15px;}
-.btn {padding:12px 20px; border:none; border-radius:8px; cursor:pointer; font-weight:bold; font-size:15px; transition:0.3s;}
-.btn-primary {background:#00c3ff; color:#fff;}
-.btn-primary:hover {background:#009ecb;}
-.btn-secondary {background:#ccc; color:#333; text-decoration:none; display:inline-block; text-align:center;}
-.btn-secondary:hover {background:#bbb;}
-.signup-footer {text-align:center; font-size:14px; color:#555; margin-top:10px;}
-.signup-footer a {color:#00c3ff; text-decoration:none; font-weight:bold;}
-.signup-footer a:hover {text-decoration:underline;}
-@media (max-width:500px){.actions {flex-direction:column;}} 
+:root {
+  --primary: #00c3ff;
+  --primary-dark: #009ecb;
+  --success: #4caf50;
+  --error: #f44336;
+  --radius: 16px;
+  --transition: 0.3s ease;
+}
+
+body {
+  font-family: 'Vazir', sans-serif;
+  margin:0; padding:0;
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background: linear-gradient(135deg, #00c3ff, #007bff);
+}
+
+/* کارت ثبت‌نام */
+.auth-card {
+  background: rgba(255,255,255,0.95);
+  padding: 40px 30px;
+  border-radius: var(--radius);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  width: 90%;
+  max-width: 450px;
+  position: relative;
+}
+
+.auth-title { text-align:center; color: var(--primary); font-size:28px; margin-bottom:10px; font-weight:bold; }
+.auth-sub { text-align:center; color:#555; margin-bottom:20px; }
+
+.form-row { margin-bottom:18px; display:flex; flex-direction:column; }
+.form-row label { margin-bottom:5px; font-weight:bold; color:#333; }
+.form-row input { padding:10px 15px; border:1px solid #ccc; border-radius:8px; font-size:15px; transition: var(--transition); }
+.form-row input:focus { border-color: var(--primary); outline:none; box-shadow:0 0 6px rgba(0,195,255,0.5); }
+
+.actions { display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:15px; }
+.btn { padding:12px 20px; border:none; border-radius:8px; cursor:pointer; font-weight:bold; font-size:15px; transition: var(--transition); display:inline-flex; justify-content:center; align-items:center; gap:5px; }
+.btn-primary { background: var(--primary); color:#fff; }
+.btn-primary:hover { background: var(--primary-dark); transform:scale(1.05); }
+.btn-secondary { background:#ccc; color:#333; text-decoration:none; display:inline-flex; justify-content:center; align-items:center; }
+.btn-secondary:hover { background:#bbb; transform:scale(1.05); }
+
+.signup-footer { text-align:center; font-size:14px; color:#555; margin-top:10px; }
+.signup-footer a { color: var(--primary); text-decoration:none; font-weight:bold; }
+.signup-footer a:hover { text-decoration:underline; }
+
+@media(max-width:500px){ .actions{ flex-direction:column; } }
+
+/* Alert Box ساده و انیمیشنی */
+.alert-box {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-60px);
+  min-width: 280px;
+  max-width: 90%;
+  background:#fff;
+  padding:15px 20px;
+  border-radius:16px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.25);
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:15px;
+  opacity:0;
+  pointer-events:none;
+  z-index:1000;
+  transition: transform 0.4s ease, opacity 0.4s ease;
+}
+.alert-box.show {
+  transform: translateX(-50%) translateY(0);
+  opacity:1;
+  pointer-events:all;
+}
+.alert-box.success { border-left:6px solid var(--success); }
+.alert-box.error { border-left:6px solid var(--error); }
+.alert-box i { font-size:22px; }
 </style>
 </head>
 <body>
-<div class="auth-wrap">
-  <div class="auth-card">
-    <h1 class="auth-title">ثبت‌نام راننده</h1>
-    <p class="auth-sub">لطفاً اطلاعات خود را با دقت وارد کنید</p>
-    <form id="signupForm">
-      <div class="form-row">
-        <label>نام و نام خانوادگی</label>
-        <input type="text" id="fullName" placeholder="مثلاً علی رضایی" required>
-      </div>
-      <div class="form-row">
-        <label>تاریخ تولد</label>
-        <input type="text" id="birthdate" placeholder="روز/ماه/سال" required readonly>
-      </div>
-      <div class="form-row">
-        <label>کد ملی</label>
-        <input type="text" id="nationalId" maxlength="10" placeholder="مثلاً 0012345678" required>
-      </div>
-      <div class="form-row">
-        <label>شماره پلاک راننده</label>
-        <input type="text" id="licensePlate" placeholder="مثلاً 12ب345-ایران" required>
-      </div>
-      <div class="form-row">
-        <label>شماره تماس</label>
-        <input type="tel" id="phone" placeholder="مثلاً 09123456789" required>
-      </div>
-      <div class="form-row">
-        <label>نوع خودرو</label>
-        <input type="text" id="carType" placeholder="مثلاً پژو 206" required>
-      </div>
-      <div class="form-row">
-        <label>رنگ خودرو</label>
-        <input type="text" id="carColor" placeholder="مثلاً سفید" required>
-      </div>
-      <div class="form-row">
-        <label>مدل خودرو</label>
-        <input type="text" id="carModel" placeholder="مثلاً 1399" required>
-      </div>
-      <div class="form-row">
-        <label>ایجاد رمز عبور</label>
-        <input type="password" id="password" placeholder="حداقل 6 کاراکتر" required>
-      </div>
-      <div class="form-row">
-        <label>تکرار رمز عبور</label>
-        <input type="password" id="confirmPassword" placeholder="رمز عبور را دوباره وارد کنید" required>
-      </div>
-      <div class="actions">
-        <button type="submit" class="btn btn-primary">ثبت‌نام</button>
-        <a href="driver-login.html" class="btn btn-secondary">ورود راننده</a>
-      </div>
-    </form>
-    <p class="signup-footer">اگر قبلاً ثبت‌نام کرده‌اید، برای ورود <a href="driver-login.html">اینجا کلیک کنید</a>.</p>
-  </div>
+
+<div class="auth-card">
+  <h1 class="auth-title">ثبت‌نام راننده</h1>
+  <p class="auth-sub">لطفاً اطلاعات خود را با دقت وارد کنید</p>
+
+  <form id="signupForm">
+    <div class="form-row"><label>نام و نام خانوادگی</label><input type="text" id="fullName" placeholder="مثلاً علی رضایی" required></div>
+    <div class="form-row"><label>تاریخ تولد</label><input type="text" id="birthdate" placeholder="روز/ماه/سال" required readonly></div>
+    <div class="form-row"><label>کد ملی</label><input type="text" id="nationalId" maxlength="10" placeholder="مثلاً 0012345678" required></div>
+    <div class="form-row"><label>شماره پلاک راننده</label><input type="text" id="licensePlate" placeholder="مثلاً 12ب345-ایران" required></div>
+    <div class="form-row"><label>شماره تماس</label><input type="tel" id="phone" placeholder="مثلاً 09123456789" required></div>
+    <div class="form-row"><label>نوع خودرو</label><input type="text" id="carType" placeholder="مثلاً پژو 206" required></div>
+    <div class="form-row"><label>رنگ خودرو</label><input type="text" id="carColor" placeholder="مثلاً سفید" required></div>
+    <div class="form-row"><label>مدل خودرو</label><input type="text" id="carModel" placeholder="مثلاً 1399" required></div>
+    <div class="form-row"><label>رمز عبور</label><input type="password" id="password" placeholder="حداقل 6 کاراکتر" required></div>
+    <div class="form-row"><label>تکرار رمز عبور</label><input type="password" id="confirmPassword" placeholder="رمز عبور را دوباره وارد کنید" required></div>
+    <div class="actions">
+      <button type="submit" class="btn btn-primary">ثبت‌نام</button>
+      <a href="driver-login.html" class="btn btn-secondary">ورود راننده</a>
+    </div>
+  </form>
+  <p class="signup-footer">اگر قبلاً ثبت‌نام کرده‌اید، <a href="driver-login.html">اینجا کلیک کنید</a>.</p>
 </div>
+
+<!-- Alert Box -->
+<div id="alertBox" class="alert-box"><i></i><span></span></div>
+
 <script>
 $(document).ready(function(){
-  $('#birthdate').persianDatepicker({
-    format: 'YYYY/MM/DD',
-    autoClose: true,
-    initialValueType: 'gregorian',
-    calendar: { persian: true }
-  });
+  // Persian Datepicker
+  $('#birthdate').persianDatepicker({ format: 'YYYY/MM/DD', autoClose: true });
+
+  const showAlert = (message, type="success") => {
+    const box = $('#alertBox');
+    box.removeClass('success error show').addClass(type+' show');
+    box.find('i').attr('class', type==="success" ? 'ri-check-line' : 'ri-error-warning-line');
+    box.find('span').text(message);
+    setTimeout(()=> box.removeClass('show'), 3500);
+  }
 
   $('#signupForm').on('submit', async function(e){
     e.preventDefault();
 
-    const pass = $('#password').val().trim();
-    const confirmPass = $('#confirmPassword').val().trim();
+    const fullName = $('#fullName').val().trim();
+    const birthDate = $('#birthdate').val().trim();
+    const nationalId = $('#nationalId').val().trim();
+    const licensePlate = $('#licensePlate').val().trim();
+    const phone = $('#phone').val().trim();
+    const carType = $('#carType').val().trim();
+    const carColor = $('#carColor').val().trim();
+    const carModel = $('#carModel').val().trim();
+    const password = $('#password').val().trim();
+    const confirmPassword = $('#confirmPassword').val().trim();
 
-    // بررسی تطابق رمز عبور
-    if (pass !== confirmPass) {
-      Swal.fire({
-        icon: 'warning',
-        title: 'عدم تطابق رمز عبور',
-        text: 'رمز عبور و تکرار آن یکسان نیست. لطفاً مجدداً بررسی کنید.',
-        confirmButtonText: 'باشه',
-        confirmButtonColor: '#3085d6'
-      });
+    // بررسی فیلدهای خالی
+    if(!fullName || !birthDate || !nationalId || !licensePlate || !phone || !carType || !carColor || !carModel || !password){
+      showAlert("لطفاً تمام فیلدها را تکمیل کنید.","error");
       return;
     }
 
-    // بررسی فیلدهای خالی
-    const requiredFields = [
-      { id: '#fullName', name: 'نام و نام خانوادگی' },
-      { id: '#birthdate', name: 'تاریخ تولد' },
-      { id: '#nationalId', name: 'کد ملی' },
-      { id: '#licensePlate', name: 'پلاک خودرو' },
-      { id: '#phone', name: 'شماره تماس' },
-      { id: '#carType', name: 'نوع خودرو' },
-      { id: '#carColor', name: 'رنگ خودرو' },
-      { id: '#carModel', name: 'مدل خودرو' },
-      { id: '#password', name: 'رمز عبور' }
-    ];
-
-    for (let field of requiredFields) {
-      if (!$(field.id).val().trim()) {
-        Swal.fire({
-          icon: 'info',
-          title: 'فیلد ناقص',
-          text: `لطفاً فیلد "${field.name}" را تکمیل کنید.`,
-          confirmButtonText: 'متوجه شدم',
-          confirmButtonColor: '#3085d6'
-        });
-        return;
-      }
+    // بررسی کد ملی
+    if(!/^\d{10}$/.test(nationalId)){
+      showAlert("کد ملی نامعتبر است.","error");
+      return;
     }
 
-    const driverData = {
-      fullName: $('#fullName').val(),
-      birthDate: $('#birthdate').val(),
-      nationalId: $('#nationalId').val(),
-      licensePlate: $('#licensePlate').val(),
-      phone: $('#phone').val(),
-      carType: $('#carType').val(),
-      carColor: $('#carColor').val(),
-      carModel: $('#carModel').val(),
-      password: pass
-    };
+    // بررسی شماره تماس
+    if(!/^09\d{9}$/.test(phone)){
+      showAlert("شماره تماس نامعتبر است.","error");
+      return;
+    }
 
+    // بررسی رمز عبور
+    if(password.length<6){
+      showAlert("رمز عبور باید حداقل 6 کاراکتر باشد.","error");
+      return;
+    }
+    if(password !== confirmPassword){
+      showAlert("رمز عبور و تکرار آن یکسان نیست.","error");
+      return;
+    }
+
+    // ارسال دیتا به سرور
     try {
       const res = await fetch("https://naji-backend.onrender.com/api/tow/signup", {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(driverData)
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({fullName,birthDate,nationalId,licensePlate,phone,carType,carColor,carModel,password})
       });
-
       const data = await res.json();
-
-      if (res.ok) {
-        Swal.fire({
-          icon: 'success',
-          title: 'ثبت‌نام موفق!',
-          text: data.message || 'ثبت‌نام شما با موفقیت انجام شد.',
-          showConfirmButton: false,
-          timer: 2000,
-          timerProgressBar: true,
-          willClose: () => {
-            window.location.href = 'driver-login.html';
-          }
-        });
+      if(res.ok){
+        showAlert("ثبت‌نام با موفقیت انجام شد!","success");
+        setTimeout(()=> window.location.href="driver-login.html",1500);
       } else {
-        Swal.fire({
-          icon: 'error',
-          title: 'خطا در ثبت‌نام',
-          text: data.message || 'در فرآیند ثبت‌نام مشکلی پیش آمده است. لطفاً دوباره تلاش کنید.',
-          confirmButtonText: 'باشه',
-          confirmButtonColor: '#d33'
-        });
+        showAlert(data.message || "خطا در ثبت‌نام. لطفاً دوباره تلاش کنید.","error");
       }
-
-    } catch (err) {
+    } catch(err){
       console.error(err);
-      Swal.fire({
-        icon: 'error',
-        title: 'عدم ارتباط با سرور',
-        text: 'در حال حاضر ارتباط با سرور ممکن نیست. لطفاً بعداً دوباره تلاش کنید.',
-        confirmButtonText: 'باشه',
-        confirmButtonColor: '#d33'
-      });
+      showAlert("ارتباط با سرور برقرار نشد.","error");
     }
   });
 });
 </script>
 
+<!-- آیکون‌ها -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
 </body>
 </html>
