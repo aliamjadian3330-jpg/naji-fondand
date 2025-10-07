@@ -9,6 +9,9 @@
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/persian-date@1.1.0/dist/persian-date.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/js/persian-datepicker.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <style>
 body {font-family: 'Vazir', sans-serif; margin:0; padding:0; background:#00c3ff;}
 .auth-wrap {display:flex; justify-content:center; align-items:center; min-height:100vh;}
@@ -85,26 +88,57 @@ body {font-family: 'Vazir', sans-serif; margin:0; padding:0; background:#00c3ff;
     <p class="signup-footer">اگر قبلاً ثبت‌نام کرده‌اید، برای ورود <a href="driver-login.html">اینجا کلیک کنید</a>.</p>
   </div>
 </div>
-
-
-  تمام علت هایش را حرفه ای کن
 <script>
 $(document).ready(function(){
   $('#birthdate').persianDatepicker({
     format: 'YYYY/MM/DD',
     autoClose: true,
     initialValueType: 'gregorian',
-    calendar: {persian: true}
+    calendar: { persian: true }
   });
 
   $('#signupForm').on('submit', async function(e){
     e.preventDefault();
 
-    var pass = $('#password').val();
-    var confirmPass = $('#confirmPassword').val();
-    if(pass !== confirmPass){
-      alert('رمز عبور و تکرار آن یکسان نیست!');
+    const pass = $('#password').val().trim();
+    const confirmPass = $('#confirmPassword').val().trim();
+
+    // بررسی تطابق رمز عبور
+    if (pass !== confirmPass) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'عدم تطابق رمز عبور',
+        text: 'رمز عبور و تکرار آن یکسان نیست. لطفاً مجدداً بررسی کنید.',
+        confirmButtonText: 'باشه',
+        confirmButtonColor: '#3085d6'
+      });
       return;
+    }
+
+    // بررسی فیلدهای خالی
+    const requiredFields = [
+      { id: '#fullName', name: 'نام و نام خانوادگی' },
+      { id: '#birthdate', name: 'تاریخ تولد' },
+      { id: '#nationalId', name: 'کد ملی' },
+      { id: '#licensePlate', name: 'پلاک خودرو' },
+      { id: '#phone', name: 'شماره تماس' },
+      { id: '#carType', name: 'نوع خودرو' },
+      { id: '#carColor', name: 'رنگ خودرو' },
+      { id: '#carModel', name: 'مدل خودرو' },
+      { id: '#password', name: 'رمز عبور' }
+    ];
+
+    for (let field of requiredFields) {
+      if (!$(field.id).val().trim()) {
+        Swal.fire({
+          icon: 'info',
+          title: 'فیلد ناقص',
+          text: `لطفاً فیلد "${field.name}" را تکمیل کنید.`,
+          confirmButtonText: 'متوجه شدم',
+          confirmButtonColor: '#3085d6'
+        });
+        return;
+      }
     }
 
     const driverData = {
@@ -119,37 +153,50 @@ $(document).ready(function(){
       password: pass
     };
 
-    
+    try {
+      const res = await fetch("https://naji-backend.onrender.com/api/tow/signup", {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(driverData)
+      });
 
-try { const res = await fetch('http://localhost:5000/api/drivers/signup', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(driverData) }); const data = await res.json(); if(res.ok){ alert(data.message || "ثبت‌نام موفقیت‌آمیز بود!"); window.location.href = 'driver-login.html'; } else { alert(data.message || "خطا در ثبت‌نام"); }
+      const data = await res.json();
 
+      if (res.ok) {
+        Swal.fire({
+          icon: 'success',
+          title: 'ثبت‌نام موفق!',
+          text: data.message || 'ثبت‌نام شما با موفقیت انجام شد.',
+          showConfirmButton: false,
+          timer: 2000,
+          timerProgressBar: true,
+          willClose: () => {
+            window.location.href = 'driver-login.html';
+          }
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'خطا در ثبت‌نام',
+          text: data.message || 'در فرآیند ثبت‌نام مشکلی پیش آمده است. لطفاً دوباره تلاش کنید.',
+          confirmButtonText: 'باشه',
+          confirmButtonColor: '#d33'
+        });
+      }
 
-
-
-
-} catch(err) {
-  console.error(err);
-  alert('خطا در ارتباط با سرور');
-}
-
-
-
+    } catch (err) {
+      console.error(err);
+      Swal.fire({
+        icon: 'error',
+        title: 'عدم ارتباط با سرور',
+        text: 'در حال حاضر ارتباط با سرور ممکن نیست. لطفاً بعداً دوباره تلاش کنید.',
+        confirmButtonText: 'باشه',
+        confirmButtonColor: '#d33'
+      });
+    }
   });
 });
+</script>
 
-  </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
