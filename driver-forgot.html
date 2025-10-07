@@ -8,7 +8,6 @@
 <!-- فونت و آیکون -->
 <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css">
 
 <style>
 :root {
@@ -28,44 +27,19 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
   background: linear-gradient(135deg, #ff7a00, #ff5500);
-  position: relative;
-}
-
-body::before, body::after {
-  content: '';
-  position: absolute;
-  width: 200%;
-  height: 200%;
-  top: -50%;
-  left: -50%;
-  border-radius: 40%;
-  background: radial-gradient(circle at center, rgba(255,255,255,0.1), transparent 70%);
-  animation: wave 15s infinite alternate ease-in-out;
-  z-index: 0;
-}
-body::after { animation-delay: 7.5s; }
-
-@keyframes wave {
-  0% { transform: rotate(0deg) scale(1); }
-  100% { transform: rotate(15deg) scale(1.1); }
 }
 
 /* کارت فراموشی رمز */
 .auth-card {
-  position: relative;
   background: rgba(255,255,255,0.95);
   padding: 45px 35px;
   border-radius: var(--radius);
   box-shadow: 0 15px 35px rgba(0,0,0,0.25);
   max-width: 420px;
   width: 90%;
-  backdrop-filter: blur(10px);
-  z-index: 1;
-  animation: fadeInUp 1s ease;
+  position: relative;
 }
-@keyframes fadeInUp { from{opacity:0; transform:translateY(50px);} to{opacity:1; transform:translateY(0);} }
 
 .auth-title { text-align:center; color: var(--primary); font-size:28px; margin-bottom:8px; font-weight:bold; }
 .auth-sub { text-align:center; color:#555; margin-bottom:25px; font-size:15px; }
@@ -95,9 +69,9 @@ body::after { animation-delay: 7.5s; }
   gap:6px;
 }
 .btn-primary { background: var(--primary); color:#fff; }
-.btn-primary:hover { background: var(--primary-dark); transform:scale(1.05); }
+.btn-primary:hover { background: var(--primary-dark); }
 .btn-secondary { background:#ddd; color:#333; text-decoration:none; }
-.btn-secondary:hover { background:#ccc; transform:scale(1.05); }
+.btn-secondary:hover { background:#ccc; }
 
 .actions { display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-top:10px; }
 
@@ -105,15 +79,12 @@ body::after { animation-delay: 7.5s; }
 .auth-footer a { color: var(--primary); font-weight:bold; text-decoration:none; }
 .auth-footer a:hover { text-decoration:underline; }
 
-.small { font-size:13px; color:#555; }
-@media(max-width:500px){ .actions{ flex-direction:column; } }
-
-/* نوتیفیکیشن زیبا */
+/* Alert Box ساده و زیبا */
 .alert-box {
   position: fixed;
   top:20px;
   left:50%;
-  transform:translateX(-50%) translateY(-50px);
+  transform: translateX(-50%) translateY(-60px);
   min-width:280px;
   max-width:90%;
   background:#fff;
@@ -127,66 +98,14 @@ body::after { animation-delay: 7.5s; }
   opacity:0;
   pointer-events:none;
   z-index:1000;
+  transition: transform 0.4s ease, opacity 0.4s ease;
 }
 .alert-box.show { opacity:1; transform:translateX(-50%) translateY(0); pointer-events:all; }
 .alert-box.success { border-left:6px solid var(--success); }
 .alert-box.error { border-left:6px solid var(--error); }
-.alert-box i { font-size:22px; }
-
-/* Alert Box بهینه برای موبایل */
-.alert-box {
-  position: fixed;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%) translateY(-60px);
-  min-width: 280px;
-  max-width: 90%;
-  background: #fff;
-  padding: 15px 20px;
-  border-radius: 16px;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.25);
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 15px;
-  opacity: 0;
-  pointer-events: none;
-  z-index: 1000;
-  transition: transform 0.5s ease, opacity 0.5s ease;
-}
-.alert-box.show {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-  pointer-events: all;
-}
-.alert-box.success { border-left: 6px solid var(--success); }
-.alert-box.error { border-left: 6px solid var(--error); }
-.alert-box i {
-  font-size: 22px;
-  flex-shrink: 0;
-}
-.alert-box span {
-  flex: 1;
-  font-weight: 500;
-  line-height: 1.4;
-  word-break: break-word;
-}
-
-/* انیمیشن نرمی برای fade out */
-.alert-box.fade-out {
-  opacity: 0;
-  transform: translateX(-50%) translateY(-60px);
-}
-
-/* Shake برای خطا */
-.shake {
-  animation: shakeX 0.8s ease-in-out;
-}
-@keyframes shakeX {
-  0%, 100% { transform: translateX(0); }
-  10%, 30%, 50%, 70%, 90% { transform: translateX(-8px); }
-  20%, 40%, 60%, 80% { transform: translateX(8px); }
-}
+.alert-box i { font-size:22px; flex-shrink:0; }
+.alert-box span { flex:1; font-weight:500; line-height:1.4; word-break:break-word; }
+.alert-box.fade-out { opacity:0; transform:translateX(-50%) translateY(-60px); }
 </style>
 </head>
 
@@ -215,10 +134,7 @@ body::after { animation-delay: 7.5s; }
 </div>
 
 <!-- Alert Box -->
-<!-- Alert Box -->
-<div id="alertBox" class="alert-box">
-  <i></i><span></span>
-</div>
+<div id="alertBox" class="alert-box"><i></i><span></span></div>
 
 <script>
 function showAlert(message,type="success"){
@@ -226,24 +142,15 @@ function showAlert(message,type="success"){
   const icon=box.querySelector("i");
   const text=box.querySelector("span");
 
-  box.className=`alert-box ${type} animate__animated`;
-  icon.className=type==="success"?"ri-check-line":"ri-error-warning-line";
-  text.textContent=message;
-
-  box.classList.add("animate__fadeInDown","show");
-
-  if(type==="error"){
-    const card=document.querySelector(".auth-card");
-    card.classList.add("animate__animated","animate__shakeX");
-    card.addEventListener("animationend",()=>card.classList.remove("animate__animated","animate__shakeX"),{once:true});
-  }
+  icon.className = type==="success"?"ri-check-line":"ri-error-warning-line";
+  text.textContent = message;
+  box.className = `alert-box ${type} show`;
 
   setTimeout(()=>{
-    box.classList.remove("animate__fadeInDown");
-    box.classList.add("animate__fadeOutUp");
-    box.addEventListener("animationend",function handler(){
-      box.classList.remove("show","animate__fadeOutUp");
-      box.removeEventListener("animationend",handler);
+    box.classList.add("fade-out");
+    box.addEventListener("transitionend",function handler(){
+      box.className="alert-box";
+      box.removeEventListener("transitionend",handler);
     });
   },3500);
 }
@@ -276,33 +183,6 @@ document.getElementById("forgotForm").addEventListener("submit",async function(e
     showAlert("خطا در اتصال به سرور.","error");
   }
 });
-
-function showAlert(message, type="success") {
-  const box = document.getElementById("alertBox");
-  const icon = box.querySelector("i");
-  const text = box.querySelector("span");
-
-  icon.className = type === "success" ? "ri-check-line" : "ri-error-warning-line";
-  text.textContent = message;
-
-  box.className = `alert-box ${type} show`;
-
-  // اگر خطا بود shake کارت
-  if (type === "error") {
-    const card = document.querySelector(".auth-card");
-    card.classList.add("shake");
-    card.addEventListener("animationend", () => card.classList.remove("shake"), {once:true});
-  }
-
-  // بعد از 3.5 ثانیه fade out
-  setTimeout(() => {
-    box.classList.add("fade-out");
-    box.addEventListener("transitionend", function handler() {
-      box.className = "alert-box"; // ریست کلاس‌ها
-      box.removeEventListener("transitionend", handler);
-    });
-  }, 3500);
-}
 </script>
 </body>
 </html>
