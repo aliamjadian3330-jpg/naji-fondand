@@ -11,9 +11,6 @@
 <!-- آیکون‌ها -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
 
-<!-- Animate.css برای انیمیشن‌ها -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css">
-
 <style>
 :root {
   --primary: #00c3ff;
@@ -24,7 +21,7 @@
   --transition: 0.4s ease;
 }
 
-/* پس‌زمینه موجی */
+/* پس‌زمینه */
 body {
   font-family: 'Vazir', sans-serif;
   margin: 0;
@@ -33,24 +30,9 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
   background: linear-gradient(135deg, #00c3ff, #007bff);
   position: relative;
 }
-body::before, body::after {
-  content: '';
-  position: absolute;
-  width: 200%;
-  height: 200%;
-  top: -50%;
-  left: -50%;
-  border-radius: 40%;
-  background: radial-gradient(circle at center, rgba(255,255,255,0.1), transparent 70%);
-  animation: wave 15s infinite alternate ease-in-out;
-  z-index: 0;
-}
-body::after { animation-delay: 7.5s; }
-@keyframes wave { 0% { transform: rotate(0deg) scale(1); } 100% { transform: rotate(15deg) scale(1.1); } }
 
 /* کارت ورود */
 .auth-card {
@@ -63,9 +45,7 @@ body::after { animation-delay: 7.5s; }
   width: 90%;
   backdrop-filter: blur(10px);
   z-index: 1;
-  animation: fadeInUp 1s ease;
 }
-@keyframes fadeInUp { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
 
 .auth-title { text-align: center; color: var(--primary); font-size: 30px; margin-bottom: 8px; font-weight: bold; }
 .auth-sub { text-align: center; color: #555; margin-bottom: 25px; font-size: 15px; }
@@ -113,7 +93,7 @@ body::after { animation-delay: 7.5s; }
 
 @media(max-width:500px){ .actions{ flex-direction:column; } }
 
-/* Alert Box */
+/* Alert Box ساده */
 .alert-box {
   position: fixed;
   top: 20px;
@@ -132,17 +112,16 @@ body::after { animation-delay: 7.5s; }
   opacity: 0;
   pointer-events: none;
   z-index: 1000;
-  transition: transform 0.5s ease, opacity 0.5s ease;
+  transition: transform 0.4s ease, opacity 0.4s ease;
 }
-.alert-box.show { transform: translateX(-50%) translateY(0); opacity: 1; pointer-events: all; }
-.alert-box.fade-out { transform: translateX(-50%) translateY(-60px); opacity: 0; }
+.alert-box.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+  pointer-events: all;
+}
 .alert-box.success { border-left: 6px solid var(--success); }
 .alert-box.error { border-left: 6px solid var(--error); }
 .alert-box i { font-size: 22px; }
-
-@keyframes shakeX { 0%,100% { transform: translateX(0); } 20%,60% { transform: translateX(-6px); } 40%,80% { transform: translateX(6px); } }
-.animate__shakeX { animation: shakeX 0.6s ease-in-out; }
-
 </style>
 </head>
 
@@ -183,28 +162,16 @@ function showAlert(message, type="success"){
   const icon = box.querySelector("i");
   const text = box.querySelector("span");
 
-  box.className = `alert-box ${type} animate__animated`;
   icon.className = type === "success" ? "ri-check-line" : "ri-error-warning-line";
   text.textContent = message;
 
-  box.classList.add("animate__fadeInDown","show");
-
-  // shake کارت روی خطا
-  if(type==="error"){
-    const card = document.querySelector('.auth-card');
-    card.classList.add("animate__animated","animate__shakeX");
-    card.addEventListener('animationend',()=> card.classList.remove("animate__animated","animate__shakeX"), {once:true});
-  }
+  // نمایش ساده
+  box.className = `alert-box ${type} show`;
 
   // مخفی شدن خودکار
   setTimeout(()=>{
-    box.classList.remove("animate__fadeInDown");
-    box.classList.add("animate__fadeOutUp");
-    box.addEventListener('animationend', function handler(){
-      box.classList.remove("show","animate__fadeOutUp");
-      box.removeEventListener('animationend', handler);
-    });
-  },3500);
+    box.classList.remove("show");
+  }, 3500);
 }
 
 // Login form
@@ -229,11 +196,6 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
     if(res.ok){
       localStorage.setItem("driverData", JSON.stringify(data.driver));
       showAlert("ورود موفقیت‌آمیز بود! در حال انتقال...","success");
-
-      const card = document.querySelector('.auth-card');
-      card.style.transition="0.6s";
-      card.style.transform="scale(0.95)";
-      card.style.opacity="0";
       setTimeout(()=> window.location.href="driver-dashboard.html",1500);
     } else {
       showAlert(data.message || "کد ملی یا رمز عبور نادرست است.","error");
