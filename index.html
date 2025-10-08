@@ -529,117 +529,162 @@ body {
     font-size: 0.95rem;
   }
 }
-
 /* ================== Services Section - Ultra Modern ================== */
 .text_info {
   text-align: center;
-  background: linear-gradient(135deg, #0c7706, #065f46, #1e293b);
-  color: #fff;
-  font-size: 2rem;
+  font-size: 2.4rem;
   font-weight: 900;
-  padding: 2.5rem 1rem;
-  letter-spacing: 1px;
-  border-bottom: 5px solid #22c55e;
-  text-shadow: 2px 2px 10px rgba(0,0,0,0.4);
+  padding: 3rem 2rem;
+  letter-spacing: 1.5px;
   position: relative;
   overflow: hidden;
+  border-radius: 1.2rem;
+  background: linear-gradient(135deg, #065f46, #0c7706, #1e293b);
+  color: #fff;
+  text-shadow:
+    0 0 5px rgba(255,255,255,0.2),
+    0 0 10px rgba(255,255,255,0.2),
+    0 0 20px rgba(255,255,255,0.1);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+  transition: transform 0.4s ease, text-shadow 0.4s ease;
 }
 
+.text_info:hover {
+  transform: translateY(-6px);
+  text-shadow:
+    0 0 10px rgba(255,255,255,0.4),
+    0 0 20px rgba(255,255,255,0.3),
+    0 0 30px rgba(255,255,255,0.2);
+}
+
+/* ================== Animated Gradient Text ================== */
+.text_info span {
+  background: linear-gradient(90deg, #22c55e, #06b6d4, #f59e0b, #ef4444);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientText 5s ease infinite;
+  display: inline-block;
+}
+
+@keyframes gradientText {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ================== Animated 3D Line ================== */
 .text_info::after {
   content: "";
   position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 100%;
-  height: 4px;
-  background: linear-gradient(90deg, #22c55e, #06b6d4, #f59e0b, #ef4444);
-  animation: moveGradient 5s linear infinite;
+  bottom: 0;
+  left: -150%;
+  width: 400%;
+  height: 6px;
+  background: linear-gradient(90deg, #22c55e, #06b6d4, #f59e0b, #ef4444, #22c55e);
+  border-radius: 3px;
+  box-shadow: 0 0 10px rgba(255,255,255,0.3);
+  animation: moveLine 4s linear infinite;
 }
 
-@keyframes moveGradient {
-  0% { background-position: 0 0; }
-  100% { background-position: 200% 0; }
+@keyframes moveLine {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-66.66%); }
 }
-
 .services {
   background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  padding: 4rem 2rem;
-  gap: 2.5rem;
+  padding: 5rem 2rem;
+  gap: 3rem;
+  perspective: 1500px; /* برای حس 3D */
 }
 
 /* کارت سرویس‌ها */
 .service {
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 20px;
-  padding: 2rem 1.8rem;
-  width: 280px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 2rem;
+  padding: 2.5rem 2rem;
+  width: 300px;
   text-align: center;
-  box-shadow: 
-    0 8px 25px rgba(0,0,0,0.08),
-    0 0 40px rgba(12,119,6,0.1);
-  margin-top: 5vh;
-  transition: all 0.5s ease;
+  box-shadow: 0 12px 35px rgba(0,0,0,0.12), 0 0 50px rgba(12,119,6,0.1);
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.6s ease;
   cursor: pointer;
   position: relative;
   overflow: hidden;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(12,119,6,0.15);
+  transform-style: preserve-3d;
 }
 
-/* افکت نوار نورانی */
-.service::before {
+/* نوار نورانی متحرک */
+.service::after {
   content: "";
   position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(12,119,6,0.25), rgba(12,119,6,0.05));
-  opacity: 0;
-  transition: opacity 0.5s ease;
+  bottom: 0;
+  left: -150%;
+  width: 400%;
+  height: 6px;
+  background: linear-gradient(90deg, #22c55e, #06b6d4, #f59e0b, #ef4444, #22c55e);
+  border-radius: 3px;
+  box-shadow: 0 0 15px rgba(255,255,255,0.3);
+  animation: moveLine 4s linear infinite;
 }
 
-.service:hover::before {
-  opacity: 1;
+@keyframes moveLine {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-66.66%); }
 }
 
+/* افکت 3D و hover */
 .service:hover {
-  transform: translateY(-12px) scale(1.04);
-  box-shadow: 
-    0 15px 40px rgba(0,0,0,0.2),
-    0 0 60px rgba(12,119,6,0.3);
+  transform: rotateY(10deg) rotateX(5deg) translateY(-15px) scale(1.05);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.25), 0 0 80px rgba(12,119,6,0.35);
 }
 
 /* تصویر سرویس */
 .service img {
-  max-width: 95px;
+  max-width: 100px;
   height: auto;
-  margin-bottom: 1rem;
-  transition: transform 0.5s ease;
-  filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));
+  margin-bottom: 1.2rem;
+  transition: transform 0.6s ease, filter 0.6s ease;
+  filter: drop-shadow(0 6px 15px rgba(0,0,0,0.3));
 }
 
 .service:hover img {
-  transform: rotate(12deg) scale(1.15);
+  transform: rotate(20deg) scale(1.2) translateY(-5px);
+  filter: drop-shadow(0 8px 20px rgba(0,0,0,0.4));
 }
 
 /* تیتر سرویس */
 .service h3 {
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   color: #065f46;
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.8rem;
   font-weight: 900;
-  letter-spacing: 0.5px;
-  text-shadow: 1px 1px 6px rgba(0,0,0,0.1);
+  letter-spacing: 0.8px;
+  text-shadow: 1px 1px 8px rgba(0,0,0,0.1);
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.service:hover h3 {
+  color: #10b981;
+  text-shadow: 0 0 12px rgba(16,185,129,0.6);
 }
 
 /* توضیحات سرویس */
 .service p {
   font-size: 1rem;
-  color: #444;
+  color: #334155;
   line-height: 1.8;
   font-weight: 500;
+  transition: color 0.3s ease;
 }
 
+.service:hover p {
+  color: #065f46;
+}
 
 /* ================== Article Section ================== */
 .article_piccher {
@@ -1677,16 +1722,16 @@ body, html {height:100%; width:100%;}
   
     <!-- Header -->
     <div class="header_top">
-        <div class="road-text">
+      <div class="road-text">
         <img src="logo7.png" alt=" ناجي راه" width="90.6px">
     </div>
-        
         <p>«نگران نباش، امداد نزديکتر از هميشه است.»</p>
 
 <h1 class="road-text">ناجی راه جعبه ابزار آنلاینته</h1>
 
 <p>با ناجی راه <span class="road-text">با خیال راحت بزن به دل جاده</span>
 
+<div class="road-text">مسی</div>
 <style>
   /* متن جاده‌ای واقعی */
 .road-text {
@@ -2082,5 +2127,3 @@ cards.forEach(card => {
 </body>
 
 </html>
-
-
