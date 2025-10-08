@@ -685,218 +685,139 @@ body {
 .service:hover p {
   color: #065f46;
 }
- * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazir', sans-serif; }
-  body {
-    min-height:100vh;
-    background: linear-gradient(135deg, #0f172a, #1e293b, #334155, #475569, #64748b);
-    background-size: 400% 400%;
-    animation: gradientBG 20s ease infinite;
-    padding:2rem;
-    overflow-x:hidden;
-    color:#fff;
-  }
-  @keyframes gradientBG { 0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;} }
+/* ================== Article Section ================== */
+.article_piccher {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  background: linear-gradient(135deg, #e5f4ea, #d1f0dc);
+  padding: 5vh 2vw;
+  gap: 2.5rem;
+  border-radius: 1.5rem;
+}
 
-  /* ================= Header ================= */
-  .header_top {
-    background-color: rgb(255, 128, 0);
-    color: rgb(12, 119, 6);
-    text-align:center;
-    padding:0.5rem;
-    font-size:2rem;
-    font-weight:bold;
-    border-radius:0.8rem;
-    box-shadow:0 5px 15px rgba(0,0,0,0.3);
-  }
+.article_image {
+  width: 45%;
+  display: flex;
+  justify-content: center;
+  perspective: 1200px; /* برای افکت 3D تصاویر */
+}
 
-  /* ================= Text Road ================= */
-  .road-text {
-    font-size:3rem;
-    font-weight:bold;
-    background: linear-gradient(to right, #4b4b4b 0%, #333 25%, #fff 25%, #fff 30%, #333 30%, #4b4b4b 100%);
-    background-size: 50px 100%;
-    color: transparent;
-    -webkit-background-clip: text;
-    background-clip: text;
-    text-shadow: 0 2px 6px rgba(0,0,0,0.5);
-    letter-spacing:4px;
-    animation: moveRoad 2s linear infinite;
-    text-align:center;
-    margin:3rem 0;
-    display:block;
-  }
-  @keyframes moveRoad { 0%{background-position:0 0;}100%{background-position:50px 0;} }
+.article_image img {
+  width: 80%;
+  height: auto;
+  border-radius: 1rem;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  transition: transform 0.6s ease, box-shadow 0.6s ease;
+}
 
-  /* ================= Services Section ================= */
-  .text_info {
-    text-align:center;
-    font-size:2.4rem;
-    font-weight:900;
-    padding:3rem 2rem;
-    letter-spacing:1.5px;
-    position:relative;
-    overflow:hidden;
-    border-radius:1.2rem;
-    background: linear-gradient(135deg,#065f46,#0c7706,#1e293b);
-    color:#fff;
-    text-shadow:0 0 5px rgba(255,255,255,0.2),0 0 10px rgba(255,255,255,0.2),0 0 20px rgba(255,255,255,0.1);
-    box-shadow:0 10px 40px rgba(0,0,0,0.3);
-    transition: transform 0.4s ease,text-shadow 0.4s ease;
-    margin-bottom:2rem;
-  }
-  .text_info:hover{ transform: translateY(-6px); text-shadow:0 0 10px rgba(255,255,255,0.4),0 0 20px rgba(255,255,255,0.3),0 0 30px rgba(255,255,255,0.2); }
-  .text_info span{
-    background: linear-gradient(90deg, #22c55e, #06b6d4, #f59e0b, #ef4444);
-    background-size:300% 100%;
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
-    animation: gradientText 5s ease infinite;
-    display:inline-block;
-  }
-  @keyframes gradientText{0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
-  .text_info::after{
-    content:"";
-    position:absolute;
-    bottom:0;
-    left:-150%;
-    width:400%;
-    height:6px;
-    background: linear-gradient(90deg,#22c55e,#06b6d4,#f59e0b,#ef4444,#22c55e);
-    border-radius:3px;
-    box-shadow:0 0 10px rgba(255,255,255,0.3);
-    animation: moveLine 4s linear infinite;
-  }
-  @keyframes moveLine{0%{transform:translateX(0);}100%{transform:translateX(-66.66%);}}
+.article_image img:hover {
+  transform: rotateY(8deg) rotateX(5deg) scale(1.05);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
+}
 
-  .services{
-    background: linear-gradient(135deg,#f1f5f9,#e2e8f0);
-    display:flex;
-    justify-content:center;
-    flex-wrap:wrap;
-    padding:5rem 2rem;
-    gap:3rem;
-    perspective:1500px;
-  }
-  .service{
-    background: rgba(255,255,255,0.8);
-    border-radius:2rem;
-    padding:2.5rem 2rem;
-    width:300px;
-    text-align:center;
-    box-shadow:0 12px 35px rgba(0,0,0,0.12),0 0 50px rgba(12,119,6,0.1);
-    transition: transform 0.6s cubic-bezier(0.4,0,0.2,1), box-shadow 0.6s ease;
-    cursor:pointer;
-    position:relative;
-    overflow:hidden;
-    backdrop-filter:blur(15px);
-    border:1px solid rgba(12,119,6,0.15);
-    transform-style: preserve-3d;
-  }
-  .service::after{
-    content:"";
-    position:absolute;
-    bottom:0;
-    left:-150%;
-    width:400%;
-    height:6px;
-    background: linear-gradient(90deg,#22c55e,#06b6d4,#f59e0b,#ef4444,#22c55e);
-    border-radius:3px;
-    box-shadow:0 0 15px rgba(255,255,255,0.3);
-    animation: moveLine 4s linear infinite;
-  }
-  .service:hover{ transform: rotateY(10deg) rotateX(5deg) translateY(-15px) scale(1.05); box-shadow:0 20px 60px rgba(0,0,0,0.25),0 0 80px rgba(12,119,6,0.35);}
-  .service img{ max-width:100px; height:auto; margin-bottom:1.2rem; transition: transform 0.6s ease, filter 0.6s ease; filter:drop-shadow(0 6px 15px rgba(0,0,0,0.3));}
-  .service:hover img{ transform: rotate(20deg) scale(1.2) translateY(-5px); filter:drop-shadow(0 8px 20px rgba(0,0,0,0.4));}
-  .service h3{ font-size:1.5rem; color:#065f46; margin-bottom:0.8rem; font-weight:900; letter-spacing:0.8px; text-shadow:1px 1px 8px rgba(0,0,0,0.1); transition:color 0.3s ease,text-shadow 0.3s ease;}
-  .service:hover h3{ color:#10b981; text-shadow:0 0 12px rgba(16,185,129,0.6);}
-  .service p{ font-size:1rem; color:#334155; line-height:1.8; font-weight:500; transition:color 0.3s ease;}
-  .service:hover p{ color:#065f46;}
+/* باکس متن */
+.article_text {
+  width: 45%;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(10px);
+  padding: 2.5rem;
+  border-radius: 1.2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  color: #065f46;
+  direction: rtl;
+  transition: transform 0.5s ease, box-shadow 0.5s ease;
+}
 
-  /* ================= Article Section ================= */
-  .article_piccher{
-    display:flex;
-    align-items:center;
-    justify-content:space-around;
-    flex-wrap:wrap;
-    background: linear-gradient(135deg,#e5f4ea,#d1f0dc);
-    padding:5vh 2vw;
-    gap:2.5rem;
-    border-radius:1.5rem;
-    margin-top:4rem;
-  }
-  .article_image{
-    width:45%;
-    display:flex;
-    justify-content:center;
-    perspective:1200px;
-  }
-  .article_image img{
-    width:80%;
-    height:auto;
-    border-radius:1rem;
-    box-shadow:0 8px 25px rgba(0,0,0,0.1);
-    transition: transform 0.6s ease, box-shadow 0.6s ease;
-  }
-  .article_image img:hover{ transform: rotateY(8deg) rotateX(5deg) scale(1.05); box-shadow:0 12px 35px rgba(0,0,0,0.25); }
+.article_text:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+}
 
-  .article_text{
-    width:45%;
-    background: rgba(255,255,255,0.75);
-    backdrop-filter: blur(10px);
-    padding:2.5rem;
-    border-radius:1.2rem;
-    box-shadow:0 10px 30px rgba(0,0,0,0.1);
-    color:#065f46;
-    direction:rtl;
-    transition: transform 0.5s ease, box-shadow 0.5s ease;
-  }
-  .article_text:hover{ transform: translateY(-5px); box-shadow:0 15px 40px rgba(0,0,0,0.2); }
-  .article_text_one{ text-align:center; font-size:2.8rem; font-style:italic; margin-bottom:2rem; font-weight:900; color:#0d9488; text-shadow:1px 1px 10px rgba(0,0,0,0.2);}
-  .article_text_two{ text-align:center; font-size:1.3rem; margin-bottom:1.8rem; font-weight:700; color:#065f46;}
-  .article_text_tree{ text-align:justify; font-size:1.1rem; line-height:2.2; font-weight:500; color:#134e4a;}
+/* تیتر اصلی */
+.article_text_one {
+  text-align: center;
+  font-size: 2.8rem;
+  font-style: italic;
+  margin-bottom: 2rem;
+  font-weight: 900;
+  color: #0d9488;
+  text-shadow: 1px 1px 10px rgba(0,0,0,0.2);
+}
 
-  .article_img2{
-    display:flex;
-    flex-wrap:wrap;
-    align-items:center;
-    justify-content:center;
-    gap:2.5rem;
-    padding:3rem 2rem;
-    background: linear-gradient(135deg,#d1f0dc,#e5f4ea);
-    border-radius:1.5rem;
-    box-shadow:0 0 20px rgba(0,0,0,0.08);
-    direction:rtl;
-    margin-top:3rem;
-  }
-  .article_image_wrapper{
-    flex:1 1 40%;
-    text-align:center;
-    perspective:1200px;
-  }
-  .article_image_wrapper img{
-    max-width:90%;
-    height:auto;
-    border-radius:1.2rem;
-    box-shadow:0 8px 25px rgba(0,0,0,0.1);
-    transition: transform 0.6s ease, box-shadow 0.6s ease;
-  }
-  .article_image_wrapper img:hover{ transform: rotateY(10deg) rotateX(5deg) scale(1.05); box-shadow:0 12px 35px rgba(0,0,0,0.25);}
-  .article_text2{
-    flex:1 1 50%;
-    background: rgba(255,255,255,0.75);
-    backdrop-filter: blur(10px);
-    padding:2.5rem;
-    border-radius:1.2rem;
-    box-shadow:0 10px 30px rgba(0,0,0,0.1);
-    font-family:'Vazir',sans-serif;
-    font-size:1.1rem;
-    line-height:2.2;
-    text-align:justify;
-    color:#065f46;
-    font-weight:500;
-    transition: transform 0.5s ease, box-shadow 0.5s ease;
-  }
-  .article_text2:hover{ transform: translateY(-5px); box-shadow:0 15px 40px rgba(0,0,0,0.2);}
+/* تیتر فرعی */
+.article_text_two {
+  text-align: center;
+  font-size: 1.3rem;
+  margin-bottom: 1.8rem;
+  font-weight: 700;
+  color: #065f46;
+}
+
+/* متن اصلی */
+.article_text_tree {
+  text-align: justify;
+  font-size: 1.1rem;
+  line-height: 2.2;
+  font-weight: 500;
+  color: #134e4a;
+}
+
+/* ================== Article 2 Section ================== */
+.article_img2 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 2.5rem;
+  padding: 3rem 2rem;
+  background: linear-gradient(135deg, #d1f0dc, #e5f4ea);
+  border-radius: 1.5rem;
+  box-shadow: 0 0 20px rgba(0,0,0,0.08);
+  direction: rtl;
+}
+
+.article_image_wrapper {
+  flex: 1 1 40%;
+  text-align: center;
+  perspective: 1200px;
+}
+
+.article_image_wrapper img {
+  max-width: 90%;
+  height: auto;
+  border-radius: 1.2rem;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+  transition: transform 0.6s ease, box-shadow 0.6s ease;
+}
+
+.article_image_wrapper img:hover {
+  transform: rotateY(10deg) rotateX(5deg) scale(1.05);
+  box-shadow: 0 12px 35px rgba(0,0,0,0.25);
+}
+
+.article_text2 {
+  flex: 1 1 50%;
+  background: rgba(255,255,255,0.75);
+  backdrop-filter: blur(10px);
+  padding: 2.5rem;
+  border-radius: 1.2rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  font-family: 'Vazir', sans-serif;
+  font-size: 1.1rem;
+  line-height: 2.2;
+  text-align: justify;
+  color: #065f46;
+  font-weight: 500;
+  transition: transform 0.5s ease, box-shadow 0.5s ease;
+}
+
+.article_text2:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+}
+
 /* ================== Footer ================== */
 .footer {
   background-color: #222;
