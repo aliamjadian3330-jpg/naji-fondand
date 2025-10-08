@@ -1,139 +1,71 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>فراموشی رمز عبور یدک‌کش</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>فراموشی رمز عبور راننده</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Vazir:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  *{margin:0;padding:0;box-sizing:border-box;font-family:'Vazir',sans-serif;}
-  body{height:100vh;display:flex;justify-content:center;align-items:center;overflow:hidden;position:relative;background:#0f172a;}
-
-  /* Gradient پس‌زمینه متحرک */
-  body::before{
-    content:'';
-    position:absolute;top:0;left:0;width:100%;height:100%;
-    background:linear-gradient(135deg,#0f172a,#1e293b,#334155,#475569,#64748b);
-    background-size:400% 400%;
-    animation:gradientBG 20s ease infinite;
-    z-index:-2;
-  }
-  @keyframes gradientBG{0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
-
-  /* particles */
-  body::after{
-    content:'';
-    position:absolute;top:0;left:0;width:100%;height:100%;
-    background-image:
-      radial-gradient(circle at 20% 80%, rgba(34,197,94,0.1) 0%, transparent 50%),
-      radial-gradient(circle at 80% 20%, rgba(59,130,246,0.1) 0%, transparent 50%);
-    animation:float 15s ease-in-out infinite;
-    z-index:-1;
-  }
-  @keyframes float{0%,100%{transform:translateY(0px);}33%{transform:translateY(-20px);}66%{transform:translateY(10px);}}
-
-  /* کارت فرم */
-  .form-container{
-    position:relative;
-    background:rgba(255,255,255,0.05);
-    backdrop-filter:blur(25px);
-    -webkit-backdrop-filter:blur(25px);
-    padding:50px 40px;
-    border-radius:24px;
-    width:100%;max-width:420px;
-    box-shadow:0 25px 50px rgba(0,0,0,0.25),0 0 0 1px rgba(255,255,255,0.1);
-    border:1px solid rgba(255,255,255,0.1);
-    animation:cardUp 1.2s forwards;
-    overflow:hidden;
-  }
-  @keyframes cardUp{0%{opacity:0;transform:translateY(60px) scale(0.95);}100%{opacity:1;transform:translateY(0) scale(1);}}
-
-  /* عنوان */
-  .header{text-align:center;margin-bottom:40px;}
-  .header h2{
-    font-size:2.2rem;font-weight:700;
-    background:linear-gradient(135deg,#ffffff,#22c55e);
-    -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-    background-clip:text;margin-bottom:8px;letter-spacing:-0.5px;
-  }
-  .header p{color:rgba(255,255,255,0.7);font-size:0.95rem;font-weight:400;}
-
-  /* input group */
-  .input-group{position:relative;margin-bottom:24px;}
-  .input-group input{
-    width:100%;
-    padding:18px 20px 18px 55px;
-    border-radius:16px;
-    border:2px solid rgba(255,255,255,0.1);
-    background:rgba(255,255,255,0.05);
-    color:#ffffff;
-    font-size:1rem;
-    transition:all 0.3s;
-    outline:none;
-  }
-  .input-group input::placeholder{color:rgba(255,255,255,0.5);}
-  .input-group input:focus{
-    border-color:#22c55e;
-    background:rgba(255,255,255,0.08);
-    box-shadow:0 0 0 4px rgba(34,197,94,0.1),0 8px 25px rgba(34,197,94,0.15);
-    transform:translateY(-2px);
-  }
-  .input-group i{
-    position:absolute;top:50%;left:20px;transform:translateY(-50%);
-    color:rgba(255,255,255,0.6);font-size:18px;transition:all 0.3s;z-index:1;
-  }
-  .input-group input:focus ~ i{color:#22c55e;transform:translateY(-50%) scale(1.1);}
-
-  /* دکمه */
-  .submit-btn{
-    width:100%;padding:18px;margin-top:20px;
-    border:none;border-radius:16px;font-weight:600;font-size:1.1rem;
-    cursor:pointer;background:linear-gradient(135deg,#22c55e,#16a34a);
-    color:#fff;box-shadow:0 8px 25px rgba(34,197,94,0.3);
-    position:relative;overflow:hidden;transition:all 0.3s;
-  }
-  .submit-btn:hover{
-    background:linear-gradient(135deg,#16a34a,#15803d);
-    transform:translateY(-3px);
-    box-shadow:0 12px 35px rgba(34,197,94,0.4);
-  }
-  .submit-btn::before{
-    content:"";position:absolute;top:0;left:-100%;width:100%;height:100%;
-    background:linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent);
-    transition:left 0.6s ease;
-  }
-  .submit-btn:hover::before{left:100%;}
-
-  /* پیام‌ها */
-  .alert{
-    position:fixed;top:30px;left:50%;
-    transform:translateX(-50%) translateY(-100px);
-    padding:16px 24px;border-radius:12px;font-weight:500;color:#fff;
-    opacity:0;pointer-events:none;z-index:1000;
-    transition:all 0.4s;backdrop-filter:blur(10px);box-shadow:0 10px 25px rgba(0,0,0,0.2);
-  }
-  .alert.success{background:linear-gradient(135deg,rgba(34,197,94,0.9),rgba(22,163,74,0.9));border:1px solid rgba(34,197,94,0.3);}
-  .alert.error{background:linear-gradient(135deg,rgba(239,68,68,0.9),rgba(220,38,38,0.9));border:1px solid rgba(239,68,68,0.3);}
-  .alert.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto;}
-
-  /* responsive */
-  @media(max-width:480px){
-    .form-container{margin:20px;padding:40px 30px;max-width:none;}
-    .header h2{font-size:1.8rem;}
-    .input-group input{padding:16px 18px 16px 50px;}
-    .submit-btn{padding:16px;font-size:1rem;}
-  }
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Vazir',sans-serif;}
+body{height:100vh;display:flex;justify-content:center;align-items:center;overflow:hidden;position:relative;background:#0f172a;}
+body::before{
+  content:'';position:absolute;top:0;left:0;width:100%;height:100%;
+  background:linear-gradient(135deg,#0f172a,#1e293b,#334155,#475569,#64748b);
+  background-size:400% 400%;animation:gradientBG 20s ease infinite;z-index:-2;
+}
+@keyframes gradientBG{0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
+body::after{
+  content:'';position:absolute;top:0;left:0;width:100%;height:100%;
+  background-image:
+    radial-gradient(circle at 20% 80%, rgba(34,197,94,0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(59,130,246,0.1) 0%, transparent 50%);
+  animation:float 15s ease-in-out infinite;z-index:-1;
+}
+@keyframes float{0%,100%{transform:translateY(0px);}33%{transform:translateY(-20px);}66%{transform:translateY(10px);}}
+.form-container{
+  position:relative;background:rgba(255,255,255,0.05);backdrop-filter:blur(25px);
+  padding:50px 40px;border-radius:24px;width:100%;max-width:420px;
+  box-shadow:0 25px 50px rgba(0,0,0,0.25),0 0 0 1px rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.1);
+}
+.header{text-align:center;margin-bottom:40px;}
+.header h2{
+  font-size:2.2rem;font-weight:700;
+  background:linear-gradient(135deg,#ffffff,#22c55e);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;margin-bottom:8px;letter-spacing:-0.5px;
+}
+.header p{color:rgba(255,255,255,0.7);font-size:0.95rem;font-weight:400;}
+.input-group{position:relative;margin-bottom:24px;}
+.input-group input{
+  width:100%;padding:18px 20px 18px 55px;border-radius:16px;border:2px solid rgba(255,255,255,0.1);
+  background:rgba(255,255,255,0.05);color:#ffffff;font-size:1rem;transition:all 0.3s;outline:none;
+}
+.input-group input::placeholder{color:rgba(255,255,255,0.5);}
+.input-group input:focus{border-color:#22c55e;background:rgba(255,255,255,0.08);box-shadow:0 0 0 4px rgba(34,197,94,0.1),0 8px 25px rgba(34,197,94,0.15);transform:translateY(-2px);}
+.input-group i{position:absolute;top:50%;left:20px;transform:translateY(-50%);color:rgba(255,255,255,0.6);font-size:18px;transition:all 0.3s;z-index:1;}
+.input-group input:focus ~ i{color:#22c55e;transform:translateY(-50%) scale(1.1);}
+.submit-btn{
+  width:100%;padding:18px;margin-top:20px;border:none;border-radius:16px;font-weight:600;font-size:1.1rem;
+  cursor:pointer;background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;
+  box-shadow:0 8px 25px rgba(34,197,94,0.3);position:relative;overflow:hidden;transition:all 0.3s;
+}
+.submit-btn:hover{background:linear-gradient(135deg,#16a34a,#15803d);transform:translateY(-3px);box-shadow:0 12px 35px rgba(34,197,94,0.4);}
+.submit-btn::before{content:"";position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent);transition:left 0.6s ease;}
+.submit-btn:hover::before{left:100%;}
+.alert{position:fixed;top:30px;left:50%;transform:translateX(-50%) translateY(-100px);padding:16px 24px;border-radius:12px;font-weight:500;color:#fff;opacity:0;pointer-events:none;z-index:1000;transition:all 0.4s;backdrop-filter:blur(10px);box-shadow:0 10px 25px rgba(0,0,0,0.2);}
+.alert.success{background:linear-gradient(135deg,rgba(34,197,94,0.9),rgba(22,163,74,0.9));border:1px solid rgba(34,197,94,0.3);}
+.alert.error{background:linear-gradient(135deg,rgba(239,68,68,0.9),rgba(220,38,38,0.9));border:1px solid rgba(239,68,68,0.3);}
+.alert.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto;}
+@media(max-width:480px){.form-container{margin:20px;padding:40px 30px;max-width:none;}.header h2{font-size:1.8rem;}.input-group input{padding:16px 18px 16px 50px;}.submit-btn{padding:16px;font-size:1rem;}}
 </style>
 </head>
 <body>
-
 <div class="form-container">
   <div class="header">
     <h2>بازیابی رمز عبور</h2>
     <p>کد ملی و شماره تماس خود را وارد کنید تا رمز عبور بازیابی شود</p>
   </div>
-
   <form id="forgotForm">
     <div class="input-group">
       <input type="text" id="nationalId" placeholder="کد ملی ۱۰ رقمی" required>
@@ -146,23 +78,22 @@
     <button type="submit" class="submit-btn">بازیابی رمز عبور</button>
   </form>
 </div>
-
 <div class="alert" id="alert"></div>
 
 <script>
-const form=document.getElementById('forgotForm');
-const alertBox=document.getElementById('alert');
+const form = document.getElementById('forgotForm');
+const alertBox = document.getElementById('alert');
 
-function showAlert(message,type='success'){
-  alertBox.textContent=message;
-  alertBox.className=`alert ${type} show`;
-  setTimeout(()=>{alertBox.classList.remove('show');},4000);
+function showAlert(message, type='success'){
+  alertBox.textContent = message;
+  alertBox.className = `alert ${type} show`;
+  setTimeout(()=>{ alertBox.classList.remove('show'); }, 4000);
 }
 
-form.addEventListener('submit',async(e)=>{
+form.addEventListener('submit', async (e) => {
   e.preventDefault();
-  const nationalId=document.getElementById('nationalId').value.trim();
-  const phone=document.getElementById('phone').value.trim();
+  const nationalId = document.getElementById('nationalId').value.trim();
+  const phone = document.getElementById('phone').value.trim();
 
   if(!/^\d{10}$/.test(nationalId)){
     showAlert('کد ملی معتبر نیست','error'); return;
@@ -171,12 +102,24 @@ form.addEventListener('submit',async(e)=>{
     showAlert('شماره تماس معتبر نیست','error'); return;
   }
 
-  // شبیه‌سازی ارسال درخواست
-  showAlert('در حال ارسال...', 'success');
-  setTimeout(()=>{
-    showAlert('رمز عبور با موفقیت بازیابی شد', 'success');
-    form.reset();
-  },2000);
+  try {
+    const res = await fetch("https://naji-backend.onrender.com/api/drivers/forgot-password", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ nationalId, phone })
+    });
+    const data = await res.json();
+
+    if(res.ok){
+      showAlert(`رمز جدید: ${data.message}`, 'success');
+      form.reset();
+    } else {
+      showAlert(data.message || "خطا در بازیابی رمز", 'error');
+    }
+  } catch(err){
+    console.error(err);
+    showAlert("ارتباط با سرور برقرار نشد", 'error');
+  }
 });
 </script>
 </body>
