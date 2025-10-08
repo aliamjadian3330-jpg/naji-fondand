@@ -1,72 +1,83 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fa">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>داشبورد راننده|ناجی راه</title>
-  <link rel="shortcut icon" href="logo7.png">
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
 <style>
-/* پایه */
-* { margin:0; padding:0; box-sizing:border-box; font-family:'Roboto',sans-serif; }
-html, body { height:100%; width:100%; background:#f0f2f5; }
+/* پایه مدرن */
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn','Roboto',sans-serif; }
+html, body { height:100%; width:100%; background:#f5f7fa; }
 
 /* Map */
 #mapContainer { height:100vh; width:100%; position:relative; }
-#map { height:100%; width:100%; border-radius:8px; }
+#map { height:100%; width:100%; border-radius:12px; box-shadow:0 8px 24px rgba(0,0,0,0.15); }
 
-/* Slide Panel Right */
+/* Slide Panel Right مدرن */
 #slidePanel {
   position:absolute;
-  top:0; right:-320px; /* مخفی خارج صفحه */
-  width:300px; height:100%;
-  background: #2563eb;
+  top:0; right:-340px; 
+  width:320px; height:100%;
+  background: linear-gradient(135deg, #1e3a8a, #2563eb);
   color:white;
-  padding:20px;
-  transition:right 0.4s ease, box-shadow 0.3s ease;
+  padding:25px 20px;
+  transition: right 0.5s cubic-bezier(0.77,0,0.175,1);
   z-index:1000;
   overflow-y:auto;
-  border-top-left-radius:16px;
-  border-bottom-left-radius:16px;
-  box-shadow: -4px 0 20px rgba(0,0,0,0.15);
+  border-top-left-radius:20px;
+  border-bottom-left-radius:20px;
+  box-shadow: -6px 0 24px rgba(0,0,0,0.2);
 }
 #slidePanel.open { right:0; }
 
-/* Panel Content */
+/* Panel Headings */
 #slidePanel h2 {
-  margin-bottom:15px;
+  margin-bottom:20px;
   text-align:center;
-  font-size:1.3rem;
+  font-size:1.4rem;
   letter-spacing:1px;
+  text-shadow: 1px 1px 6px rgba(0,0,0,0.3);
 }
 #slidePanel h3 {
-  margin:12px 0 8px;
+  margin:15px 0 10px;
   font-size:1rem;
   border-bottom:1px solid rgba(255,255,255,0.3);
-  padding-bottom:4px;
+  padding-bottom:6px;
+  letter-spacing:0.5px;
 }
 
-/* فرم و دکمه‌ها */
+/* Inputs and Buttons */
 #slidePanel input, #slidePanel select {
   width:100%;
-  padding:10px;
-  margin-bottom:12px;
-  border-radius:8px;
-  border:1px solid #d1d5db;
-  font-size:0.95rem;
+  padding:12px 14px;
+  margin-bottom:14px;
+  border-radius:12px;
+  border:1px solid #cbd5e1;
+  font-size:1rem;
+  transition: all 0.3s ease;
+}
+#slidePanel input:focus, #slidePanel select:focus { 
+  outline:none; 
+  border-color:#60a5fa; 
+  box-shadow:0 0 10px rgba(96,165,250,0.4); 
 }
 #slidePanel button {
   width:100%;
-  padding:10px;
+  padding:12px;
   border:none;
-  border-radius:8px;
+  border-radius:14px;
   cursor:pointer;
-  margin-top:8px;
-  font-size:0.95rem;
-  transition: transform 0.2s ease, background 0.2s ease;
+  margin-top:10px;
+  font-size:1rem;
+  font-weight:600;
+  transition: all 0.3s ease;
+  box-shadow:0 4px 12px rgba(0,0,0,0.2);
 }
 #slidePanel button:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  box-shadow:0 8px 18px rgba(0,0,0,0.3);
 }
 .btn-primary { background:#3b82f6; color:white; }
 .btn-primary:hover { background:#60a5fa; }
@@ -81,11 +92,13 @@ html, body { height:100%; width:100%; background:#f0f2f5; }
   height:100px;
   border-radius:50%;
   object-fit:cover;
-  margin:10px auto;
+  margin:15px auto;
   display:block;
-  border:2px solid white;
-  box-shadow:0 2px 8px rgba(0,0,0,0.2);
+  border:3px solid white;
+  box-shadow:0 4px 14px rgba(0,0,0,0.25);
+  transition: transform 0.3s ease;
 }
+#photoPreview:hover { transform: scale(1.08); }
 
 /* لیست اطلاعات راننده */
 ul#driverInfo {
@@ -94,56 +107,158 @@ ul#driverInfo {
   margin-bottom:15px;
 }
 ul#driverInfo li {
-  padding:6px 0;
-  font-size:0.95rem;
+  padding:8px 0;
+  font-size:1rem;
   border-bottom:1px solid rgba(255,255,255,0.2);
+  display:flex;
+  justify-content:space-between;
+  letter-spacing:0.5px;
 }
 
 /* Toggle Button */
 #toggleBtn {
   position:absolute;
-  top:15px;
-  right:15px;
+  top:18px;
+  right:18px;
   background:#3b82f6;
   color:white;
   border:none;
   border-radius:50%;
-  width:50px; height:50px;
-  font-size:24px;
+  width:55px; height:55px;
+  font-size:28px;
   cursor:pointer;
   z-index:1001;
   display:flex;
   justify-content:center;
   align-items:center;
-  box-shadow:0 4px 12px rgba(0,0,0,0.3);
-  transition: transform 0.2s ease, background 0.2s ease;
+  box-shadow:0 6px 20px rgba(0,0,0,0.35);
+  transition: transform 0.3s ease, background 0.3s ease;
 }
-#toggleBtn:hover {
-  transform: scale(1.1);
-  background:#60a5fa;
+#toggleBtn:hover { transform: scale(1.15); background:#60a5fa; }
+
+/* پنل انتظار مدرن */
+#waitingPanel {
+  display: none; 
+  position: fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background: linear-gradient(120deg,#0f2027,#203a43,#2c5364);
+  background-size: 400% 400%;
+  animation: gradientBG 25s ease infinite;
+  color:#fff;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index:2000;
+  text-align:center;
+  backdrop-filter: blur(12px);
+}
+#waitingPanel .spinner {
+  width:90px; height:90px;
+  border:12px solid rgba(255,255,255,0.15);
+  border-top:12px solid #00ffd5;
+  border-radius:50%;
+  animation: spin 1s linear infinite;
+  margin-bottom:25px;
+  box-shadow:0 0 30px rgba(0,255,213,0.6);
+}
+#waitingPanel #waitingText {
+  font-size:1.6rem;
+  font-weight:500;
+  text-shadow:2px 2px 10px rgba(0,0,0,0.5);
+  margin-bottom:25px;
+}
+#waitingPanel #cancelButton {
+  position:relative;
+  padding:16px 36px;
+  font-size:1.2rem;
+  font-weight:600;
+  color:#00ffd5;
+  background:#0f2027;
+  border:2px solid #00ffd5;
+  border-radius:50px;
+  cursor:pointer;
+  overflow:hidden;
+  box-shadow:0 0 30px rgba(0,255,213,0.6);
+  transition: all 0.3s ease;
+}
+#waitingPanel #cancelButton:hover {
+  box-shadow:0 0 45px rgba(0,255,213,0.9);
+  transform: translateY(-3px);
+}
+#waitingPanel .car-glow {
+  content:'';
+  position:absolute;
+  top:50%; left:50%;
+  width:100%; height:100%;
+  background: radial-gradient(circle, rgba(0,255,213,0.5) 0%, transparent 70%);
+  border-radius:50px;
+  transform: translate(-50%,-50%) scale(1);
+  animation: pulse 1.5s infinite;
+  pointer-events:none;
+}
+#waitingPanel .particle {
+  position:absolute;
+  width:6px; height:6px;
+  background: rgba(255,255,255,0.35);
+  border-radius:50%;
+  animation: float 7-9s ease-in-out infinite;
+  filter:blur(1px);
+  opacity:0.75;
 }
 
-/* اطلاعات مسیر */
-#slidePanel > div:last-child {
-  margin-top:15px;
-  background:white;
-  color:black;
-  padding:12px;
-  border-radius:12px;
-  box-shadow:0 2px 8px rgba(0,0,0,0.1);
-  font-size:0.9rem;
+/* انیمیشن‌ها */
+@keyframes spin { 0%{transform:rotate(0deg);}100%{transform:rotate(360deg);} }
+@keyframes pulse { 0%,100%{transform:translate(-50%,-50%) scale(1);}50%{transform:translate(-50%,-50%) scale(1.25);} }
+@keyframes float {
+  0%{transform:translateY(0) translateX(0) rotate(0deg);}
+  25%{transform:translateY(-80px) translateX(25px) rotate(45deg);}
+  50%{transform:translateY(-160px) translateX(-25px) rotate(90deg);}
+  75%{transform:translateY(-240px) translateX(30px) rotate(135deg);}
+  100%{transform:translateY(-320px) translateX(0px) rotate(180deg);}
 }
+@keyframes gradientBG {
+  0% {background-position:0% 50%;}
+  50% {background-position:100% 50%;}
+  100% {background-position:0% 50%;}
+}
+
+/* پنل پایین ماموریت */
+#tripPanel {
+  display:none;
+  position:fixed;
+  bottom:0; left:0; right:0;
+  background:#fff;
+  border-top-left-radius:24px;
+  border-top-right-radius:24px;
+  border-top:4px solid #2563eb;
+  padding:22px;
+  z-index:1001;
+  box-shadow:0 -6px 24px rgba(0,0,0,0.25);
+  animation: slideUp 0.5s cubic-bezier(0.77,0,0.175,1);
+}
+@keyframes slideUp { from{transform:translateY(100%);opacity:0;} to{transform:translateY(0);opacity:1;} }
+
+.trip-header h3 { font-size:1.3rem; color:#2563eb; text-align:center; margin:0; }
+.trip-content { padding:12px 0; }
+.trip-info p { margin:6px 0; font-size:1rem; color:#333; display:flex; justify-content:space-between; }
+.trip-actions { display:flex; gap:12px; margin-top:20px; }
+.btn { flex:1; padding:14px; border-radius:14px; font-size:1rem; cursor:pointer; transition:all 0.3s ease; }
+.btn-cancel { background:#ef4444; color:#fff; }
+.btn-cancel:hover { background:#dc2626; }
+.btn-end { background:#10b981; color:#fff; }
+.btn-end:hover { background:#059669; }
 
 /* responsive موبایل */
-@media (max-width: 768px) {
-  #slidePanel { width:260px; right:-280px; padding:15px; }
-  #slidePanel h2 { font-size:1.1rem; }
-  #slidePanel h3 { font-size:0.95rem; }
-  #slidePanel input, #slidePanel select, #slidePanel button { font-size:0.9rem; }
-  #photoPreview { width:80px; height:80px; }
+@media (max-width:768px){
+  #slidePanel{ width:280px; right:-300px; padding:18px;}
+  #slidePanel h2{ font-size:1.2rem; }
+  #slidePanel h3{ font-size:0.95rem; }
+  #slidePanel input,#slidePanel select,#slidePanel button{ font-size:0.95rem;}
+  #photoPreview{ width:80px; height:80px; }
 }
-
 </style>
+
 </head>
 <body>
 
@@ -213,80 +328,351 @@ ul#driverInfo li {
     </div>
   </div>
 </div>
-<!-- پنل انتظار -->
-<!-- پنل انتظار -->
-<div id="waitingPanel">
-  <div class="spinner"></div>
-  <div id="waitingText">ما درخواست شما را به یدکش های اطراف فرستادیم <br>...لطفا منتظر پذیرش توسط یدکشان باشید </div>
-
-  <!-- ذرات شناور -->
-  <div class="particle" style="top:90%; left:10%; animation-duration:8s;"></div>
-  <div class="particle" style="top:80%; left:70%; animation-duration:6s;"></div>
-  <div class="particle" style="top:85%; left:40%; animation-duration:7s;"></div>
-  <div class="particle" style="top:95%; left:80%; animation-duration:5s;"></div>
+<!-- علرت-->
+ <!-- Modal پیشرفته -->
+  زیبا ترش کن<!-- 🌈 مودال هشدار حرفه‌ای -->
+<div id="modernAlert" class="modal">
+  <div class="modal-content">
+    <div class="icon-wrap">
+      <div class="icon-glow"></div>
+      <svg viewBox="0 0 24 24" width="42" height="42" fill="none" stroke="white" stroke-width="2.5">
+        <path id="iconPath" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </div>
+    <h3 id="modalTitle"><span style="font-size:80px;">✅</span><br>ورود شما با موفقیت انجام شد</h3>
+    <p id="modalMessage">به داشبورد  خودتون خوش آمدید✅</p>
+    <button class="closeBtn" onclick="closeModal()">باشه</button>
+  </div>
 </div>
+
+<!-- 🔊 صداها -->
+<audio id="sound-success" src="https://cdn.pixabay.com/audio/2022/03/15/audio_7b6b1f1a5f.mp3"></audio>
+<audio id="sound-error" src="https://cdn.pixabay.com/audio/2022/03/15/audio_66bcb8e331.mp3"></audio>
+<audio id="sound-warning" src="https://cdn.pixabay.com/audio/2022/03/15/audio_063f694232.mp3"></audio>
+
 <style>
-  #waitingPanel {
+/* ===== پس‌زمینه مودال ===== */
+.modal {
   display: none;
   position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: linear-gradient(120deg, #1a2a6c, #b21f1f, #fdbb2d);
-  background-size: 400% 400%;
-  animation: gradientBG 15s ease infinite;
-  color: #fff;
-  flex-direction: column;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(10px);
+  display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 2000;
+  z-index: 9999;
+}
+
+/* ===== بدنه مودال ===== */
+.modal-content {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.25);
+  backdrop-filter: blur(30px) saturate(160%);
+  border-radius: 24px;
+  padding: 40px 30px;
   text-align: center;
+  color: #fff;
+  width: 90%;
+  max-width: 420px;
+  box-shadow:
+    0 0 30px rgba(255,255,255,0.15),
+    0 25px 45px rgba(0,0,0,0.5);
+  transform: scale(0.85) translateY(-30px);
+  opacity: 0;
+  animation: modalIn 0.6s cubic-bezier(.18,.89,.32,1.28) forwards;
+  transition: all 0.3s ease;
 }
 
-@keyframes gradientBG {
-  0% {background-position:0% 50%;}
-  50% {background-position:100% 50%;}
-  100% {background-position:0% 50%;}
-}
-
-.spinner {
-  width: 70px;
-  height: 70px;
-  border: 8px solid rgba(255,255,255,0.2);
-  border-top: 8px solid #fff;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
+/* ===== آیکون ===== */
+.icon-wrap {
+  position: relative;
+  width: 90px; height: 90px;
   margin: 0 auto 20px auto;
-  box-shadow: 0 0 15px rgba(255,255,255,0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.icon-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  filter: blur(12px);
+  animation: glowPulse 2s infinite ease-in-out;
 }
 
-@keyframes spin { 
-  0% {transform:rotate(0deg);} 
-  100% {transform:rotate(360deg);} 
+/* ===== متن ===== */
+#modalTitle {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  font-weight: 600;
+  text-shadow: 0 2px 12px rgba(255,255,255,0.4);
+}
+#modalMessage {
+  font-size: 1.05rem;
+  opacity: 0.9;
+  line-height: 1.6;
+  margin-bottom: 25px;
 }
 
-#waitingText {
-  font-size: 1.3rem;
-  line-height: 1.5;
-  text-shadow: 1px 1px 5px rgba(0,0,0,0.4);
+/* ===== دکمه ===== */
+.closeBtn {
+  padding: 12px 32px;
+  border: none;
+  border-radius: 14px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  color: #fff;
+  background: linear-gradient(135deg, #00c6ff, #0072ff);
+  box-shadow: 0 10px 25px rgba(0,114,255,0.5);
+  transition: all 0.35s ease;
+}
+.closeBtn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 14px 35px rgba(0,114,255,0.6);
 }
 
-/* ذرات شناور */
-.particle {
-  position:absolute;
-  width:8px;
-  height:8px;
-  background: rgba(255,255,255,0.5);
-  border-radius:50%;
-  animation: float 6s linear infinite;
+/* ===== رنگ‌ها ===== */
+.modal-success .icon-wrap {
+  background: radial-gradient(circle at top left, #22c55e, #16a34a);
+}
+.modal-success .icon-glow {
+  background: radial-gradient(circle, #4ade80 0%, transparent 70%);
 }
 
-@keyframes float {
-  0% {transform: translateY(0) translateX(0);}
-  50% {transform: translateY(-180px) translateX(50px);}
-  100% {transform: translateY(-360px) translateX(-30px);}
+.modal-error .icon-wrap {
+  background: radial-gradient(circle at top left, #ef4444, #b91c1c);
+}
+.modal-error .icon-glow {
+  background: radial-gradient(circle, #f87171 0%, transparent 70%);
 }
 
+.modal-warning .icon-wrap {
+  background: radial-gradient(circle at top left, #facc15, #ca8a04);
+}
+.modal-warning .icon-glow {
+  background: radial-gradient(circle, #fde047 0%, transparent 70%);
+}
+
+/* ===== انیمیشن‌ها ===== */
+@keyframes modalIn {
+  to { transform: scale(1) translateY(0); opacity: 1; }
+}
+@keyframes modalOut {
+  to { transform: scale(0.85) translateY(-30px); opacity: 0; }
+}
+@keyframes glowPulse {
+  0%,100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.9; transform: scale(1.15); }
+}
 </style>
+
+<script>
+let alertTimeout;
+const iconPaths = {
+  success: "M5 13l4 4L19 7",       // ✓
+  error: "M6 6l12 12M6 18L18 6",  // ✕
+  warning: "M12 8v4m0 4h.01"       // ⚠
+};
+
+function showAlert(message, type="success") {
+  const modal = document.getElementById('modernAlert');
+  const content = modal.querySelector('.modal-content');
+  const path = document.getElementById('iconPath');
+  const title = document.getElementById('modalTitle');
+  const msg = document.getElementById('modalMessage');
+
+  // پاک کردن کلاس‌های قبلی
+  content.classList.remove("modal-success","modal-error","modal-warning");
+  content.classList.add("modal-"+type);
+
+  // تنظیم آیکون و عنوان
+  path.setAttribute("d", iconPaths[type] || iconPaths.success);
+  title.textContent =
+    type === "success" ? "عملیات موفق!" :
+    type === "error" ? "خطا رخ داد!" :
+    "هشدار!";
+
+  msg.textContent = message;
+
+  // نمایش مودال
+  modal.style.display = 'flex';
+  content.style.animation = 'modalIn 0.6s forwards';
+
+  // پخش صدا
+  const audio = document.getElementById(`sound-${type}`);
+  if (audio) {
+    audio.currentTime = 0;
+    audio.play().catch(()=>{});
+  }
+
+  // بسته شدن خودکار
+  clearTimeout(alertTimeout);
+  alertTimeout = setTimeout(closeModal, 3500);
+}
+
+function closeModal() {
+  const modal = document.getElementById('modernAlert');
+  const content = modal.querySelector('.modal-content');
+  content.style.animation = 'modalOut 0.5s forwards';
+  setTimeout(() => { modal.style.display = 'none'; }, 450);
+  clearTimeout(alertTimeout);
+}
+</script>
+
+
+<!-- پنل انتظار -->
+ <!-- پنل انتظار -->
+<div id="waitingPanel">
+  <div class="spinner"></div>
+  <div id="waitingText">
+    ما درخواست شما را به یدکش‌های اطراف فرستادیم<br>
+    لطفا منتظر پذیرش توسط یدکشان باشید...
+  </div>
+  <button id="cancelButton">
+    لغو درخواست
+    <span class="car-glow"></span>
+  </button>
+  
+  <!-- ذرات نورانی -->
+  <div class="particle" style="top:50%; left:20%;"></div>
+  <div class="particle" style="top:80%; left:70%;"></div>
+  <div class="particle" style="top:90%; left:10%; animation-duration:8s;"></div>
+  <div class="particle" style="top:85%; left:40%; animation-duration:7s;"></div>
+</div>
+
+<style>
+  #waitingPanel {
+    display: none; /* ⚡ پیش‌فرض مخفی */
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: linear-gradient(120deg, #0f2027, #203a43, #2c5364);
+    background-size: 400% 400%;
+    animation: gradientBG 20s ease infinite;
+    color: #fff;
+    display:none; /* ⚡ فقط وقتی JS نمایش می‌دهد */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    text-align: center;
+    backdrop-filter: blur(10px);
+  }
+
+  @keyframes gradientBG {
+    0% {background-position:0% 50%;}
+    50% {background-position:100% 50%;}
+    100% {background-position:0% 50%;}
+  }
+
+  .spinner {
+    width: 80px;
+    height: 80px;
+    border: 10px solid rgba(255,255,255,0.15);
+    border-top: 10px solid #00ffd5;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 25px auto;
+    box-shadow: 0 0 20px rgba(0, 255, 213, 0.6);
+  }
+
+  @keyframes spin { 
+    0% {transform: rotate(0deg);} 
+    100% {transform: rotate(360deg);} 
+  }
+
+  #waitingText {
+    font-size: 1.5rem;
+    font-weight: 500;
+    line-height: 1.5;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+  }
+
+  #cancelButton {
+    position: relative;
+    padding: 14px 32px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #00ffd5;
+    background: #0f2027;
+    border: 2px solid #00ffd5;
+    border-radius: 50px;
+    cursor: pointer;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 255, 213, 0.5);
+    transition: all 0.3s ease;
+  }
+
+  #cancelButton:hover {
+    box-shadow: 0 0 35px rgba(0, 255, 213, 0.9);
+    transform: translateY(-3px);
+  }
+
+  .car-glow {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(0,255,213,0.5) 0%, transparent 70%);
+    border-radius: 50px;
+    transform: translate(-50%, -50%) scale(1);
+    animation: pulse 1.5s infinite;
+    pointer-events: none;
+  }
+
+  @keyframes pulse {
+    0% {transform: translate(-50%, -50%) scale(1);}
+    50% {transform: translate(-50%, -50%) scale(1.2);}
+    100% {transform: translate(-50%, -50%) scale(1);}
+  }
+
+  .particle {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: rgba(255,255,255,0.3);
+    border-radius: 50%;
+    animation: float 8s ease-in-out infinite;
+    filter: blur(1px);
+    opacity: 0.7;
+  }
+
+  @keyframes float {
+    0% {transform: translateY(0) translateX(0) rotate(0deg);}
+    25% {transform: translateY(-100px) translateX(30px) rotate(45deg);}
+    50% {transform: translateY(-200px) translateX(-20px) rotate(90deg);}
+    75% {transform: translateY(-300px) translateX(40px) rotate(135deg);}
+    100% {transform: translateY(-400px) translateX(0px) rotate(180deg);}
+  }
+</style>
+
+<script>
+  // نمایش پنل فقط هنگام درخواست
+  function showWaitingPanel() {
+    document.getElementById('waitingPanel').style.display = 'flex';
+  }
+
+  function hideWaitingPanel() {
+    document.getElementById('waitingPanel').style.display = 'none';
+  }
+
+  document.getElementById("cancelButton").addEventListener("click", hideWaitingPanel);
+
+  // مثال اتصال به دکمه درخواست سرویس
+  function requestService() {
+    // نمایش پنل هنگام ارسال درخواست
+    showWaitingPanel();
+    // ارسال درخواست به سرور و بقیه کارها...
+  }
+</script>
+
 <!-- پنل پایین راننده -->
 <div id="tripPanel">
   <div class="trip-header">
@@ -407,7 +793,7 @@ window.onload = function(){
   if(driverData){
     fillDashboard(JSON.parse(driverData));
   } else {
-    alert("ابتدا وارد شويد");
+    showAlert("ابتدا وارد شويد");
     window.location.href = "driver-login.html";
   }
 }
@@ -422,7 +808,7 @@ function register(){
   };
   localStorage.setItem("driverData",JSON.stringify(data));
   fillDashboard(data);
-  alert("ثبت نام با موفقيت انجام شد!");
+  showAlert("ثبت نام با موفقيت انجام شد!");
 }
 
 function fillDashboard(data){
@@ -452,7 +838,7 @@ function previewPhoto(event){
 /* نظر سنجي */
 function submitSurvey(){
   const rating=document.getElementById('surveyRating').value;
-  if(!rating){ alert("لطفا امتياز خود را انتخاب کنيد"); return; }
+  if(!rating){ showAlert("لطفا امتياز خود را انتخاب کنيد"); return; }
   alert("با تشکر از نظر شما: "+rating+"/5");
   document.getElementById('surveyRating').value = "";
 }
@@ -466,7 +852,7 @@ map.on('click', function(e){
   } else if(!destinationMarker){
     destinationMarker=L.marker(e.latlng,{draggable:true}).addTo(map).bindPopup("مقصد").openPopup();
   } else {
-    const choice = confirm("کدام را تغيير مي‌خواي؟ OK = مبدا, Cancel = مقصد");
+    const choice = showAlert("کدام را می خواهید تغییر دهید؟ OK = مبدا, Cancel = مقصد");
     if(choice){ originMarker.setLatLng(e.latlng).bindPopup("مبدا").openPopup(); }
     else { destinationMarker.setLatLng(e.latlng).bindPopup("مقصد").openPopup(); }
     if(routeLine) map.removeLayer(routeLine);
@@ -482,7 +868,7 @@ function setCurrentLocation(){
       else { originMarker=L.marker(latlng,{draggable:true}).addTo(map).bindPopup("مبدا").openPopup(); }
       map.setView(latlng,14);
     });
-  }else alert("امکان دريافت موقعيت وجود ندارد!");
+  }else showAlert("امکان دريافت موقعيت وجود ندارد!");
 }
 
 function lockOrigin(){ if(originMarker){ originMarker.dragging.disable(); originMarker.bindPopup("مبدا (قفل)").openPopup(); } }
@@ -529,7 +915,7 @@ function startTowLiveUpdates(requestId) {
     navigator.geolocation.getCurrentPosition(pos => {
       socket.emit('towLocation', { requestId, lat: pos.coords.latitude, lng: pos.coords.longitude });
     }, err => {/* ignore */});
-  }, 3000);
+  }, 30000);
 }
 
 function stopTowLiveUpdates(){
@@ -608,7 +994,7 @@ function startLiveTracking() {
       });
     }, 3000); // هر 3 ثانيه
   } else {
-    alert("امکان دريافت موقعيت وجود ندارد!");
+    showAlert("امکان دريافت موقعيت وجود ندارد!");
   }
 }
 
@@ -618,7 +1004,7 @@ function startLiveTracking() {
 // هنگام درخواست سرويس شروع مي‌کنيم
 function requestService() {
   if (!originMarker || !destinationMarker) {
-    alert("ابتدا مبدا و مقصد را تعیین کنید");
+    showAlert("ابتدا مبدا و مقصد را تعیین کنید");
     return;
   }
 
@@ -731,6 +1117,12 @@ socket.on('tripEnded', (info) => {
 socket.on('tripCanceled', (info) => {
   alert(info.message || "ماموریت لغو شد توسط یدک‌کش");
   cleanupRequest();
+});
+
+
+document.getElementById("cancelButton").addEventListener("click", function() {
+    document.getElementById("waitingPanel").style.display = "none";
+    // اضافه کردن کد لغو درخواست سرور یا عملیات دیگر
 });
 
 
