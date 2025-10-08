@@ -103,7 +103,7 @@ form.addEventListener('submit', async (e) => {
   }
 
   try {
-    const res = await fetch("https://naji-backend.onrender.com/api/drivers/forgot-password", {
+    const res = await fetch("https://naji-backend.onrender.com/api/tow/forgot-password", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ nationalId, phone })
@@ -124,3 +124,4 @@ form.addEventListener('submit', async (e) => {
 </script>
 </body>
 </html>
+
