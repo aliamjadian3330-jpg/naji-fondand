@@ -330,7 +330,7 @@ ul#driverInfo li {
 </div>
 <!-- علرت-->
  <!-- Modal پیشرفته -->
-  زیبا ترش کن<!-- 🌈 مودال هشدار حرفه‌ای -->
+  <!-- 🌈 مودال هشدار حرفه‌ای -->
 <div id="modernAlert" class="modal">
   <div class="modal-content">
     <div class="icon-wrap">
@@ -774,6 +774,29 @@ function closeModal() {
 }
 
 </style>
+<script>
+// گرفتن اجازه پخش صدا با اولین کلیک یا لمس
+document.addEventListener("click", enableAudio, { once: true });
+document.addEventListener("touchstart", enableAudio, { once: true });
+
+function enableAudio() {
+  const sounds = [
+    document.getElementById('sound-success'),
+    document.getElementById('sound-error'),
+    document.getElementById('sound-warning')
+  ];
+  sounds.forEach(audio => {
+    if (audio) {
+      audio.play().then(() => {
+        audio.pause();
+        audio.currentTime = 0;
+      }).catch(()=>{});
+    }
+  });
+  console.log("🎵 اجازه پخش صدا فعال شد!");
+}
+</script>
+
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <!-- socket.IO -->
