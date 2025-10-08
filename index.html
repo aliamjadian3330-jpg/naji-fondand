@@ -36,27 +36,133 @@ body {
 
 /* ================== Header Top ================== */
 .header_top {
-  background-color: rgb(255, 128, 0);
-  color: rgb(12, 119, 6);
+  background: linear-gradient(90deg, #0d9488, #10b981);
+  color: #f0fdf4;
   text-align: center;
-  padding: 0.5rem;
+  padding: 1rem 1.5rem;
   font-size: 1.6rem;
-  font-weight: bold;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  animation: fadeInDown 1s ease-out;
+  position: relative;
 }
-  * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazir', sans-serif; }
-  body {
-    min-height: 100vh;
-    background: linear-gradient(135deg, #0f172a, #1e293b, #334155, #475569, #64748b);
-    background-size: 400% 400%;
-    animation: gradientBG 20s ease infinite;
-    padding:2rem;
-    overflow-x:hidden;
+
+.header_top::before,
+.header_top::after {
+  content: "";
+  position: absolute;
+  height: 3px;
+  width: 40px;
+  background: #f0fdf4;
+  top: 50%;
+  transform: translateY(-50%);
+  border-radius: 5px;
+}
+
+.header_top::before {
+  left: 1.5rem;
+}
+
+.header_top::after {
+  right: 1.5rem;
+}
+
+/* ================== Reset & Global ================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Vazir', sans-serif;
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #ecfdf5, #f0fdf4, #d1fae5);
+  background-size: 400% 400%;
+  animation: gradientBG 25s ease infinite;
+  color: #064e3b;
+  padding: 2rem;
+  overflow-x: hidden;
+}
+
+/* ================== Info Box ================== */
+.info_box {
+  background: #ffffff;
+  border-left: 5px solid #10b981;
+  padding: 1.5rem 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 3px 15px rgba(16, 185, 129, 0.15);
+  margin: 2rem auto;
+  max-width: 800px;
+  animation: fadeInUp 1s ease;
+}
+
+.info_box h2 {
+  font-size: 1.4rem;
+  color: #065f46;
+  margin-bottom: 0.8rem;
+}
+
+.info_box p {
+  font-size: 1rem;
+  color: #0f172a;
+  line-height: 1.8;
+}
+
+/* ================== Buttons ================== */
+.button {
+  display: inline-block;
+  background: linear-gradient(90deg, #10b981, #059669);
+  color: #f0fdf4;
+  padding: 0.7rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 0.8rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  margin-top: 1rem;
+}
+
+.button:hover {
+  background: linear-gradient(90deg, #059669, #047857);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(5, 150, 105, 0.3);
+}
+
+/* ================== Animations ================== */
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
   }
-  @keyframes gradientBG {
-    0% { background-position:0% 50%; }
-    50% { background-position:100% 50%; }
-    100% { background-position:0% 50%; }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
   /* ================== Top Panel Tabs ================== */
   .top-panel-tabs {
@@ -1573,6 +1679,43 @@ body, html {height:100%; width:100%;}
     <div class="header_top">
         <img src="logo7.png" alt=" ناجي راه" width="90.6px">
         <p>«نگران نباش، امداد نزديکتر از هميشه است.»</p>
+
+<h1 class="road-text">ناجی راه جعبه ابزار آنلاینته</h1>
+
+<p>با ناجی راه <span class="road-text">با خیال راحت بزن به دل جاده</span>
+
+<style>
+  /* متن جاده‌ای واقعی */
+.road-text {
+  font-family: 'Vazir', sans-serif; /* فونت فارسی */
+  font-weight: bold;
+  background: linear-gradient(
+    to right, 
+    #4b4b4b 0%, 
+    #333 25%, 
+    #fff 25%, 
+    #fff 30%, 
+    #333 30%, 
+    #4b4b4b 100%
+  );
+  background-size: 50px 100%;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+  letter-spacing: 4px;
+  animation: moveRoad 2s linear infinite;
+  display: inline-block; /* قابل استفاده در span, h1, p و div */
+}
+
+@keyframes moveRoad {
+  0% { background-position: 0 0; }
+  100% { background-position: 50px 0; }
+}
+
+</style>
+
+
     </div>
 <!-- پنل بالای سایت -->
 <div class="top-panel-tabs">
