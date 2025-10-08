@@ -166,7 +166,7 @@ document.getElementById("forgotForm").addEventListener("submit",async function(e
   }
 
   try{
-    const res=await fetch("https://naji-backend.onrender.com/api/drivers/forgot", {
+    const res=await fetch("https://naji-backend.onrender.com/api/drivers/forgot-password", {
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({nationalId,phone})
@@ -186,3 +186,4 @@ document.getElementById("forgotForm").addEventListener("submit",async function(e
 </script>
 </body>
 </html>
+
