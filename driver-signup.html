@@ -182,7 +182,7 @@ $(document).ready(function(){
 
     // ارسال دیتا به سرور
     try {
-      const res = await fetch("https://naji-backend.onrender.com/api/driver/signup", {
+      const res = await fetch("https://naji-backend.onrender.com/api/drivers/signup", {
         method:'POST',
         headers:{'Content-Type':'application/json'},
         body: JSON.stringify({fullName,birthDate,nationalId,licensePlate,phone,carType,carColor,carModel,password})
@@ -206,4 +206,5 @@ $(document).ready(function(){
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
 </body>
 </html>
+
 
