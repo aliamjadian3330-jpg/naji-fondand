@@ -230,7 +230,7 @@ $(document).ready(function(){
         };
 
         try{
-            const response = await fetch('http://localhost:5000/api/tow/signup',{
+            const response = await fetch("https://naji-backend.onrender.com/api/tow/signup", {
                 method:'POST',
                 headers:{'Content-Type':'application/json'},
                 body: JSON.stringify(data)
