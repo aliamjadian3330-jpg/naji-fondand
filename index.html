@@ -10,10 +10,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Vazir:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<a href="tel:0902000000" class="emergency-call" title="تماس فوری">
+  <img src="https://cdn-icons-png.flaticon.com/512/15/15874.png" alt="mobile-phone" />
+  <span style="color:red ;font-style: oblique;font-weight:bolder;">تماس فوری</span>
+</a>
 
-    
 
-    
 
     <!-- css -->
      <style>
@@ -285,7 +287,7 @@ body {
     0% { opacity:0; transform:translateY(40px) scale(0.95); filter:blur(10px); }
     100% { opacity:1; transform:translateY(0) scale(1); filter:blur(0); }
   }
-
+/* ..... */
   /* دکمه‌های ثبت‌نام و ورود کنار هم */
   .sign-tab, .login-tab {
     display:inline-flex;
@@ -355,7 +357,7 @@ body {
     .tab-btn { width:auto; }
     .tab-content { padding:2rem; margin:2rem 1rem; }
   }
-/* ================== Header Main - Modern & Professional ================== */
+  /* ================== Header Main - Glassmorphism ================== */
 .header {
   position: relative;
   min-height: 75vh;
@@ -367,44 +369,57 @@ body {
   padding: 3rem 1rem;
   background: url('background-yadk.jpg') no-repeat center center / cover;
   overflow: hidden;
+  border-radius: 20px;
 }
 
 .header::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.15); /* کمی تاریک برای خوانایی متن */
+  background: linear-gradient(135deg, rgba(0,0,0,0.3), rgba(0,0,0,0.1));
   z-index: 0;
+  animation: backgroundShift 20s ease infinite;
 }
 
 .header_box {
   position: relative;
   z-index: 1;
   max-width: 850px;
-  padding: 2rem;
-  border-radius: 20px;
-  background: rgba(255,255,255,0.05); /* شفاف و حرفه‌ای */
-  backdrop-filter: blur(4px); /* کمی محو برای متن */
-  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  padding: 2rem 3rem;
+  border-radius: 25px;
+  background: rgba(255,255,255,0.1); /* شیشه‌ای بسیار شفاف */
+  backdrop-filter: blur(0.6px); /* محو کردن پس‌زمینه */
+  -webkit-backdrop-filter: blur(15px); /* پشتیبانی مرورگر سافاری */
+  border: 1px solid rgba(255,255,255,0.2);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.35);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .header_box:hover {
-  transform: scale(1.03);
-  box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+  transform: scale(1.05);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
 }
 
 .font_Naji {
-  font-size: 4rem;
-  color: #00FF00;
+  font-size: 5rem;
+  color: #07b31e;
   font-family: 'Impact', sans-serif;
-  text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+  text-shadow: 2px 2px 12px rgba(0,0,0,0.8);
   animation: pulse 2s infinite alternate;
 }
 
+/* انیمیشن Pulse برای متن */
 @keyframes pulse {
-  0% { transform: scale(1); }
-  100% { transform: scale(1.05); }
+  0% { transform: scale(1); opacity: 0.9; }
+  50% { transform: scale(1.07); opacity: 1; }
+  100% { transform: scale(1); opacity: 0.9; }
+}
+
+/* حرکت آرام پس‌زمینه */
+@keyframes backgroundShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 .header_box h1 {
@@ -1712,7 +1727,61 @@ body, html {height:100%; width:100%;}
   .footer-links { flex-direction: column; gap: 1rem; }
   .social-icons { gap: 1rem; }
 }
+.emergency-call {
+  position: fixed;
+  bottom: 19px;
+  left: 5px;
+  z-index: 9999;
+  background-color: #16a34a; /* سبز */
+  color: #fff;
+  font-weight: bold;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 8px 25px rgba(22,163,74,0.6);
+  text-decoration: none;
+  animation: pulse 1.5s infinite, floatUpDown 2.5s ease-in-out infinite;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
 
+.emergency-call img {
+  width: 27px;
+  height: 27px;
+  filter: brightness(0) invert(1); /* سفید */
+}
+
+.emergency-call:hover {
+  transform: scale(1.15);
+  box-shadow: 0 12px 35px rgba(22,163,74,0.8);
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(22,163,74,0.5); }
+  70% { box-shadow: 0 0 0 20px rgba(22,163,74,0); }
+  100% { box-shadow: 0 0 0 0 rgba(22,163,74,0); }
+}
+
+@keyframes floatUpDown {
+  0% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-6px) scale(1.02); }
+  100% { transform: translateY(0) scale(1); }
+}
+
+/* ریسپانسیو روی موبایل */
+@media (max-width: 480px) {
+  .emergency-call {
+    padding: 10px 16px;
+    font-size: 0.9rem;
+  }
+  .emergency-call img {
+    width: 20px;
+    height: 20px;
+  }
+}
 
      </style>
 </head>
@@ -1726,8 +1795,12 @@ body, html {height:100%; width:100%;}
         <img src="logo7.png" alt=" ناجي راه" width="90.6px">
     </div>
         <p>«نگران نباش، امداد نزديکتر از هميشه است.»</p>
+
 <h1 class="road-text">ناجی راه جعبه ابزار آنلاینته</h1>
+
+
 <p>با ناجی راه <span class="road-text">با خیال راحت بزن به دل جاده</span>
+
 <style>
   /* متن جاده‌ای واقعی */
 .road-text {
@@ -1824,7 +1897,7 @@ body, html {height:100%; width:100%;}
     <header class="header">
         <div class="header_box">
             <h1>
-               <span class="font_Naji">Naji</span><br>
+               <span class="font_Naji">NAJI RAH</span><br>
                </h1>
                <h1 style="font-weight:bolder; font-size:35px;">
                 <span style="color:#00FF00 ;">ناجي راه</span>!راه حل تمام جاده‌ها و ناجي تمام رانندگان!
@@ -2123,4 +2196,3 @@ cards.forEach(card => {
 </body>
 
 </html>
-
