@@ -506,23 +506,15 @@ body {
   0% { transform: translateX(0); }
   100% { transform: translateX(-66.66%); }
 }
-.services {
-  background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  padding: 5rem 2rem;
-  gap: 3rem;
-  perspective: 1500px; /* برای حس 3D */
-}
 /* کارت سرویس‌ها */
 .service {
   background: rgba(255, 255, 255, 0.8);
-  border-radius: 3rem; /* افزایش رادیوس */
-  padding: 2rem 1.5rem; /* کاهش padding */
-  width: 250px; /* کاهش عرض */
+  border-radius: 3rem;
+  padding: 1.5rem 1.2rem; /* کمتر کردن padding */
+  width: 220px; /* کوچکتر */
+  margin: 1rem; /* فاصله بین کارت‌ها */
   text-align: center;
-  box-shadow: 0 12px 35px rgba(0,0,0,0.12), 0 0 50px rgba(12,119,6,0.1);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.12), 0 0 40px rgba(12,119,6,0.1);
   transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.6s ease;
   cursor: pointer;
   position: relative;
@@ -530,6 +522,8 @@ body {
   backdrop-filter: blur(15px);
   border: 1px solid rgba(12,119,6,0.15);
   transform-style: preserve-3d;
+  display: inline-block; /* برای کنار هم قرار گرفتن */
+  vertical-align: top;
 }
 
 /* نوار نورانی متحرک */
@@ -539,10 +533,10 @@ body {
   bottom: 0;
   left: -150%;
   width: 400%;
-  height: 6px;
+  height: 5px; /* کمی کوتاه‌تر */
   background: linear-gradient(90deg, #22c55e, #06b6d4, #f59e0b, #ef4444, #22c55e);
   border-radius: 3px;
-  box-shadow: 0 0 15px rgba(255,255,255,0.3);
+  box-shadow: 0 0 12px rgba(255,255,255,0.3);
   animation: moveLine 4s linear infinite;
 }
 
@@ -553,45 +547,45 @@ body {
 
 /* افکت 3D و hover */
 .service:hover {
-  transform: rotateY(10deg) rotateX(5deg) translateY(-10px) scale(1.05); /* کاهش translateY */
-  box-shadow: 0 20px 60px rgba(0,0,0,0.25), 0 0 80px rgba(12,119,6,0.35);
+  transform: rotateY(8deg) rotateX(4deg) translateY(-8px) scale(1.05);
+  box-shadow: 0 15px 50px rgba(0,0,0,0.25), 0 0 60px rgba(12,119,6,0.35);
 }
 
 /* تصویر سرویس */
 .service img {
-  max-width: 90px; /* کاهش اندازه تصویر */
+  max-width: 70px; /* کوچکتر */
   height: auto;
-  margin-bottom: 1rem; /* کاهش فاصله زیر تصویر */
+  margin-bottom: 0.8rem;
   transition: transform 0.6s ease, filter 0.6s ease;
-  filter: drop-shadow(0 6px 15px rgba(0,0,0,0.3));
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3));
 }
 
 .service:hover img {
-  transform: rotate(15deg) scale(1.2) translateY(-5px); /* تغییرات کوچکتر در افکت */
-  filter: drop-shadow(0 8px 20px rgba(0,0,0,0.4));
+  transform: rotate(15deg) scale(1.15) translateY(-4px);
+  filter: drop-shadow(0 6px 15px rgba(0,0,0,0.4));
 }
 
 /* تیتر سرویس */
 .service h3 {
-  font-size: 1.3rem; /* کاهش سایز تیتر */
+  font-size: 1.1rem;
   color: #065f46;
-  margin-bottom: 0.6rem; /* کاهش فاصله زیر تیتر */
+  margin-bottom: 0.5rem;
   font-weight: 900;
-  letter-spacing: 0.6px; /* کاهش فاصله بین حروف */
-  text-shadow: 1px 1px 8px rgba(0,0,0,0.1);
+  letter-spacing: 0.5px;
+  text-shadow: 1px 1px 6px rgba(0,0,0,0.1);
   transition: color 0.3s ease, text-shadow 0.3s ease;
 }
 
 .service:hover h3 {
   color: #10b981;
-  text-shadow: 0 0 12px rgba(16,185,129,0.6);
+  text-shadow: 0 0 10px rgba(16,185,129,0.6);
 }
 
 /* توضیحات سرویس */
 .service p {
-  font-size: 0.9rem; /* کاهش سایز متن توضیحات */
+  font-size: 0.85rem;
   color: #334155;
-  line-height: 1.6; /* کاهش فاصله بین خطوط */
+  line-height: 1.4;
   font-weight: 500;
   transition: color 0.3s ease;
 }
@@ -600,6 +594,46 @@ body {
   color: #065f46;
 }
 
+/* ========== ریسپانسیو موبایل و تبلت ========== */
+@media (max-width: 768px) {
+  .service {
+    width: 180px;
+    padding: 1.2rem 1rem;
+    margin: 0.8rem;
+  }
+  .service img {
+    max-width: 60px;
+    margin-bottom: 0.6rem;
+  }
+  .service h3 {
+    font-size: 1rem;
+    margin-bottom: 0.4rem;
+  }
+  .service p {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .service {
+    width: 100%;
+    max-width: 300px;
+    margin: 0.5rem auto;
+    padding: 1rem;
+    display: block; /* کارت‌ها زیر هم قرار بگیرند */
+  }
+  .service img {
+    max-width: 50px;
+    margin-bottom: 0.5rem;
+  }
+  .service h3 {
+    font-size: 0.95rem;
+    margin-bottom: 0.3rem;
+  }
+  .service p {
+    font-size: 0.75rem;
+  }
+}
 
 /* ================== Article Section ================== */
 .article_piccher {
@@ -1725,6 +1759,7 @@ body, html {height:100%; width:100%;}
 }
 
   
+
 
 
 
