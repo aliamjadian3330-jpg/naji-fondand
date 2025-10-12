@@ -45,6 +45,188 @@ body {
 .info_box h2 { font-size: 1.2rem; color: #065f46; margin-bottom: 0.6rem; }
 .info_box p { font-size: 0.9rem; color: #0f172a; line-height: 1.6; }
 
+/* ================== Buttons ================== */
+.button {
+  display: inline-block;
+  background: linear-gradient(90deg, #10b981, #059669);
+  color: #f0fdf4;
+  padding: 0.7rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 0.8rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  margin-top: 1rem;
+}
+
+.button:hover {
+  background: linear-gradient(90deg, #059669, #047857);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(5, 150, 105, 0.3);
+}
+/* ================== Animations ================== */
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+  /* ================== Top Panel Tabs ================== */
+  .top-panel-tabs {
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:0.5rem;
+    background: rgba(30,41,59,0.85);
+    backdrop-filter: blur(15px);
+    padding:1.5rem 2rem;
+    border-radius:30px;
+    box-shadow:0 25px 50px rgba(0,0,0,0.3);
+    flex-wrap: wrap;
+    margin:2rem auto;
+    max-width:1200px;
+    position:relative;
+  }
+
+  .top-panel-tabs::before {
+    content:'';
+    position:absolute;
+    top:0; left:0; right:0;
+    height:2px;
+    background: linear-gradient(90deg, transparent, #22c55e, #3b82f6, #a855f7, transparent);
+    border-radius:30px 30px 0 0;
+  }
+
+  .tab-btn {
+    position:relative;
+    background: rgba(34,197,94,0.1);
+    color: rgba(255,255,255,0.8);
+    border: 2px solid rgba(34,197,94,0.2);
+    padding:1rem 2rem;
+    border-radius:20px;
+    font-size:1rem;
+    font-weight:600;
+    cursor:pointer;
+    overflow:hidden;
+    transition: all 0.4s ease;
+    box-shadow:0 8px 25px rgba(0,0,0,0.15);
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+  }
+  .tab-btn::before {
+    content:'';
+    position:absolute;
+    top:0; left:-100%;
+    width:100%; height:100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+    transition:left 0.6s ease;
+    z-index:1;
+  }
+  .tab-btn::after {
+    content:'';
+    position:absolute;
+    top:50%; left:50%;
+    width:0; height:0;
+    border-radius:50%;
+    background: radial-gradient(circle, rgba(34,197,94,0.3) 0%, rgba(34,197,94,0.1) 50%, transparent 100%);
+    transform: translate(-50%,-50%);
+    transition: all 0.6s ease;
+    z-index:0;
+  }
+  .tab-btn:hover {
+    transform: translateY(-4px) scale(1.05);
+    background: rgba(34,197,94,0.2);
+    border-color: rgba(34,197,94,0.4);
+    box-shadow:0 15px 35px rgba(34,197,94,0.2);
+  }
+  .tab-btn:hover::before { left:100%; }
+  .tab-btn:hover::after { width:300%; height:300%; opacity:0.6; }
+  .tab-btn.active {
+    background: rgba(34,197,94,0.9);
+    border-color: rgba(34,197,94,0.8);
+    color:#fff;
+    transform: translateY(-2px) scale(1.08);
+    box-shadow: 0 20px 40px rgba(34,197,94,0.3);
+    z-index:10;
+  }
+  .tab-btn.active::after {
+    width:200%; height:200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.1) 50%, transparent 100%);
+  }
+  .tab-content {
+    display:none;
+    padding:3rem 4rem;
+    margin:3rem auto;
+    max-width:1100px;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(15px);
+    border-radius:30px;
+    box-shadow:0 25px 50px rgba(0,0,0,0.1);
+    font-size:1.2rem;
+    line-height:1.8;
+    color:#1e293b;
+    border:1px solid rgba(255,255,255,0.2);
+    position:relative;
+    overflow:hidden;
+  }
+  .tab-content::before {
+    content:'';
+    position:absolute;
+    top:0; left:0; right:0;
+    height:3px;
+    background: linear-gradient(90deg, #22c55e, #3b82f6, #a855f7);
+    border-radius:30px 30px 0 0;
+  }
+  .tab-content.active { display:block; animation: contentSlideIn 0.8s forwards; }
+  @keyframes contentSlideIn {
+    0% { opacity:0; transform:translateY(40px) scale(0.95); filter:blur(10px); }
+    100% { opacity:1; transform:translateY(0) scale(1); filter:blur(0); }
+  }
+/* ..... */
+  /* دکمه‌های ثبت‌نام و ورود کنار هم */
+  .sign-tab, .login-tab {
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:0.5rem;
+    margin:0 0.5rem;
+    padding:1rem 2rem;
+    border-radius:18px;
+    font-weight:600;
+    text-decoration:none;
+    border:2px solid transparent;
+    cursor:pointer;
+    transition: all 0.4s ease;
+    font-size:1rem;
+    letter-spacing:0.5px;
+    text-transform:uppercase;
+    position:relative;
+    overflow:hidden;
+  }
+
   .sign-tab {
     background: linear-gradient(135deg, #fb923c, #f97316);
     border-color: rgba(251,146,60,0.3);
@@ -71,7 +253,7 @@ body {
     box-shadow:0 15px 35px rgba(59,130,246,0.4);
   }
 
-  /* ط°ط±ط§طھ ظ…طھط­ط±ع© */
+  /* ذرات متحرک */
   .floating-particles {
     position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:-1;
   }
@@ -87,16 +269,13 @@ body {
     50% { transform: translateY(-100px) rotate(180deg); }
   }
 
-  /* ط±غŒط³ظ¾ط§ظ†ط³غŒظˆ */
+  /* ریسپانسیو */
   @media(max-width:768px){
     .top-panel-tabs { flex-wrap:wrap; }
     .tab-btn { width:auto; }
     .tab-content { padding:2rem; margin:2rem 1rem; }
   }
-
-}
-
-/* ================== Header Main - Glassmorphism ================== */
+  /* ================== Header Main - Glassmorphism ================== */
 .header {
   position: relative;
   min-height: 75vh;
@@ -109,7 +288,7 @@ body {
   background: url('background-yadk.jpg') no-repeat center center / cover;
   overflow: hidden;
   border-radius: 20px;
-}
+
 .header::before {
   content: '';
   position: absolute;
@@ -1596,6 +1775,7 @@ body, html {height:100%; width:100%;}
 }
 
   
+
 
 
 
