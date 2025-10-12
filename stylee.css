@@ -13,11 +13,9 @@ body {
   background-color: #f5f5f5;
   line-height: 1.6;
   height: 5000px;
-}
-/* ================== Header Top ================== */
+}/* ================== Header Top ================== */
 .header_top {
   background: linear-gradient(90deg, #0d9488, #10b981);
-  
   text-align: center;
   padding: 1rem 1.5rem;
   font-size: 1.6rem;
@@ -29,6 +27,7 @@ body {
   animation: fadeInDown 1s ease-out;
   position: relative;
 }
+
 .header_top::before,
 .header_top::after {
   content: "";
@@ -39,12 +38,15 @@ body {
   transform: translateY(-50%);
   border-radius: 5px;
 }
+
 .header_top::before {
   left: 1.5rem;
 }
+
 .header_top::after {
   right: 1.5rem;
 }
+
 /* ================== Reset & Global ================== */
 * {
   margin: 0;
@@ -53,6 +55,7 @@ body {
   font-family: 'Vazir', sans-serif;
   scroll-behavior: smooth;
 }
+
 body {
   min-height: 100vh;
   background: linear-gradient(135deg, #ecfdf5, #f0fdf4, #d1fae5);
@@ -61,7 +64,18 @@ body {
   color: #064e3b;
   padding: 2rem;
   overflow-x: hidden;
+  font-size: 16px; /* Added for better consistency */
 }
+
+@media (max-width: 768px) {
+  body {
+    padding: 1rem;
+  }
+  .header_top {
+    font-size: 1.4rem;
+  }
+}
+
 /* ================== Info Box ================== */
 .info_box {
   background: #ffffff;
@@ -85,6 +99,19 @@ body {
   color: #0f172a;
   line-height: 1.8;
 }
+
+@media (max-width: 768px) {
+  .info_box {
+    padding: 1rem;
+  }
+  .info_box h2 {
+    font-size: 1.2rem;
+  }
+  .info_box p {
+    font-size: 0.9rem;
+  }
+}
+
 /* ================== Buttons ================== */
 .button {
   display: inline-block;
@@ -106,6 +133,14 @@ body {
   transform: translateY(-2px);
   box-shadow: 0 4px 10px rgba(5, 150, 105, 0.3);
 }
+
+@media (max-width: 768px) {
+  .button {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+  }
+}
+
 /* ================== Animations ================== */
 @keyframes gradientBG {
   0% { background-position: 0% 50%; }
@@ -134,6 +169,28 @@ body {
     transform: translateY(0);
   }
 }
+
+/* Media Queries for Smaller Devices */
+@media (max-width: 480px) {
+  .header_top {
+    font-size: 1.3rem;
+    padding: 1rem;
+  }
+  .info_box {
+    padding: 1rem;
+  }
+  .info_box h2 {
+    font-size: 1.1rem;
+  }
+  .info_box p {
+    font-size: 0.9rem;
+  }
+  .button {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+  }
+}
+
   /* ================== Top Panel Tabs ================== */
   .top-panel-tabs {
     display:flex;
@@ -1781,3 +1838,4 @@ body, html {height:100%; width:100%;}
 }
 
   
+
