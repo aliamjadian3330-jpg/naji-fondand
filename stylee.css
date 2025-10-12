@@ -17,7 +17,7 @@ body {
 /* ================== Header Top ================== */
 .header_top {
   background: linear-gradient(90deg, #0d9488, #10b981);
-  
+  margin:20px
   text-align: center;
   padding: 1rem 1.5rem;
   font-size: 1.6rem;
@@ -1836,4 +1836,5 @@ body, html {height:100%; width:100%;}
 }
 
   
+
 
