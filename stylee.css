@@ -572,11 +572,11 @@ body {
   background: linear-gradient(135deg, #f0fdfa, #e0f2fe);
 }
 
-/* کارت سرویس به‌صورت دایره شیشه‌ای */
+/* کارت سرویس به‌صورت مربع با گوشه‌های گرد */
 .service {
   width: 280px;
   height: 280px;
-  border-radius: 50%;
+  border-radius: 30px;  /* گوشه‌های گردتر */
   background: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -1836,3 +1836,4 @@ body, html {height:100%; width:100%;}
 }
 
   
+
