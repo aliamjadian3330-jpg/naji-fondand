@@ -13,38 +13,78 @@ body {
   background-color: #f5f5f5;
   line-height: 1.6;
   height: 5000px;
-
+}
+/* ================== Header Top ================== */
+.header_top {
+  background: linear-gradient(90deg, #0d9488, #10b981);
+  
+  text-align: center;
+  padding: 1rem 1.5rem;
+  font-size: 1.6rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  animation: fadeInDown 1s ease-out;
+  position: relative;
+}
+.header_top::before,
+.header_top::after {
+  content: "";
+  position: absolute;
+  height: 3px;
+  width: 40px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-radius: 5px;
+}
+.header_top::before {
+  left: 1.5rem;
+}
+.header_top::after {
+  right: 1.5rem;
 }
 /* ================== Reset & Global ================== */
 * {
-  margin: 0; padding: 0; box-sizing: border-box; font-family: 'Vazir', sans-serif; scroll-behavior: smooth;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Vazir', sans-serif;
+  scroll-behavior: smooth;
 }
 body {
-  min-height: 100vh; background: linear-gradient(135deg, #ecfdf5, #f0fdf4, #d1fae5); background-size: 400% 400%;
-  animation: gradientBG 25s ease infinite; color: #064e3b; padding: 1rem; overflow-x: hidden; font-size: 14px;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #ecfdf5, #f0fdf4, #d1fae5);
+  background-size: 400% 400%;
+  animation: gradientBG 25s ease infinite;
+  color: #064e3b;
+  padding: 2rem;
+  overflow-x: hidden;
 }
-
-/* ================== Header Top ================== */
-.header_top {
-  background: linear-gradient(90deg, #0d9488, #10b981); text-align: center; padding: 0.8rem 1.2rem;
-  font-size: 1.4rem; font-weight: 600; letter-spacing: 0.2px; border-bottom: 1.5px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); animation: fadeInDown 1s ease-out;
-  position: relative;
-}
-.header_top::before, .header_top::after {
-  content: ""; position: absolute; height: 2px; width: 30px; top: 50%; transform: translateY(-50%);
-  border-radius: 5px;
-}
-.header_top::before { left: 1rem; } .header_top::after { right: 1rem; }
-
 /* ================== Info Box ================== */
 .info_box {
-  background: #ffffff; border-left: 4px solid #10b981; padding: 1.2rem 1.5rem; border-radius: 0.8rem;
-  box-shadow: 0 2px 10px rgba(16, 185, 129, 0.1); margin: 1.5rem auto; max-width: 700px; animation: fadeInUp 1s ease;
+  background: #ffffff;
+  border-left: 5px solid #10b981;
+  padding: 1.5rem 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 3px 15px rgba(16, 185, 129, 0.15);
+  margin: 2rem auto;
+  max-width: 800px;
+  animation: fadeInUp 1s ease;
 }
-.info_box h2 { font-size: 1.2rem; color: #065f46; margin-bottom: 0.6rem; }
-.info_box p { font-size: 0.9rem; color: #0f172a; line-height: 1.6; }
 
+.info_box h2 {
+  font-size: 1.4rem;
+  color: #065f46;
+  margin-bottom: 0.8rem;
+}
+
+.info_box p {
+  font-size: 1rem;
+  color: #0f172a;
+  line-height: 1.8;
+}
 /* ================== Buttons ================== */
 .button {
   display: inline-block;
@@ -288,7 +328,7 @@ body {
   background: url('background-yadk.jpg') no-repeat center center / cover;
   overflow: hidden;
   border-radius: 20px;
-
+}
 .header::before {
   content: '';
   position: absolute;
@@ -522,38 +562,50 @@ body {
   0% { transform: translateX(0); }
   100% { transform: translateX(-66.66%); }
 }
-/* کارت سرویس‌ها */
-.service {
-  background: rgba(255, 255, 255, 0.8);
-  border-radius: 3rem;
-  padding: 1.5rem 1.2rem; /* کمتر کردن padding */
-  width: 220px; /* کوچکتر */
-  margin: 1rem; /* فاصله بین کارت‌ها */
-  text-align: center;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.12), 0 0 40px rgba(12,119,6,0.1);
-  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.6s ease;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  backdrop-filter: blur(15px);
-  border: 1px solid rgba(12,119,6,0.15);
-  transform-style: preserve-3d;
-  display: inline-block; /* برای کنار هم قرار گرفتن */
-  vertical-align: top;
+/* بخش کلی کارت‌ها */
+.services {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 3rem;
+  padding: 4rem 2rem;
+  background: linear-gradient(135deg, #f0fdfa, #e0f2fe);
 }
 
-/* نوار نورانی متحرک */
+/* کارت سرویس به‌صورت دایره شیشه‌ای */
+.service {
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1), 0 0 20px rgba(34, 197, 94, 0.2);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding-bottom: 2rem;
+  text-align: center;
+  transition: transform 0.6s ease, box-shadow 0.6s ease;
+  cursor: pointer;
+}
+
+/* افکت خط نورانی متحرک */
 .service::after {
   content: "";
   position: absolute;
   bottom: 0;
   left: -150%;
   width: 400%;
-  height: 5px; /* کمی کوتاه‌تر */
+  height: 5px;
   background: linear-gradient(90deg, #22c55e, #06b6d4, #f59e0b, #ef4444, #22c55e);
-  border-radius: 3px;
-  box-shadow: 0 0 12px rgba(255,255,255,0.3);
+  border-radius: 4px;
   animation: moveLine 4s linear infinite;
+  box-shadow: 0 0 15px rgba(255,255,255,0.2);
 }
 
 @keyframes moveLine {
@@ -561,48 +613,70 @@ body {
   100% { transform: translateX(-66.66%); }
 }
 
-/* افکت 3D و hover */
+/* افکت هاور */
 .service:hover {
-  transform: rotateY(8deg) rotateX(4deg) translateY(-8px) scale(1.05);
-  box-shadow: 0 15px 50px rgba(0,0,0,0.25), 0 0 60px rgba(12,119,6,0.35);
+  transform: scale(1.06) rotateZ(1deg);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15), 0 0 40px rgba(16,185,129,0.3);
 }
 
-/* تصویر سرویس */
+/* قاب دایره‌ای عکس */
+.service .icon-box {
+  position: absolute;
+  top: -30px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.service .icon-circle {
+  width: 100px;
+  height: 100px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  transition: transform 0.5s ease;
+}
+
+.service:hover .icon-circle {
+  transform: scale(1.2) rotate(10deg);
+}
+
+/* عکس داخل قاب */
 .service img {
-  max-width: 70px; /* کوچکتر */
-  height: auto;
-  margin-bottom: 0.8rem;
-  transition: transform 0.6s ease, filter 0.6s ease;
-  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3));
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  transition: transform 0.5s ease;
 }
 
 .service:hover img {
-  transform: rotate(15deg) scale(1.15) translateY(-4px);
-  filter: drop-shadow(0 6px 15px rgba(0,0,0,0.4));
+  transform: scale(1.3);
 }
 
-/* تیتر سرویس */
+/* عنوان کارت */
 .service h3 {
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   color: #065f46;
+  margin-top: 1rem;
   margin-bottom: 0.5rem;
-  font-weight: 900;
-  letter-spacing: 0.5px;
-  text-shadow: 1px 1px 6px rgba(0,0,0,0.1);
-  transition: color 0.3s ease, text-shadow 0.3s ease;
+  font-weight: 800;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  transition: color 0.3s ease;
 }
 
 .service:hover h3 {
   color: #10b981;
-  text-shadow: 0 0 10px rgba(16,185,129,0.6);
 }
 
-/* توضیحات سرویس */
+/* توضیحات کارت */
 .service p {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   color: #334155;
-  line-height: 1.4;
-  font-weight: 500;
+  padding: 0 1.5rem;
+  line-height: 1.6;
   transition: color 0.3s ease;
 }
 
@@ -610,44 +684,31 @@ body {
   color: #065f46;
 }
 
-/* ========== ریسپانسیو موبایل و تبلت ========== */
+/* ریسپانسیو */
 @media (max-width: 768px) {
   .service {
-    width: 180px;
-    padding: 1.2rem 1rem;
-    margin: 0.8rem;
+    width: 220px;
+    height: 220px;
+    padding-bottom: 1.5rem;
   }
+
+  .service .icon-circle {
+    width: 80px;
+    height: 80px;
+  }
+
   .service img {
-    max-width: 60px;
-    margin-bottom: 0.6rem;
+    width: 50px;
+    height: 50px;
   }
+
   .service h3 {
     font-size: 1rem;
-    margin-bottom: 0.4rem;
   }
+
   .service p {
     font-size: 0.8rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .service {
-    width: 100%;
-    max-width: 300px;
-    margin: 0.5rem auto;
-    padding: 1rem;
-    display: block; /* کارت‌ها زیر هم قرار بگیرند */
-  }
-  .service img {
-    max-width: 50px;
-    margin-bottom: 0.5rem;
-  }
-  .service h3 {
-    font-size: 0.95rem;
-    margin-bottom: 0.3rem;
-  }
-  .service p {
-    font-size: 0.75rem;
+    padding: 0 1rem;
   }
 }
 
@@ -1775,11 +1836,3 @@ body, html {height:100%; width:100%;}
 }
 
   
-
-
-
-
-
-
-
-
