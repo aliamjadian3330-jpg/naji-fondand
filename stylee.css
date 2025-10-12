@@ -45,96 +45,55 @@ body {
 .info_box h2 { font-size: 1.2rem; color: #065f46; margin-bottom: 0.6rem; }
 .info_box p { font-size: 0.9rem; color: #0f172a; line-height: 1.6; }
 
-/* ================== Buttons ================== */
-.button {
-  display: inline-block; background: linear-gradient(90deg, #10b981, #059669); color: #f0fdf4;
-  padding: 0.5rem 1.2rem; font-size: 0.9rem; font-weight: 500; border: none; border-radius: 0.7rem; cursor: pointer;
-  transition: all 0.3s ease; text-decoration: none; margin-top: 1rem;
-}
-.button:hover {
-  background: linear-gradient(90deg, #059669, #047857); transform: translateY(-2px); box-shadow: 0 4px 8px rgba(5, 150, 105, 0.3);
-}
-
-/* ================== Animations ================== */
-@keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-@keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-
-/* ================== Media Queries ================== */
-@media (max-width: 768px) {
-  body { padding: 0.8rem; font-size: 13px; }
-  .header_top { font-size: 1.3rem; padding: 0.7rem 1rem; }
-  .info_box { padding: 1rem; }
-  .info_box h2 { font-size: 1rem; }
-  .info_box p { font-size: 0.85rem; }
-  .button { padding: 0.4rem 1rem; font-size: 0.85rem; }
-}
-@media (max-width: 480px) {
-  body { padding: 0.5rem; }
-  .header_top { font-size: 1.2rem; padding: 0.6rem 1rem; }
-  .info_box { padding: 0.8rem; }
-  .info_box h2 { font-size: 0.9rem; }
-  .info_box p { font-size: 0.8rem; }
-  .button { padding: 0.3rem 0.9rem; font-size: 0.8rem; }
-}
-
-/* دکمه‌های ثبت‌نام و ورود کنار هم */
-.sign-tab, .login-tab {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  margin: 0 0.5rem;
-  padding: 1rem 2rem;
-  border-radius: 18px;
-  font-weight: 600;
-  text-decoration: none;
-  border: 2px solid transparent;
-  cursor: pointer;
-  transition: all 0.4s ease;
-  font-size: 1rem;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  position: relative;
-  overflow: hidden;
-  min-width: 140px; /* حداقل عرض برای هماهنگی */
-}
-
-.sign-tab {
-  background: linear-gradient(135deg, #fb923c, #f97316);
-  border-color: rgba(251, 146, 60, 0.3);
-  color: #fff;
-  box-shadow: 0 10px 25px rgba(251, 146, 60, 0.3);
-}
-
-.sign-tab:hover {
-  background: linear-gradient(135deg, #f97316, #ea580c);
-  transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 15px 35px rgba(251, 146, 60, 0.4);
-}
-
-.login-tab {
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
-  border-color: rgba(59, 130, 246, 0.3);
-  color: #fff;
-  box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
-}
-
-.login-tab:hover {
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
-  transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 15px 35px rgba(59, 130, 246, 0.4);
-}
-
-/* ریسپانسیو موبایل برای دکمه‌ها زیر هم */
-@media (max-width: 480px) {
-  .sign-tab, .login-tab {
-    display: flex; /* از inline-flex به flex */
-    width: 100%;
-    margin: 0.5rem 0;
-    justify-content: center;
-    min-width: unset; /* حذف حداقل عرض */
+  .sign-tab {
+    background: linear-gradient(135deg, #fb923c, #f97316);
+    border-color: rgba(251,146,60,0.3);
+    color:#fff;
+    box-shadow:0 10px 25px rgba(251,146,60,0.3);
   }
+
+  .sign-tab:hover {
+    background: linear-gradient(135deg, #f97316, #ea580c);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow:0 15px 35px rgba(251,146,60,0.4);
+  }
+
+  .login-tab {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    border-color: rgba(59,130,246,0.3);
+    color:#fff;
+    box-shadow:0 10px 25px rgba(59,130,246,0.3);
+  }
+
+  .login-tab:hover {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow:0 15px 35px rgba(59,130,246,0.4);
+  }
+
+  /* ط°ط±ط§طھ ظ…طھط­ط±ع© */
+  .floating-particles {
+    position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:-1;
+  }
+
+  .particle {
+    position:absolute; width:4px; height:4px; border-radius:50%;
+    animation: float 6s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%,100% { transform: translateY(0px) rotate(0deg); opacity:0; }
+    10%,90% { opacity:1; }
+    50% { transform: translateY(-100px) rotate(180deg); }
+  }
+
+  /* ط±غŒط³ظ¾ط§ظ†ط³غŒظˆ */
+  @media(max-width:768px){
+    .top-panel-tabs { flex-wrap:wrap; }
+    .tab-btn { width:auto; }
+    .tab-content { padding:2rem; margin:2rem 1rem; }
+  }
+
 }
 
 /* ================== Header Main - Glassmorphism ================== */
@@ -1637,6 +1596,7 @@ body, html {height:100%; width:100%;}
 }
 
   
+
 
 
 
