@@ -5,8 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>داشبورد راننده|ناجی راه</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet-geosearch@3.1.0/dist/geosearch.css">
+<script src="https://unpkg.com/leaflet-geosearch@3.1.0/dist/bundle.min.js"></script>
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+
+
 
 <style>
+  html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden; /* جلوگیری از اسکرول صفحه */
+}
+
 /* پایه مدرن */
 * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn','Roboto',sans-serif; }
 html, body { height:100%; width:100%; background:#f5f7fa; }
@@ -262,8 +274,92 @@ ul#driverInfo li {
 </head>
 <body>
 
+
+
+
 <div id="mapContainer">
   <div id="map"></div>
+<button id="btnLocate" 
+onclick="setCurrentLocation()"
+  style="
+    position: fixed;
+    bottom: 80px;
+    right: 15px;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #3b82f6, #2563eb); /* گرادیان آبی زیبا */
+    color: white;
+    border: none;
+    box-shadow:
+      0 6px 12px rgba(0,0,0,0.25),   /* سایه اصلی */
+      inset 0 1px 4px rgba(255,255,255,0.3); /* درخشش داخلی */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.3s ease;
+    z-index: 9999;
+    backdrop-filter: blur(4px); /* جلوه شیشه‌ای ملایم */
+  "
+  onmouseover="this.style.transform='scale(1.12)'; this.style.boxShadow='0 8px 16px rgba(0,0,0,0.35)';"
+  onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 6px 12px rgba(0,0,0,0.25)';"
+>
+  <svg xmlns='http://www.w3.org/2000/svg' fill='currentColor' viewBox='0 0 24 24' style='width:28px; height:28px;'>
+    <path d='M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 
+             9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 
+             2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 
+             2.5z'/>
+  </svg>
+
+
+
+  <!-- افکت موج -->
+<span id="ripple"
+  style="
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border: 2px solid rgba(59,130,246,0.8);
+    border-radius: 50%;
+    transform: scale(0.8);
+    opacity: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      circle at center,
+      rgba(147,197,253,0.4) 0%,
+      rgba(59,130,246,0.2) 40%,
+      rgba(59,130,246,0) 80%
+    );
+    box-shadow:
+      0 0 15px rgba(59,130,246,0.4),
+      inset 0 0 10px rgba(147,197,253,0.3);
+    filter: blur(0.5px);
+    animation: rippleEffect 2.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  ">
+</span>
+
+<style>
+@keyframes rippleEffect {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.9;
+    box-shadow: 0 0 10px rgba(59,130,246,0.6);
+  }
+  50% {
+    transform: scale(1.6);
+    opacity: 0.4;
+    box-shadow: 0 0 20px rgba(59,130,246,0.3);
+  }
+  100% {
+    transform: scale(2.5);
+    opacity: 0;
+    box-shadow: 0 0 25px rgba(59,130,246,0.1);
+  }
+}
+</style>
+
+</button>
 
   <!-- Toggle Button -->
   <button id="toggleBtn" onclick="togglePanel()">☰</button>
@@ -285,38 +381,43 @@ ul#driverInfo li {
     <!-- نظر سنجي -->
     <div>
       <h3>نظر سنجي راننده</h3>
-      <select id="surveyRating">
-        <option value="">انتخاب کنيد</option>
-        <option value="1">1 - خيلي بد</option>
-        <option value="2">2 - بد</option>
-        <option value="3">3 - متوسط</option>
-        <option value="4">4 - خوب</option>
-        <option value="5">5 - عالي</option>
-      </select>
-      <button class="btn-primary" onclick="submitSurvey()">ارسال</button>
-    </div>
-<hr>
- <select id="towCity">
-      <option value="bandar">انتخاب منطقه</option>
-      <option value="bandar">بندرامام خمینی (ره)</option>
-    </select>
+      <select id="surveyRating"
+  style="
+    width: 100%;
+    max-width: 320px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    border: 2px solid #3b82f6;
+    background: linear-gradient(145deg, #e0f2fe, #bae6fd);
+    color: #1e3a8a;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: all 0.25s ease;
+  "
+  onmouseover="this.style.boxShadow='0 6px 12px rgba(0,0,0,0.15)';"
+  onmouseout="this.style.boxShadow='0 4px 8px rgba(0,0,0,0.1)';"
+>
+  <option value="">انتخاب کنيد</option>
+  <option value="1">1 - خيلي بد</option>
+  <option value="2">2 - بد</option>
+  <option value="3">3 - متوسط</option>
+  <option value="4">4 - خوب</option>
+  <option value="5">5 - عالي</option>
+</select>
 
-    <!-- فرم ثبت نام -->
-    <div>
-      <h3>ثبت نام</h3>
-      <input type="text" id="name" placeholder="نام ونام خانوادگی">
-      <input type="text" id="phone" placeholder="شماره تماس">
-      <input type="text" id="carName" placeholder="نام خودرو">
-      <input type="text" id="plate" placeholder="پلاک خودرو">
-      <input type="text" id="carColor" placeholder="رنگ خودرو">
-      <button class="btn-success" onclick="register()">ثبت نام</button>
+      <button class="btn-primary" onclick="submitSurvey()">ارسال</button>
     </div>
     <!-- دکمه‌هاي نقشه -->
     <div style="margin-top:10px;">
-      <button class="btn-success" onclick="setCurrentLocation()">موقعيت من</button>
       <button class="btn-primary" onclick="lockOrigin()">قفل مبدا</button>
       <button class="btn-danger" onclick="unlockOrigin()">آزادسازي مبدا</button>
-      <button class="btn-primary" onclick="requestService()">درخواست</button>
+      
 
     </div>
 
@@ -328,7 +429,201 @@ ul#driverInfo li {
     </div>
   </div>
 </div>
+<!-- علرت-->
+ <!-- Modal پیشرفته -->
+  <!-- 🌈 مودال هشدار حرفه‌ای -->
+<div id="modernAlert" class="modal">
+  <div class="modal-content">
+    <div class="icon-wrap">
+      <div class="icon-glow"></div>
+      <svg viewBox="0 0 24 24" width="42" height="42" fill="none" stroke="white" stroke-width="2.5">
+        <path id="iconPath" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    <!-- </div>
+    <h3 id="modalTitle"><span style="font-size:80px;">✅</span><br>ورود شما با موفقیت انجام شد</h3>
+    <p id="modalMessage">به داشبورد  خودتون خوش آمدید✅</p>
+    <button class="closeBtn" onclick="closeModal()">باشه</button>
+  </div>
+</div> -->
 
+<!-- 🔊 صداها -->
+<audio id="sound-success" src="https://cdn.pixabay.com/audio/2022/03/15/audio_7b6b1f1a5f.mp3"></audio>
+<audio id="sound-error" src="https://cdn.pixabay.com/audio/2022/03/15/audio_66bcb8e331.mp3"></audio>
+<audio id="sound-warning" src="https://cdn.pixabay.com/audio/2022/03/15/audio_063f694232.mp3"></audio>
+<!-- 
+<style>
+/* ===== پس‌زمینه مودال ===== */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+/* ===== بدنه مودال ===== */
+.modal-content {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.25);
+  backdrop-filter: blur(30px) saturate(160%);
+  border-radius: 24px;
+  padding: 40px 30px;
+  text-align: center;
+  color: #fff;
+  width: 90%;
+  max-width: 420px;
+  box-shadow:
+    0 0 30px rgba(255,255,255,0.15),
+    0 25px 45px rgba(0,0,0,0.5);
+  transform: scale(0.85) translateY(-30px);
+  opacity: 0;
+  animation: modalIn 0.6s cubic-bezier(.18,.89,.32,1.28) forwards;
+  transition: all 0.3s ease;
+}
+
+/* ===== آیکون ===== */
+.icon-wrap {
+  position: relative;
+  width: 90px; height: 90px;
+  margin: 0 auto 20px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.icon-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  filter: blur(12px);
+  animation: glowPulse 2s infinite ease-in-out;
+}
+
+/* ===== متن ===== */
+#modalTitle {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  font-weight: 600;
+  text-shadow: 0 2px 12px rgba(255,255,255,0.4);
+}
+#modalMessage {
+  font-size: 1.05rem;
+  opacity: 0.9;
+  line-height: 1.6;
+  margin-bottom: 25px;
+}
+
+/* ===== دکمه ===== */
+.closeBtn {
+  padding: 12px 32px;
+  border: none;
+  border-radius: 14px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  color: #fff;
+  background: linear-gradient(135deg, #00c6ff, #0072ff);
+  box-shadow: 0 10px 25px rgba(0,114,255,0.5);
+  transition: all 0.35s ease;
+}
+.closeBtn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 14px 35px rgba(0,114,255,0.6);
+}
+
+/* ===== رنگ‌ها ===== */
+.modal-success .icon-wrap {
+  background: radial-gradient(circle at top left, #22c55e, #16a34a);
+}
+.modal-success .icon-glow {
+  background: radial-gradient(circle, #4ade80 0%, transparent 70%);
+}
+
+.modal-error .icon-wrap {
+  background: radial-gradient(circle at top left, #ef4444, #b91c1c);
+}
+.modal-error .icon-glow {
+  background: radial-gradient(circle, #f87171 0%, transparent 70%);
+}
+
+.modal-warning .icon-wrap {
+  background: radial-gradient(circle at top left, #facc15, #ca8a04);
+}
+.modal-warning .icon-glow {
+  background: radial-gradient(circle, #fde047 0%, transparent 70%);
+}
+
+/* ===== انیمیشن‌ها ===== */
+@keyframes modalIn {
+  to { transform: scale(1) translateY(0); opacity: 1; }
+}
+@keyframes modalOut {
+  to { transform: scale(0.85) translateY(-30px); opacity: 0; }
+}
+@keyframes glowPulse {
+  0%,100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.9; transform: scale(1.15); }
+}
+</style>
+
+<script>
+let alertTimeout;
+const iconPaths = {
+  success: "M5 13l4 4L19 7",       // ✓
+  error: "M6 6l12 12M6 18L18 6",  // ✕
+  warning: "M12 8v4m0 4h.01"       // ⚠
+};
+
+function showAlert(message, type="success") {
+  const modal = document.getElementById('modernAlert');
+  const content = modal.querySelector('.modal-content');
+  const path = document.getElementById('iconPath');
+  const title = document.getElementById('modalTitle');
+  const msg = document.getElementById('modalMessage');
+
+  // پاک کردن کلاس‌های قبلی
+  content.classList.remove("modal-success","modal-error","modal-warning");
+  content.classList.add("modal-"+type);
+
+  // تنظیم آیکون و عنوان
+  path.setAttribute("d", iconPaths[type] || iconPaths.success);
+  title.textContent =
+    type === "success" ? "عملیات موفق!" :
+    type === "error" ? "خطا رخ داد!" :
+    "هشدار!";
+
+  msg.textContent = message;
+
+  // نمایش مودال
+  modal.style.display = 'flex';
+  content.style.animation = 'modalIn 0.6s forwards';
+
+  // پخش صدا
+  const audio = document.getElementById(`sound-${type}`);
+  if (audio) {
+    audio.currentTime = 0;
+    audio.play().catch(()=>{});
+  }
+
+  // بسته شدن خودکار
+  clearTimeout(alertTimeout);
+  alertTimeout = setTimeout(closeModal, 3500);
+}
+
+function closeModal() {
+  const modal = document.getElementById('modernAlert');
+  const content = modal.querySelector('.modal-content');
+  content.style.animation = 'modalOut 0.5s forwards';
+  setTimeout(() => { modal.style.display = 'none'; }, 450);
+  clearTimeout(alertTimeout);
+}
+</script>
+ -->
 
 <!-- پنل انتظار -->
  <!-- پنل انتظار -->
@@ -426,7 +721,7 @@ ul#driverInfo li {
     top: 50%; left: 50%;
     width: 100%;
     height: 100%;
-    background: radial-gradient(circle, rgba(0,255,213,0.5) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(130, 197, 21, 0.5) 0%, transparent 70%);
     border-radius: 50px;
     transform: translate(-50%, -50%) scale(1);
     animation: pulse 1.5s infinite;
@@ -478,6 +773,7 @@ ul#driverInfo li {
     // ارسال درخواست به سرور و بقیه کارها...
   }
 </script>
+
 
 <!-- پنل پایین راننده -->
 <div id="tripPanel">
@@ -602,6 +898,48 @@ function enableAudio() {
   console.log("🎵 اجازه پخش صدا فعال شد!");
 }
 </script>
+<button id="btnRequestTow" onclick="requestService()"
+
+  style="
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1002;
+    width: 50%;
+    max-width: 420px;
+    padding: 16px 22px;
+    border: none;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    box-shadow:
+      0 8px 20px rgba(0, 114, 255, 0.35),
+      0 3px 8px rgba(0, 0, 0, 0.25);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+    transition: all 0.3s ease, background 0.4s ease;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    user-select: none;
+    touch-action: manipulation;
+  "
+  onmouseover="this.style.transform='translateX(-50%) scale(1.05)'; this.style.boxShadow='0 10px 25px rgba(0,114,255,0.45), 0 4px 12px rgba(0,0,0,0.3)';"
+  onmouseout="this.style.transform='translateX(-50%) scale(1)'; this.style.boxShadow='0 8px 20px rgba(0,114,255,0.35), 0 3px 8px rgba(0,0,0,0.25)';"
+  onmousedown="this.style.transform='translateX(-50%) scale(0.96)'; this.style.filter='brightness(0.95)';"
+  onmouseup="this.style.transform='translateX(-50%) scale(1.05)'; this.style.filter='brightness(1)';"
+>
+
+  <!-- متن -->
+  <span>درخواست یدک کش</span>
+</button>
 
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
@@ -625,36 +963,6 @@ window.onload = function(){
     showAlert("ابتدا وارد شويد");
     window.location.href = "driver-login.html";
   }
-}
-
-function register(){
-  const data={
-    name:document.getElementById('name').value,
-    phone:document.getElementById('phone').value,
-    carName:document.getElementById('carName').value,
-    plate: document.getElementById('plate').value,
-    carColor:document.getElementById('carColor').value
-  };
-  localStorage.setItem("driverData",JSON.stringify(data));
-  fillDashboard(data);
-  showAlert("ثبت نام با موفقيت انجام شد!");
-}
-
-function fillDashboard(data){
-  const list = document.getElementById('driverInfo');
-  list.innerHTML = "";
-  const items = [
-    `نام: ${data.name}`,
-    `شماره: ${data.phone}`,
-    `خودرو: ${data.carName}`,
-     `شماره پلاک :${data.plate}`, 
-    `رنگ خودرو:${data.carColor}`
-  ];
-  items.forEach(text => {
-    const li = document.createElement('li');
-    li.innerHTML = text;
-    list.appendChild(li);
-  });
 }
 
 /* آپلود عکس */
@@ -712,6 +1020,53 @@ const socket = io("https://naji-backend.onrender.com");
 
 //   alert('درخواست شما ارسال شد و منتظر پاسخ يدک‌کش هستيد...');
 // }
+// ارسال اطلاعات از فرم به داشبورد
+// ارسال اطلاعات از فرم به داشبورد
+socket.on('newDriverRegistered', (driver) => {
+  const container = document.getElementById('driversList');
+  const div = document.createElement('div');
+  div.innerHTML = `
+    <strong>${driver.fullName|| '-'}</strong><br>
+    شماره تماس: ${driver.phone || '-'}<br>
+    نوع خودرو: ${driver.carType || '-'}<br>
+    رنگ خودرو: ${driver.carColor || '-'}<br>
+    مدل خودرو: ${driver.carModel || '-'}<br>
+    پلاک: ${driver.licensePlate|| '-'}<br>
+    <hr>
+  `;
+  container.appendChild(div);
+});
+
+// تابع پر کردن اطلاعات راننده
+function fillDashboard(driver){
+  const infoList = document.getElementById("driverInfo");
+  infoList.innerHTML = `
+    <li><strong>نام:</strong> ${driver.fullName || '-'}</li>
+    <li><strong>شماره تماس:</strong> ${driver.phone || '-'}</li>
+    <li><strong>پلاک خودرو:</strong> ${driver.licensePlate|| '-'}</li>
+    <li><strong>نوع خودرو:</strong> ${driver.carType || '-'}</li>
+    // <li><strong>رنگ خودرو:</strong> ${driver.carColor || '-'}</li>
+    <li><strong>مدل خودرو:</strong> ${driver.carModel || '-'}</li>
+  `;
+
+  if(driver.image){
+    document.getElementById("photoPreview").src = driver.image;
+  }
+}
+
+
+// بارگذاری اطلاعات هنگام ورود به پنل
+window.onload = function(){
+  const driverData = localStorage.getItem("driverData");
+  if(driverData){
+    fillDashboard(JSON.parse(driverData));
+  } else {
+    showAlert("ابتدا وارد شوید");
+    window.location.href = "driver-login.html";
+  }
+}
+
+// ارسال اطلاعات از فرم به داشبورد^
 
 // دريافت آپديت از يدک‌کش
 
@@ -831,6 +1186,7 @@ function startLiveTracking() {
 
 
 // هنگام درخواست سرويس شروع مي‌کنيم
+
 function requestService() {
   if (!originMarker || !destinationMarker) {
     showAlert("ابتدا مبدا و مقصد را تعیین کنید");
@@ -954,10 +1310,126 @@ document.getElementById("cancelButton").addEventListener("click", function() {
     // اضافه کردن کد لغو درخواست سرور یا عملیات دیگر
 });
 
+    // ---------- Autocomplete ----------
+    let startMarker = null;
+let endMarker = null;
+
+    const translitCities = {
+      "tehran":"تهران","mashhad":"مشهد","esfahan":"اصفهان","isfahan":"اصفهان","shiraz":"شیراز",
+      "tabriz":"تبریز","karaj":"کرج","qom":"قم","kerman":"کرمان","rasht":"رشت",
+      "ahvaz":"اهواز","bandar abbas":"بندرعباس","bandarabbas":"بندرعباس","zanjan":"زنجان","yazd":"یزد",
+      "urmia":"ارومیه","orumiyeh":"ارومیه","arak":"اراک","kermanshah":"کرمانشاه","sari":"ساری",
+      "gilan":"گیلان","golestan":"گلستان","hamedan":"همدان"
+    };
+    function tryTranslateToFa(display_name){
+      if(!display_name) return display_name;
+      const lower = display_name.toLowerCase();
+      for(const k in translitCities){
+        if(lower.includes(k)) return display_name.replace(new RegExp(k,"i"), translitCities[k]);
+      }
+      return display_name;
+    }
+
+    function debounce(fn, delay=300){
+      let t;
+      return (...args) => { clearTimeout(t); t = setTimeout(()=>fn(...args), delay); };
+    }
+
+    function escapeHtml(s){ return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]); }
+    function highlight(text,q){
+      if(!q) return text;
+      const idx = text.toLowerCase().indexOf(q.toLowerCase());
+      if(idx===-1) return text;
+      return `${escapeHtml(text.slice(0,idx))}<mark class="hl">${escapeHtml(text.slice(idx,idx+q.length))}</mark>${escapeHtml(text.slice(idx+q.length))}`;
+    }
+
+    async function nominatimSearch(q){
+      const url = `https://nominatim.openstreetmap.org/search?${new URLSearchParams({
+        format:'json', q, addressdetails:1, limit:8, countrycodes:'IR', 'accept-language':'fa'
+      })}`;
+      try{
+        const res = await fetch(url, { headers:{ 'User-Agent':'naji-rah-demo/1.0' }});
+        return res.ok ? await res.json() : [];
+      } catch(e){ console.error(e); return []; }
+    }
+
+    function setupAutocomplete(inputEl, suggestionsEl, markerType){
+      let items = [], active=-1;
+
+      const renderList = q => {
+        suggestionsEl.innerHTML = '';
+        if(!items.length){ suggestionsEl.style.display='none'; return; }
+        items.forEach((it,i)=>{
+          const div = document.createElement('div');
+          div.className = 'suggest-item'+(i===active?' active':'');
+          div.innerHTML = `<div class="left">${markerType==='start'?'📍':'🏁'}</div>
+            <div class="text"><div>${highlight(it.display_name_translated||it.display_name,inputEl._lastQuery||'')}</div>
+            <div class="muted">${escapeHtml(it.type||'')}</div></div>`;
+          div.addEventListener('click',()=>chooseItem(i));
+          suggestionsEl.appendChild(div);
+        });
+        suggestionsEl.style.display='block';
+      };
+
+      const chooseItem = i => {
+        const it = items[i]; if(!it) return;
+        inputEl.value = it.display_name_translated||it.display_name;
+        suggestionsEl.style.display='none';
+        const latlng = [parseFloat(it.lat), parseFloat(it.lon)];
+        if(markerType==='start'){ startMarker?startMarker.setLatLng(latlng).openPopup() : startMarker = L.marker(latlng,{draggable:true}).addTo(map).bindPopup('مبدا').openPopup(); }
+        else { endMarker?endMarker.setLatLng(latlng).openPopup() : endMarker = L.marker(latlng,{draggable:true}).addTo(map).bindPopup('مقصد').openPopup(); }
+        map.setView(latlng,14);
+
+
+        
+      };
+
+      const doSearch = debounce(async q=>{
+        inputEl._lastQuery = q;
+        if(!q.trim()){ items=[]; renderList(q); return; }
+        const res = await nominatimSearch(q.trim());
+        items = res.map(r=>({...r, display_name_translated:tryTranslateToFa(r.display_name)}));
+        active=-1; renderList(q);
+      },300);
+
+      inputEl.addEventListener('input', e=>doSearch(e.target.value));
+      inputEl.addEventListener('keydown', e=>{
+        const shown = suggestionsEl.style.display==='block';
+        if(e.key==='ArrowDown'){ e.preventDefault(); active=Math.min(active+1, items.length-1); renderList(inputEl._lastQuery||inputEl.value);}
+        else if(e.key==='ArrowUp'){ e.preventDefault(); active=Math.max(active-1,0); renderList(inputEl._lastQuery||inputEl.value);}
+        else if(e.key==='Enter' && shown && active>=0){ e.preventDefault(); chooseItem(active);}
+        else if(e.key==='Escape'){ suggestionsEl.style.display='none'; }
+      });
+
+      document.addEventListener('click', ev=>{ if(!suggestionsEl.contains(ev.target) && ev.target!==inputEl) suggestionsEl.style.display='none'; });
+    }
+
+    setupAutocomplete(startInput,startSuggestions,'start');
+    setupAutocomplete(endInput,endSuggestions,'end');
+
+
+// تابع نمایش هشدار
+function showAlert(message) {
+  alert(message);
+}
+
+
+
+// بارگذاری اطلاعات هنگام ورود به پنل
+window.onload = function(){
+  const driverData = localStorage.getItem("driverData");
+  if(driverData){
+    fillDashboard(JSON.parse(driverData));
+  } else {
+    showAlert("ابتدا وارد شوید");
+    window.location.href = "driver-login.html";
+  }
+}
+
+
 
 </script>
 </body>
 </html>
-
 
 
