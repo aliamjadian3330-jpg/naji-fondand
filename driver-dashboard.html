@@ -41,6 +41,11 @@ html, body { height:100%; width:100%; background:#f5f7fa; }
   border-top-left-radius:20px;
   border-bottom-left-radius:20px;
   box-shadow: -6px 0 24px rgba(0,0,0,0.2);
+  
+  max-height: 45rem; /* ارتفاع دلخواه */
+  /* overflow-y: auto; فعال کردن اسکرول عمودی */
+  /* padding-right: 5px; فاصله برای scrollbar */
+
 }
 #slidePanel.open { right:0; }
 
@@ -367,16 +372,315 @@ onclick="setCurrentLocation()"
   <!-- Slide Panel -->
   <div id="slidePanel">
     <h2>داشبورد راننده</h2>
+<style>
+:root {
+  --radius: 46px;
+  --transition: 0.3s ease;
+  --primary: #4f8cff;
+  --success: #00c896;
+  --error: #f56565;
+  --bg-light: #f7f8fc;
+  --bg-dark: #1a1c23;
+  --card-light: rgba(255,255,255,0.1);
+  --card-dark: rgba(28,28,30,0.6);
+  --text-light: #1e1f22;
+  --text-dark: #e0e0e0;
+  --border: rgba(0,0,0,0.08);
+}
 
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg-light: var(--bg-dark);
+    --card-light: var(--card-dark);
+    --text-light: var(--text-dark);
+    --border: rgba(255,255,255,0.1);
+  }
+}
+
+body {
+  font-family: 'Vazirmatn', 'Inter', sans-serif;
+  background: var(--bg-light);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.uploader {
+  width: 280px;
+  padding: 25px;
+  border-radius: var(--radius);
+  background: var(--card-light);
+  backdrop-filter: blur(18px);
+  text-align: center;
+  border: 1px solid var(--border);
+  transition: all var(--transition);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.uploader.dragover {
+  transform: scale(1.03);
+  border-color: var(--primary);
+}
+
+/* پیش‌نمایش عکس */
+#photoPreview {
+  width: 100px;
+  height: 100px;
+  border-radius: 25%;
+  object-fit: cover;
+  border: 2px solid var(--border);
+  display: none;
+  margin-bottom: 16px;
+}
+
+/* آیکون پیش‌فرض */
+.default-icon {
+  font-size: 44px;
+  color: rgba(100,100,100,0.35);
+  margin-bottom: 16px;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.default-icon:hover {
+  transform: scale(1.12);
+  color: rgba(80,80,80,0.85);
+}
+
+/* برچسب آپلود فایل */
+.file-label {
+  display: inline-block;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: #fff;
+  padding: 12px 22px;
+  border-radius: var(--radius);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-bottom: 18px;
+  box-shadow: 0 6px 18px rgba(102,126,234,0.25);
+  transition: all 0.25s ease;
+}
+
+.file-label:hover {
+  background: linear-gradient(135deg, #5a6fd8, #64449e);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 22px rgba(102,126,234,0.3);
+}
+
+/* دکمه‌ها */
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  margin-top: 12px;
+}
+
+button {
+  flex: 1;
+  padding: 10px 0;
+  border: 1px solid var(--border);
+  border-radius: 8px; /* کلاسیک */
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+  cursor: pointer;
+  background-color: #4f8cff; /* رنگ ثابت */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1); /* سایه ملایم کلاسیک */
+  transition: none; /* بدون انیمیشن */
+}
+
+button:hover {
+  background-color: #3a6fd4; /* تغییر رنگ ساده */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1); /* سایه ثابت */
+}
+
+#removePhotoBtn {
+  background-color: var(--error);
+  border-color: #e53e3e;
+}
+
+#removePhotoBtn:hover {
+  background-color: #e53e3e;
+}
+
+#uploadPhotoBtn {
+  background-color: var(--success);
+  border-color: #28a57d;
+}
+
+#uploadPhotoBtn:hover {
+  background-color: #28a57d;
+}
+
+/* نوار پیشرفت */
+.progress-container {
+  margin-top: 12px;
+  width: 100%;
+  display: none;
+}
+
+.progress {
+  width: 100%;
+  height: 6px;
+  background: rgba(0,0,0,0.05);
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.08);
+}
+
+.progress-bar {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  border-radius: 6px;
+  transition: width 0.35s ease;
+}
+
+/* پیام‌ها */
+#uploadError, .success-message {
+  font-size: 12px;
+  margin-top: 10px;
+  padding: 8px 14px;
+  border-radius: 10px;
+  display: none;
+  transition: all 0.25s ease;
+}
+
+#uploadError { color: var(--error); background: rgba(245,101,101,0.12); }
+.success-message { color: var(--success); background: rgba(0,200,150,0.12); }
+
+.uploader:focus-within {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(102,126,234,0.2);
+}
+</style>
+</head>
+<body>
+
+<div class="uploader" id="uploader">
+  <div class="default-icon" id="defaultIcon">📷</div>
+  <img id="photoPreview" src="" alt="پیش‌نمایش عکس">
+  <label for="photoInput" class="file-label">📁 انتخاب عکس</label>
+  <input type="file" id="photoInput" accept="image/*" style="display:none;">
+  
+  <div class="button-group">
+    <button id="removePhotoBtn" style="display:none;">🗑️ حذف</button>
+    <button id="uploadPhotoBtn" style="display:none;">☁️ آپلود</button>
+  </div>
+
+  <div class="progress-container" id="progressContainer">
+    <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+  </div>
+
+  <div id="uploadError"></div>
+  <div class="success-message" id="successMessage"></div>
+</div>
+
+<script>
+const uploader = document.getElementById('uploader');
+const photoInput = document.getElementById('photoInput');
+const photoPreview = document.getElementById('photoPreview');
+const defaultIcon = document.getElementById('defaultIcon');
+const removeBtn = document.getElementById('removePhotoBtn');
+const uploadBtn = document.getElementById('uploadPhotoBtn');
+const progressContainer = document.getElementById('progressContainer');
+const progressBar = document.getElementById('progressBar');
+const errorDiv = document.getElementById('uploadError');
+const successDiv = document.getElementById('successMessage');
+const fileLabel = document.querySelector('.file-label');
+
+let selectedFile = null;
+
+// انتخاب فایل
+photoInput.addEventListener('change', e=>{
+  const file = e.target.files[0];
+  if(file) handleFile(file);
+});
+
+function handleFile(file){
+  if(!file.type.startsWith('image/')) return showError('فقط فایل تصویری!');
+  if(file.size > 5*1024*1024) return showError('حجم فایل بیشتر از 5MB است');
+
+  selectedFile=file;
+  hideError();
+  const reader=new FileReader();
+  reader.onload=e=>{
+    photoPreview.src=e.target.result;
+    photoPreview.style.display='block';
+    defaultIcon.style.display='none';
+    removeBtn.style.display='inline-flex';
+    uploadBtn.style.display='inline-flex';
+    fileLabel.style.display='none';   // مخفی کردن دکمه انتخاب عکس
+    photoInput.style.display='none';  // مخفی کردن input
+  };
+  reader.readAsDataURL(file);
+}
+
+// حذف عکس
+removeBtn.addEventListener('click',()=>{
+  selectedFile=null;
+  photoPreview.src='';
+  photoPreview.style.display='none';
+  defaultIcon.style.display='block';
+  removeBtn.style.display='none';
+  uploadBtn.style.display='none';
+  photoInput.value='';
+  fileLabel.style.display='inline-block'; // دوباره نمایش دکمه
+  photoInput.style.display='block';        // دوباره نمایش input
+  hideError();
+  hideSuccess();
+  hideProgress();
+});
+
+// آپلود
+uploadBtn.addEventListener('click',()=>{
+  if(!selectedFile) return showError('ابتدا عکس انتخاب کنید');
+  simulateUpload();
+});
+
+function simulateUpload(){
+  showProgress();
+  uploadBtn.disabled=true;
+  let progress=0;
+  const interval=setInterval(()=>{
+    progress+=Math.random()*15;
+    if(progress>=100){ progress=100; clearInterval(interval);
+      setTimeout(()=>{
+        hideProgress();
+        uploadBtn.disabled=false;
+        showSuccess('آپلود با موفقیت انجام شد! ✨');
+      },400);
+    }
+    progressBar.style.width=progress+'%';
+  },200);
+}
+
+// Drag & Drop
+uploader.addEventListener('dragover',e=>{ e.preventDefault(); uploader.classList.add('dragover'); });
+uploader.addEventListener('dragleave',e=>{ e.preventDefault(); uploader.classList.remove('dragover'); });
+uploader.addEventListener('drop',e=>{
+  e.preventDefault();
+  uploader.classList.remove('dragover');
+  if(e.dataTransfer.files.length>0) handleFile(e.dataTransfer.files[0]);
+});
+
+// نمایش خطا و موفقیت
+function showError(msg){ errorDiv.textContent=msg; errorDiv.style.display='block'; hideSuccess(); }
+function hideError(){ errorDiv.style.display='none'; }
+function showSuccess(msg){ successDiv.textContent=msg; successDiv.style.display='block'; hideError(); }
+function hideSuccess(){ successDiv.style.display='none'; }
+function showProgress(){ progressContainer.style.display='block'; progressBar.style.width='0%'; }
+function hideProgress(){ progressContainer.style.display='none'; progressBar.style.width='0%'; }
+</script>
     <!-- اطلاعات راننده -->
     <ul id="driverInfo"></ul>
-
-    <!-- آپلود عکس -->
-    <div>
-      <h3>آپلود عکس</h3>
-      <img id="photoPreview" src="" alt=" عکس">
-      <input type="file" id="photoInput" onchange="previewPhoto(event)">
-    </div>
 
     <!-- نظر سنجي -->
     <div>
@@ -421,14 +725,6 @@ onclick="setCurrentLocation()"
 
     </div>
 
-    <!-- اطلاعات مسير -->
-    <div style="margin-top:10px; background:white; color:black; padding:10px; border-radius:8px;">
-      <strong>اطلاعات مسير:</strong>
-      <p id="distance">فاصله: -</p>
-      <p id="duration">زمان تقريبي: -</p>
-    </div>
-  </div>
-</div>
 <!-- علرت-->
  <!-- Modal پیشرفته -->
   <!-- 🌈 مودال هشدار حرفه‌ای -->
@@ -964,14 +1260,6 @@ window.onload = function(){
     window.location.href = "driver-login.html";
   }
 }
-
-/* آپلود عکس */
-function previewPhoto(event){
-  const reader=new FileReader();
-  reader.onload=function(){document.getElementById('photoPreview').src=reader.result;}
-  reader.readAsDataURL(event.target.files[0]);
-}
-
 /* نظر سنجي */
 function submitSurvey(){
   const rating=document.getElementById('surveyRating').value;
