@@ -14,6 +14,49 @@
   <span style="color:red ;font-style: oblique;font-weight:bolder;">تماس فوری</span>
 </a>
 </head>
+<!-- FontAwesome CDN برای آیکون‌ها -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script> 
+<body>
+    <!-- Header -->
+    <div class="header_top">
+      <div class="road-text">
+        <img src="logo7.png" alt=" ناجي راه" width="90.6px">
+    </div>
+        <p>«نگران نباش، امداد نزديکتر از هميشه است.»</p>
+
+<h2 class="road-text">ناجی راه جعبه ابزار آنلاینته</h2>
+<p>با ناجی راه <span class="road-text">با خیال راحت بزن به دل جاده</span>
+<style>
+  /* متن جاده‌ای واقعی */
+.road-text {
+  font-family: 'Vazir', sans-serif; /* فونت فارسی */
+  font-weight: bold;
+  background: linear-gradient(
+    to right, 
+    #4b4b4b 0%, 
+    #333 25%, 
+    #fff 25%, 
+    #fff 30%, 
+    #333 30%, 
+    #4b4b4b 100%
+  );
+  background-size: 50px 100%;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+  letter-spacing: 4px;
+  animation: moveRoad 2s linear infinite;
+  display: inline-block; /* قابل استفاده در span, h1, p و div */
+}
+
+@keyframes moveRoad {
+  0% { background-position: 0 0; }
+  100% { background-position: 50px 0; }
+}
+</style>
+
+    </div>
 <!-- پنل بالای سایت -->
 <div class="top-panel-tabs">
   <button class="tab-btn active" data-tab="driver">راننده</button>
@@ -22,6 +65,7 @@
   <button class="tab-btn" data-tab="electric">برق‌کار</button>
   <button class="tab-btn" data-tab="about">درباره ناجی راه</button>
 </div>
+
 
 <!-- محتواهای تب‌ها -->
 <div class="info-tab">
@@ -477,6 +521,7 @@ body { margin: 0; font-family: "Vazirmatn", sans-serif; }
 <script src="js.js"></script>
 </body>
 </html>
+
 
 
 
