@@ -16,85 +16,518 @@
 
 <style>
 :root {
-  --primary: #00c3ff;
-  --primary-dark: #009ecb;
-  --success: #4caf50;
-  --error: #f44336;
-  --radius: 16px;
-  --transition: 0.3s ease;
+  --primary: #10b981;
+  --primary-light: #34d399;
+  --primary-dark: #059669;
+  --accent: #06b6d4;
+  --success: #22c55e;
+  --error: #ef4444;
+  --radius: 20px;
+  --radius-lg: 24px;
+  --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
   font-family: 'Vazir', sans-serif;
-  margin:0; padding:0;
-  min-height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  background: linear-gradient(135deg, #00c3ff, #007bff);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 50%, #a7f3d0 100%);
+  position: relative;
+  overflow-x: hidden;
+  padding: 20px;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 20% 30%, rgba(16, 185, 129, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(6, 182, 212, 0.15) 0%, transparent 50%);
+  pointer-events: none;
+  animation: pulseBackground 8s ease-in-out infinite;
+}
+
+@keyframes pulseBackground {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
 }
 
 /* کارت ثبت‌نام */
 .auth-card {
-  background: rgba(255,255,255,0.95);
-  padding: 40px 30px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.98) 0%, rgba(248,250,252,0.98) 100%);
+  backdrop-filter: blur(20px);
+  padding: clamp(30px, 5vw, 50px) clamp(25px, 4vw, 40px);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 25px 60px rgba(0,0,0,0.15), 0 0 40px rgba(16, 185, 129, 0.1);
+  width: 100%;
+  max-width: 520px;
+  position: relative;
+  border: 2px solid rgba(16, 185, 129, 0.1);
+  animation: cardSlideUp 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes cardSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.auth-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, var(--primary), var(--accent), var(--primary-light));
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  animation: borderFlow 3s linear infinite;
+  background-size: 200% 100%;
+}
+
+@keyframes borderFlow {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 200% 0%; }
+}
+
+.auth-card::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -30%;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.08) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: floatCircle 6s ease-in-out infinite;
+}
+
+@keyframes floatCircle {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-20px, 20px) scale(1.1); }
+}
+
+.auth-title {
+  text-align: center;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: clamp(24px, 5vw, 32px);
+  margin-bottom: 12px;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  position: relative;
+  animation: titleFadeIn 0.8s ease-out 0.2s both;
+}
+
+@keyframes titleFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.auth-title::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  border-radius: 2px;
+  animation: expandLine 0.6s ease-out 0.4s both;
+}
+
+@keyframes expandLine {
+  from { width: 0; }
+  to { width: 60px; }
+}
+
+.auth-sub {
+  text-align: center;
+  color: #64748b;
+  margin-bottom: 30px;
+  font-size: clamp(13px, 2vw, 15px);
+  line-height: 1.6;
+  animation: subtitleFadeIn 0.8s ease-out 0.3s both;
+}
+
+@keyframes subtitleFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.form-row {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  animation: formRowSlide 0.6s ease-out both;
+}
+
+.form-row:nth-child(1) { animation-delay: 0.4s; }
+.form-row:nth-child(2) { animation-delay: 0.45s; }
+.form-row:nth-child(3) { animation-delay: 0.5s; }
+.form-row:nth-child(4) { animation-delay: 0.55s; }
+.form-row:nth-child(5) { animation-delay: 0.6s; }
+.form-row:nth-child(6) { animation-delay: 0.65s; }
+.form-row:nth-child(7) { animation-delay: 0.7s; }
+.form-row:nth-child(8) { animation-delay: 0.75s; }
+.form-row:nth-child(9) { animation-delay: 0.8s; }
+.form-row:nth-child(10) { animation-delay: 0.85s; }
+
+@keyframes formRowSlide {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.form-row label {
+  margin-bottom: 8px;
+  font-weight: 700;
+  color: #1e293b;
+  font-size: clamp(13px, 2vw, 14px);
+  transition: var(--transition);
+}
+
+.form-row input {
+  padding: 14px 18px;
+  border: 2px solid #e2e8f0;
   border-radius: var(--radius);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-  width: 90%;
-  max-width: 450px;
+  font-size: clamp(14px, 2vw, 15px);
+  transition: var(--transition);
+  background: rgba(255, 255, 255, 0.8);
+  color: #1e293b;
+  font-family: inherit;
+}
+
+.form-row input::placeholder {
+  color: #94a3b8;
+}
+
+.form-row input:focus {
+  border-color: var(--primary);
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15), 0 8px 20px rgba(16, 185, 129, 0.1);
+  background: rgba(255, 255, 255, 1);
+  transform: translateY(-2px);
+}
+
+.form-row input:focus + label,
+.form-row:focus-within label {
+  color: var(--primary);
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+  margin-top: 30px;
+  animation: actionsFadeIn 0.8s ease-out 0.9s both;
+}
+
+@keyframes actionsFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.btn {
+  padding: 14px 28px;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-weight: 800;
+  font-size: clamp(14px, 2vw, 15px);
+  transition: var(--transition);
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 140px;
+  position: relative;
+  overflow: hidden;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+}
+
+.btn:hover::before {
+  transform: translateX(100%);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  color: #fff;
+  box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 15px 35px rgba(16, 185, 129, 0.4);
+}
+
+.btn-primary:active {
+  transform: translateY(-1px) scale(0.98);
+}
+
+.btn-secondary {
+  background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+  color: #fff;
+  text-decoration: none;
+  box-shadow: 0 8px 20px rgba(100, 116, 139, 0.3);
+}
+
+.btn-secondary:hover {
+  background: linear-gradient(135deg, #475569 0%, #334155 100%);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 12px 30px rgba(100, 116, 139, 0.4);
+}
+
+.btn-secondary:active {
+  transform: translateY(-1px) scale(0.98);
+}
+
+.signup-footer {
+  text-align: center;
+  font-size: clamp(13px, 2vw, 14px);
+  color: #64748b;
+  margin-top: 15px;
+  line-height: 1.6;
+  animation: footerFadeIn 0.8s ease-out 1s both;
+}
+
+@keyframes footerFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.signup-footer a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 800;
+  transition: var(--transition);
   position: relative;
 }
 
-.auth-title { text-align:center; color: var(--primary); font-size:28px; margin-bottom:10px; font-weight:bold; }
-.auth-sub { text-align:center; color:#555; margin-bottom:20px; }
+.signup-footer a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  right: 0;
+  width: 0;
+  height: 2px;
+  background: var(--primary);
+  transition: width 0.3s ease;
+}
 
-.form-row { margin-bottom:18px; display:flex; flex-direction:column; }
-.form-row label { margin-bottom:5px; font-weight:bold; color:#333; }
-.form-row input { padding:10px 15px; border:1px solid #ccc; border-radius:8px; font-size:15px; transition: var(--transition); }
-.form-row input:focus { border-color: var(--primary); outline:none; box-shadow:0 0 6px rgba(0,195,255,0.5); }
+.signup-footer a:hover::after {
+  width: 100%;
+}
 
-.actions { display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:15px; }
-.btn { padding:12px 20px; border:none; border-radius:8px; cursor:pointer; font-weight:bold; font-size:15px; transition: var(--transition); display:inline-flex; justify-content:center; align-items:center; gap:5px; }
-.btn-primary { background: var(--primary); color:#fff; }
-.btn-primary:hover { background: var(--primary-dark); transform:scale(1.05); }
-.btn-secondary { background:#ccc; color:#333; text-decoration:none; display:inline-flex; justify-content:center; align-items:center; }
-.btn-secondary:hover { background:#bbb; transform:scale(1.05); }
+.signup-footer a:hover {
+  color: var(--primary-dark);
+}
 
-.signup-footer { text-align:center; font-size:14px; color:#555; margin-top:10px; }
-.signup-footer a { color: var(--primary); text-decoration:none; font-weight:bold; }
-.signup-footer a:hover { text-decoration:underline; }
-
-@media(max-width:500px){ .actions{ flex-direction:column; } }
-
-/* Alert Box ساده و انیمیشنی */
+/* Alert Box مدرن و انیمیشنی */
 .alert-box {
   position: fixed;
   top: 20px;
   left: 50%;
-  transform: translateX(-50%) translateY(-60px);
-  min-width: 280px;
+  transform: translateX(-50%) translateY(-80px);
+  min-width: 300px;
   max-width: 90%;
-  background:#fff;
-  padding:15px 20px;
-  border-radius:16px;
-  box-shadow:0 8px 20px rgba(0,0,0,0.25);
-  display:flex;
-  align-items:center;
-  gap:10px;
-  font-size:15px;
-  opacity:0;
-  pointer-events:none;
-  z-index:1000;
-  transition: transform 0.4s ease, opacity 0.4s ease;
+  background: linear-gradient(135deg, #fff 0%, #f8fafc 100%);
+  padding: 18px 24px;
+  border-radius: var(--radius);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.2), 0 0 30px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: clamp(14px, 2vw, 15px);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1000;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease;
+  backdrop-filter: blur(10px);
+  border: 2px solid transparent;
 }
+
 .alert-box.show {
   transform: translateX(-50%) translateY(0);
-  opacity:1;
-  pointer-events:all;
+  opacity: 1;
+  pointer-events: all;
+  animation: alertShake 0.5s ease;
 }
-.alert-box.success { border-left:6px solid var(--success); }
-.alert-box.error { border-left:6px solid var(--error); }
-.alert-box i { font-size:22px; }
+
+@keyframes alertShake {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  25% { transform: translateX(-48%) translateY(0); }
+  75% { transform: translateX(-52%) translateY(0); }
+}
+
+.alert-box.success {
+  border-right: 6px solid var(--success);
+  border-color: rgba(34, 197, 94, 0.3);
+}
+
+.alert-box.success i {
+  color: var(--success);
+  animation: successPulse 0.6s ease;
+}
+
+@keyframes successPulse {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+.alert-box.error {
+  border-right: 6px solid var(--error);
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.alert-box.error i {
+  color: var(--error);
+  animation: errorShake 0.5s ease;
+}
+
+@keyframes errorShake {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-10deg); }
+  75% { transform: rotate(10deg); }
+}
+
+.alert-box i {
+  font-size: 26px;
+  font-weight: bold;
+}
+
+.alert-box span {
+  color: #1e293b;
+  font-weight: 600;
+  flex: 1;
+}
+
+/* Responsive */
+@media (max-width: 500px) {
+  .actions {
+    flex-direction: column;
+  }
+  
+  .btn {
+    width: 100%;
+  }
+  
+  body {
+    padding: 15px;
+  }
+  
+  .auth-card {
+    padding: 30px 20px;
+  }
+}
+
+@media (max-width: 360px) {
+  .alert-box {
+    min-width: 260px;
+    padding: 15px 18px;
+  }
+}
+
+/* Loading Animation */
+.btn-primary.loading {
+  pointer-events: none;
+  position: relative;
+}
+
+.btn-primary.loading::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Datepicker Custom Styles */
+.pwt-btn-today,
+.pwt-btn-submit {
+  background: var(--primary) !important;
+  border-color: var(--primary) !important;
+}
+
+.pwt-btn:hover {
+  background: var(--primary-dark) !important;
+}
+
+/* Scroll Animation */
+@media (prefers-reduced-motion: no-preference) {
+  .form-row {
+    opacity: 0;
+  }
+}
 </style>
 </head>
 <body>
@@ -104,16 +537,46 @@ body {
   <p class="auth-sub">لطفاً اطلاعات خود را با دقت وارد کنید</p>
 
   <form id="signupForm">
-    <div class="form-row"><label>نام و نام خانوادگی</label><input type="text" id="fullName" placeholder="مثلاً علی رضایی" required></div>
-    <div class="form-row"><label>تاریخ تولد</label><input type="text" id="birthdate" placeholder="روز/ماه/سال" required readonly></div>
-    <div class="form-row"><label>کد ملی</label><input type="text" id="nationalId" maxlength="10" placeholder="مثلاً 0012345678" required></div>
-    <div class="form-row"><label>شماره پلاک راننده</label><input type="text" id="licensePlate" placeholder="مثلاً 12ب345-ایران" required></div>
-    <div class="form-row"><label>شماره تماس</label><input type="tel" id="phone" placeholder="مثلاً 09123456789" required></div>
-    <div class="form-row"><label>نوع خودرو</label><input type="text" id="carType" placeholder="مثلاً پژو 206" required></div>
-    <div class="form-row"><label>رنگ خودرو</label><input type="text" id="carColor" placeholder="مثلاً سفید" required></div>
-    <div class="form-row"><label>مدل خودرو</label><input type="text" id="carModel" placeholder="مثلاً 1399" required></div>
-    <div class="form-row"><label>رمز عبور</label><input type="password" id="password" placeholder="حداقل 6 کاراکتر" required></div>
-    <div class="form-row"><label>تکرار رمز عبور</label><input type="password" id="confirmPassword" placeholder="رمز عبور را دوباره وارد کنید" required></div>
+    <div class="form-row">
+      <label>نام و نام خانوادگی</label>
+      <input type="text" id="fullName" placeholder="مثلاً علی رضایی" required>
+    </div>
+    <div class="form-row">
+      <label>تاریخ تولد</label>
+      <input type="text" id="birthdate" placeholder="روز/ماه/سال" required readonly>
+    </div>
+    <div class="form-row">
+      <label>کد ملی</label>
+      <input type="text" id="nationalId" maxlength="10" placeholder="مثلاً 0012345678" required>
+    </div>
+    <div class="form-row">
+      <label>شماره پلاک راننده</label>
+      <input type="text" id="licensePlate" placeholder="مثلاً 12ب345-ایران" required>
+    </div>
+    <div class="form-row">
+      <label>شماره تماس</label>
+      <input type="tel" id="phone" placeholder="مثلاً 09123456789" required>
+    </div>
+    <div class="form-row">
+      <label>نوع خودرو</label>
+      <input type="text" id="carType" placeholder="مثلاً پژو 206" required>
+    </div>
+    <div class="form-row">
+      <label>رنگ خودرو</label>
+      <input type="text" id="carColor" placeholder="مثلاً سفید" required>
+    </div>
+    <div class="form-row">
+      <label>مدل خودرو</label>
+      <input type="text" id="carModel" placeholder="مثلاً 1399" required>
+    </div>
+    <div class="form-row">
+      <label>رمز عبور</label>
+      <input type="password" id="password" placeholder="حداقل 6 کاراکتر" required>
+    </div>
+    <div class="form-row">
+      <label>تکرار رمز عبور</label>
+      <input type="password" id="confirmPassword" placeholder="رمز عبور را دوباره وارد کنید" required>
+    </div>
     <div class="actions">
       <button type="submit" class="btn btn-primary">ثبت‌نام</button>
       <a href="driver-login.html" class="btn btn-secondary">ورود راننده</a>
@@ -133,13 +596,16 @@ $(document).ready(function(){
   const showAlert = (message, type="success") => {
     const box = $('#alertBox');
     box.removeClass('success error show').addClass(type+' show');
-    box.find('i').attr('class', type==="success" ? 'ri-check-line' : 'ri-error-warning-line');
+    box.find('i').attr('class', type==="success" ? 'ri-checkbox-circle-fill' : 'ri-error-warning-fill');
     box.find('span').text(message);
-    setTimeout(()=> box.removeClass('show'), 3500);
+    setTimeout(()=> box.removeClass('show'), 4000);
   }
 
   $('#signupForm').on('submit', async function(e){
     e.preventDefault();
+
+    const $submitBtn = $(this).find('.btn-primary');
+    $submitBtn.addClass('loading').text('در حال ارسال...');
 
     const fullName = $('#fullName').val().trim();
     const birthDate = $('#birthdate').val().trim();
@@ -155,28 +621,33 @@ $(document).ready(function(){
     // بررسی فیلدهای خالی
     if(!fullName || !birthDate || !nationalId || !licensePlate || !phone || !carType || !carColor || !carModel || !password){
       showAlert("لطفاً تمام فیلدها را تکمیل کنید.","error");
+      $submitBtn.removeClass('loading').text('ثبت‌نام');
       return;
     }
 
     // بررسی کد ملی
     if(!/^\d{10}$/.test(nationalId)){
       showAlert("کد ملی نامعتبر است.","error");
+      $submitBtn.removeClass('loading').text('ثبت‌نام');
       return;
     }
 
     // بررسی شماره تماس
     if(!/^09\d{9}$/.test(phone)){
       showAlert("شماره تماس نامعتبر است.","error");
+      $submitBtn.removeClass('loading').text('ثبت‌نام');
       return;
     }
 
     // بررسی رمز عبور
     if(password.length<6){
       showAlert("رمز عبور باید حداقل 6 کاراکتر باشد.","error");
+      $submitBtn.removeClass('loading').text('ثبت‌نام');
       return;
     }
     if(password !== confirmPassword){
       showAlert("رمز عبور و تکرار آن یکسان نیست.","error");
+      $submitBtn.removeClass('loading').text('ثبت‌نام');
       return;
     }
 
@@ -190,13 +661,15 @@ $(document).ready(function(){
       const data = await res.json();
       if(res.ok){
         showAlert("ثبت‌نام با موفقیت انجام شد!","success");
-        setTimeout(()=> window.location.href="driver-login.html",1500);
+        setTimeout(()=> window.location.href="driver-login.html",1800);
       } else {
         showAlert(data.message || "خطا در ثبت‌نام. لطفاً دوباره تلاش کنید.","error");
+        $submitBtn.removeClass('loading').text('ثبت‌نام');
       }
     } catch(err){
       console.error(err);
       showAlert("ارتباط با سرور برقرار نشد.","error");
+      $submitBtn.removeClass('loading').text('ثبت‌نام');
     }
   });
 });
@@ -206,5 +679,3 @@ $(document).ready(function(){
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
 </body>
 </html>
-
-
