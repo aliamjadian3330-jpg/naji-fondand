@@ -345,10 +345,9 @@
   <p>&copy; 2025 ناجی راه. تمام حقوق محفوظ است.</p>
 </footer>
 <!-- 🌟 مودال خوش‌آمدگویی ناجی راه -->
-<div id="welcomeModal" class="modal">
+<div id="welcomeModal" class="modal hidden">
   <div class="modal-content">
     <div class="icon-wrap">
-      <!-- 🚚 آیکون یدک‌کش -->
       <svg id="towTruck" viewBox="0 0 64 64" width="64" height="64" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
         <path d="M4 44h6l5-14 12-12 8 8" />
         <circle cx="14" cy="50" r="4" />
@@ -367,67 +366,78 @@
     <button class="closeBtn" onclick="closeWelcome()">باشه، ادامه بده 🚀</button>
   </div>
 </div>
+
 <!-- 🔊 صدای خوشامد -->
 <audio id="welcomeSound" src="https://cdn.pixabay.com/audio/2021/09/13/audio_8cc031c72a.mp3"></audio>
 
 <style>
-/* ===== پس‌زمینه مدرن ===== */
+/* ===== پایه ===== */
+body { margin: 0; font-family: "Vazirmatn", sans-serif; }
+.hidden { display: none; }
+
+/* ===== پس‌زمینه مودال ===== */
 .modal {
-  display: none;
   position: fixed;
   inset: 0;
-  background: radial-gradient(circle at center, rgba(10,15,25,0.95), rgba(0,0,0,0.85));
-  backdrop-filter: blur(25px) saturate(180%);
   display: flex;
   justify-content: center;
   align-items: center;
+  background: radial-gradient(circle at center, rgba(10,15,25,0.95), rgba(0,0,0,0.85));
+  backdrop-filter: blur(20px) saturate(180%);
   z-index: 9999;
   overflow: hidden;
-  animation: fadeInBg 1s ease forwards;
+  opacity: 0;
+  transform: scale(0.98);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.modal.active {
+  opacity: 1;
+  transform: scale(1);
 }
 .modal::before, .modal::after {
   content: "";
   position: absolute;
-  width: 400px; height: 400px;
+  width: 350px; height: 350px;
   border-radius: 50%;
-  filter: blur(100px);
+  filter: blur(90px);
   opacity: 0.35;
-  animation: floatLight 12s infinite alternate ease-in-out;
+  animation: floatLight 10s infinite alternate ease-in-out;
+  will-change: transform;
 }
 .modal::before {
   background: #00c6ff;
-  top: -100px; left: -100px;
+  top: -120px; left: -100px;
 }
 .modal::after {
   background: #22c55e;
-  bottom: -120px; right: -120px;
+  bottom: -100px; right: -100px;
 }
 
 /* ===== بدنه مودال ===== */
 .modal-content {
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 30px;
-  padding: 55px 40px;
+  border-radius: 25px;
+  padding: 50px 35px;
   width: 90%;
-  max-width: 460px;
+  max-width: 440px;
   text-align: center;
   color: #f8fafc;
-  box-shadow: 0 0 60px rgba(0,255,204,0.25),
-              0 30px 80px rgba(0,0,0,0.6);
-  transform: scale(0.8) translateY(60px);
+  box-shadow: 0 0 50px rgba(0,255,204,0.2);
+  transform: translateY(40px);
   opacity: 0;
-  animation: modalIn 1s cubic-bezier(.18,.89,.32,1.28) forwards;
+  animation: modalIn 0.8s cubic-bezier(.18,.89,.32,1.28) forwards 0.4s;
+  will-change: transform, opacity;
 }
 
-/* ===== آیکون یدک‌کش ===== */
+/* ===== آیکون ===== */
 .icon-wrap {
   position: relative;
-  width: 120px; height: 120px;
+  width: 110px; height: 110px;
   margin: 0 auto 25px auto;
   border-radius: 50%;
-  background: radial-gradient(circle at center, rgba(0,255,204,0.3), rgba(59,130,246,0.2));
-  box-shadow: 0 0 60px rgba(0,255,204,0.3);
+  background: radial-gradient(circle, rgba(0,255,204,0.25), rgba(59,130,246,0.15));
+  box-shadow: 0 0 50px rgba(0,255,204,0.3);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -435,20 +445,21 @@
 }
 .icon-wrap svg {
   filter: drop-shadow(0 0 12px rgba(0,255,204,0.5));
-  animation: drive 2s ease-in-out infinite alternate;
+  animation: drive 1.5s ease-in-out infinite alternate;
+  will-change: transform;
 }
 .glow {
   position: absolute;
   width: 150%; height: 150%;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(0,255,204,0.15), transparent 70%);
-  filter: blur(15px);
+  background: radial-gradient(circle, rgba(0,255,204,0.12), transparent 70%);
+  filter: blur(20px);
   z-index: -1;
 }
 
 /* ===== متن ===== */
 #welcomeTitle {
-  font-size: 1.9rem;
+  font-size: 1.8rem;
   font-weight: 800;
   margin-bottom: 10px;
   color: #fff;
@@ -457,18 +468,17 @@
   background: linear-gradient(90deg, #00c6ff, #22c55e, #facc15);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  text-shadow: 0 0 20px rgba(0,255,204,0.3);
 }
 #welcomeMessage {
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   color: #e2e8f0;
-  line-height: 1.8;
-  margin-bottom: 30px;
+  line-height: 1.7;
+  margin-bottom: 28px;
 }
 
 /* ===== دکمه ===== */
 .closeBtn {
-  padding: 14px 36px;
+  padding: 12px 32px;
   border: none;
   border-radius: 50px;
   font-weight: 600;
@@ -477,37 +487,34 @@
   color: #fff;
   background: linear-gradient(135deg, #00c6ff, #22c55e, #facc15);
   background-size: 300% 300%;
-  box-shadow: 0 8px 25px rgba(34,197,94,0.5);
-  transition: all 0.35s ease;
+  box-shadow: 0 8px 20px rgba(34,197,94,0.4);
+  transition: all 0.3s ease;
   animation: gradientMove 5s infinite ease-in-out;
 }
 .closeBtn:hover {
-  transform: translateY(-4px) scale(1.08);
-  box-shadow: 0 12px 40px rgba(59,130,246,0.6);
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 10px 30px rgba(59,130,246,0.5);
 }
 
 /* ===== انیمیشن‌ها ===== */
 @keyframes modalIn {
-  to { transform: scale(1) translateY(0); opacity: 1; }
-}
-@keyframes fadeInBg {
-  from { opacity: 0; } to { opacity: 1; }
+  to { transform: translateY(0); opacity: 1; }
 }
 @keyframes floatLight {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(40px) translateX(40px); }
+  0% { transform: translate(0,0); }
+  100% { transform: translate(40px, 30px); }
 }
 @keyframes gradientMove {
   0%,100% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
 }
 @keyframes drive {
-  0% { transform: translateX(-5px); }
-  100% { transform: translateX(5px); }
+  0% { transform: translateX(-4px); }
+  100% { transform: translateX(4px); }
 }
 @keyframes pulseGlow {
   0%,100% { box-shadow: 0 0 40px rgba(0,255,204,0.25); }
-  50% { box-shadow: 0 0 80px rgba(0,255,204,0.5); }
+  50% { box-shadow: 0 0 70px rgba(0,255,204,0.45); }
 }
 </style>
 
@@ -516,20 +523,22 @@ window.addEventListener('load', () => {
   const modal = document.getElementById('welcomeModal');
   const sound = document.getElementById('welcomeSound');
 
-  // نمایش مودال با تاخیر نرم
   setTimeout(() => {
-    modal.style.display = 'flex';
+    modal.classList.remove('hidden');
+    requestAnimationFrame(() => modal.classList.add('active'));
     sound.play().catch(()=>{});
-  }, 1000);
+  }, 600); // نمایش سریع‌تر
 });
 
 function closeWelcome() {
   const modal = document.getElementById('welcomeModal');
-  modal.style.transition = 'opacity 0.6s ease';
-  modal.style.opacity = '0';
-  setTimeout(() => modal.style.display = 'none', 600);
+  modal.classList.remove('active');
+  modal.style.pointerEvents = 'none';
+  setTimeout(() => modal.classList.add('hidden'), 500);
 }
 </script>
+
 <script src="js.js"></script>
 </body>
 </html>
+
