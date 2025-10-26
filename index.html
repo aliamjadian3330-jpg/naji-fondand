@@ -9,10 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Vazir:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<a href="tel:0902000000" class="emergency-call" title="تماس فوری">
-  <img src="https://cdn-icons-png.flaticon.com/512/15/15874.png" alt="mobile-phone" />
-  <span style="color:red ;font-style: oblique;font-weight:bolder;">تماس فوری</span>
-</a>
+
 </head>
 <!-- FontAwesome CDN برای آیکون‌ها -->
 <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script> 
@@ -128,32 +125,205 @@
             <h2>(ناجي راه؛ همراهي مطمئن در مسير سفرتان)</h2>
         </div>
     </header>
+<!-- خدمات -->
+<div class="text_info">
+  <h4>
+    یک اپلیکیشن <span class="highlight">هوشمند و ضروری</span> برای هر راننده
+  </h4>
+</div>
 
-    <!-- خدمات -->
-    <div class="text_info">
-        <h4>
-    يک اپليکيشن   <span style="color:red;">ضروري </span>، براي هر راننده
-        </h4>
-    </div><section class="services">       
-    <div class="service">
-        <a href="driver-signup.html" target="_blank">
-            <img src="tt.png" alt="يدک کش" style="width: 120px; height: auto;">
-        </a>
-        <h2>درخواست<br>يدک‌کش</h2>
+<section class="services">
+  <div class="service">
+    <a href="driver-signup.html" target="_blank" aria-label="درخواست یدک کش">
+      <div class="icon-box">
+        <img src="tt.png" alt="یدک کش" loading="lazy">
+      </div>
+      <h2>درخواست یدک‌کش</h2>
+      <p>در هر زمان و هر مکان، یدک‌کش در خدمت شماست.</p>
+    </a>
+  </div>
+
+  <div class="service soon-card">
+    <div class="icon-box">
+      <img src="caring2.png" alt="مکانیک" loading="lazy">
     </div>
-    <div class="service">
-        <a href="">
-            <img src="caring2.png" alt="مکانيک" style="width: 120px; height: auto;">
-        </a>
-        <h2>درخواست<br>مکانيک <span style="color:red ;">(بزودی)</span></h2>
+    <h2>درخواست مکانیک <span class="soon">(بزودی)</span></h2>
+    <p>به زودی امکان درخواست مکانیک در محل.</p>
+  </div>
+
+  <div class="service soon-card">
+    <div class="icon-box">
+      <img src="برقکار22.png" alt="برقکار" loading="lazy">
     </div>
-    <div class="service">
-        <a href="" target="_blank">
-            <img src="برقکار22.png" alt=" برقکار" style="width: 120px; height: auto;">
-        </a>
-        <h2>درخواست<br>برقکار <span style="color:red ;">(بزودی)</span></h2>
-    </div>
+    <h2>درخواست برقکار <span class="soon">(بزودی)</span></h2>
+    <p>در حال توسعه: برقکار سیار و سریع.</p>
+  </div>
 </section>
+
+<!-- CSS -->
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap');
+
+  body {
+    font-family: 'Vazirmatn', sans-serif;
+    background: linear-gradient(135deg, #f0f4ff, #ffffff);
+    overflow-x: hidden;
+  }
+
+  .text_info h4 {
+    text-align: center;
+    font-size: 32px;
+    color: #222;
+    margin-top: 60px;
+    margin-bottom: 50px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+
+  .highlight {
+    color: #007bff;
+    position: relative;
+  }
+
+  .highlight::after {
+    content: "";
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    background: rgba(0, 123, 255, 0.3);
+    border-radius: 3px;
+  }
+
+  /* سرویس‌ها */
+  .services {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 30px;
+    padding: 20px 40px;
+  }
+
+  .service {
+    position: relative;
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    padding: 30px 20px;
+    text-align: center;
+    transition: all 0.4s ease;
+    opacity: 0;
+    transform: translateY(40px);
+    animation: fadeUp 1s forwards;
+  }
+
+  .service:nth-child(1) { animation-delay: 0.2s; }
+  .service:nth-child(2) { animation-delay: 0.4s; }
+  .service:nth-child(3) { animation-delay: 0.6s; }
+
+  @keyframes fadeUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .service:hover {
+    transform: translateY(-10px) scale(1.03);
+    box-shadow: 0 15px 30px rgba(0, 123, 255, 0.2);
+  }
+
+  .icon-box {
+    background: linear-gradient(145deg, #007bff, #00c6ff);
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .icon-box::before {
+    content: "";
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(rgba(255,255,255,0.3), transparent 70%);
+    animation: rotateGlow 3s linear infinite;
+  }
+
+  @keyframes rotateGlow {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  .icon-box img {
+    width: 60%;
+    z-index: 2;
+    transition: transform 0.4s ease;
+  }
+
+  .service:hover .icon-box img {
+    transform: scale(1.15);
+  }
+
+  .service h2 {
+    color: #222;
+    font-size: 22px;
+    font-weight: 700;
+    margin: 15px 0 10px;
+    transition: color 0.3s ease;
+  }
+
+  .service p {
+    color: #666;
+    font-size: 15px;
+    line-height: 1.6;
+    padding: 0 10px;
+  }
+
+  .service:hover h2 {
+    color: #007bff;
+  }
+
+  .soon {
+    color: #ff6b6b;
+    font-size: 14px;
+    font-weight: 600;
+    animation: blink 1.5s infinite ease-in-out;
+  }
+
+  @keyframes blink {
+    50% { opacity: 0.3; }
+  }
+
+  .soon-card {
+    opacity: 0.7;
+    pointer-events: none;
+  }
+
+  /* ریسپانسیو */
+  @media (max-width: 768px) {
+    .services {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .service {
+      width: 85%;
+    }
+  }
+</style>
+
+<!-- Font Awesome icons -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
 <!-- ............................................................................. -->
 <!-- شروع معرفي پلتفرم ناجي راه -->
@@ -255,29 +425,233 @@
     </form>
   </div>
 </section
- 
- <!-- ================== پشتیبانی 24 ساعته حرفه‌ای ================== -->
+<!-- ================== پشتیبانی 24 ساعته حرفه‌ای ================== -->
 <div class="support-widget">
+  <!-- دکمه شناور -->
   <div class="support-toggle">
     <i class="fas fa-headset"></i>
     <span>پشتیبانی ۲۴ ساعته</span>
   </div>
+
+  <!-- پنل بازشونده -->
   <div class="support-panel">
     <div class="support-header">
       <span>پشتیبانی آنلاین</span>
       <i class="fas fa-times close-btn"></i>
     </div>
+
     <div class="support-body">
-      <p>سوالی داری؟ همین حالا پیام بده!</p>
+      <p>سوالی داری؟ همین حالا پیام بده 👇</p>
+<div class="emergency-section">
+        <a href="tel:0902000000" class="emergency-call" title="تماس فوری">
+          <img src="https://cdn-icons-png.flaticon.com/512/15/15874.png" alt="تماس فوری">
+          <span>تماس فوری</span>
+        </a>
+
       <form class="support-form" action="https://formspree.io/f/yourFormID" method="POST">
         <input type="text" name="name" placeholder="نام شما" required>
         <input type="email" name="email" placeholder="ایمیل شما" required>
-        <textarea name="message" rows="4" placeholder="پیام شما..." required></textarea>
+        <textarea name="message" rows="3" placeholder="پیام شما..." required></textarea>
         <button type="submit">ارسال پیام</button>
       </form>
+
+      <div class="emergency-section">
+        <a href="tel:0902000000" class="emergency-call" title="تماس فوری">
+          <img src="https://cdn-icons-png.flaticon.com/512/15/15874.png" alt="تماس فوری">
+          <span>تماس فوری</span>
+        </a>
+      </div>
     </div>
   </div>
 </div>
+
+<!-- =============== CSS حرفه‌ای =============== -->
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600&display=swap');
+
+  body {
+    font-family: 'Vazirmatn', sans-serif;
+  }
+
+  /* ویجت اصلی */
+  .support-widget {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 1000;
+  }
+
+  /* دکمه شناور پشتیبانی */
+  .support-toggle {
+    background: linear-gradient(135deg, #007bff, #00c6ff);
+    color: #fff;
+    padding: 14px 20px;
+    border-radius: 50px;
+    box-shadow: 0 10px 25px rgba(0, 123, 255, 0.25);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+
+  .support-toggle i {
+    font-size: 20px;
+  }
+
+  .support-toggle:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 123, 255, 0.35);
+  }
+
+  /* پنل بازشونده */
+  .support-panel {
+    position: absolute;
+    bottom: 80px;
+    right: 0;
+    width: 320px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.4s ease;
+    pointer-events: none;
+  }
+
+  .support-panel.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: all;
+  }
+
+  .support-header {
+    background: linear-gradient(135deg, #007bff, #00c6ff);
+    color: white;
+    padding: 15px 20px;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .support-header .close-btn {
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+
+  .support-header .close-btn:hover {
+    transform: rotate(90deg);
+  }
+
+  .support-body {
+    padding: 20px;
+  }
+
+  .support-body p {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 15px;
+    text-align: center;
+  }
+
+  .support-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .support-form input,
+  .support-form textarea {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-family: inherit;
+    transition: border-color 0.3s ease;
+  }
+
+  .support-form input:focus,
+  .support-form textarea:focus {
+    border-color: #007bff;
+    outline: none;
+  }
+
+  .support-form button {
+    background: linear-gradient(135deg, #007bff, #00c6ff);
+    border: none;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+
+  .support-form button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+  }
+
+  /* تماس فوری */
+  .emergency-section {
+    text-align: center;
+    margin-top: 15px;
+  }
+
+  .emergency-call {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #e63946;
+    font-weight: bold;
+    text-decoration: none;
+    transition: transform 0.3s ease;
+  }
+
+  .emergency-call img {
+    width: 24px;
+    height: 24px;
+  }
+
+  .emergency-call:hover {
+    transform: scale(1.1);
+  }
+
+  /* ریسپانسیو */
+  @media (max-width: 480px) {
+    .support-panel {
+      right: 10px;
+      width: 90%;
+    }
+
+    .support-toggle {
+      padding: 12px 16px;
+      font-size: 14px;
+    }
+  }
+</style>
+
+<!-- =============== اسکریپت فعال‌سازی انیمیشن =============== -->
+<script>
+  const toggleBtn = document.querySelector('.support-toggle');
+  const panel = document.querySelector('.support-panel');
+  const closeBtn = document.querySelector('.close-btn');
+
+  toggleBtn.addEventListener('click', () => {
+    panel.classList.toggle('active');
+  });
+
+  closeBtn.addEventListener('click', () => {
+    panel.classList.remove('active');
+  });
+</script>
+
+<!-- Font Awesome برای آیکون‌ها -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
  <!-- ================== تماس با ما ================== -->
 <div class="call">
  <section class="contact-us">
@@ -310,21 +684,6 @@
         </div>
       </div>
     </div>
-    <!-- نقشه گوگل -->
-    <div class="map">
-      <iframe 
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3239.123456789!2d51.123456789!3d35.123456789!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3f8e0123456789%3A0x123456789abcdef!2sYour+Location!5e0!3m2!1sen!2sir!4v1696212345678!5m2!1sen!2sir" 
-        width="100%" 
-        height="350" 
-        style="border:0;" 
-        allowfullscreen="" 
-        loading="lazy" 
-        referrerpolicy="no-referrer-when-downgrade">
-      </iframe>
-    </div>
-  </div>
-</section>
-</div>
 <!-- ================== Footer Modern & Professional ================== -->
 <footer class="footer">
   <div class="footer-links">
@@ -344,89 +703,6 @@
   </div>
   <p>&copy; 2025 ناجی راه. تمام حقوق محفوظ است.</p>
 </footer>
-
-</footer><!-- 🌟 مودال خوش‌آمدگویی -->
-<div id="welcomeModal" class="modal">
-  <div class="modal-content">
-    <div class="icon-wrap">
-     <svg id="towTruck" viewBox="0 0 64 64" width="80" height="80" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-  <!-- بدنه ماشین -->
-  <path d="M4 44h6l5-14 12-12 8 8" fill="none" stroke="url(#grad1)" stroke-width="3"/>
-  
-  <!-- چرخ‌های ماشین -->
-  <circle cx="14" cy="50" r="4" fill="#ffeb3b" stroke="#f57c00" stroke-width="2"/>
-  <circle cx="46" cy="50" r="4" fill="#ffeb3b" stroke="#f57c00" stroke-width="2"/>
-  
-  <!-- قسمت یدک‌کش -->
-  <path d="M52 50h8v-8l-6-10H38l-4 8H15" fill="none" stroke="#00bcd4" stroke-width="3"/>
-  
-  <!-- کشش خط -->
-  <path d="M20 18l10 10" stroke-dasharray="5 3" stroke="#ff5722" stroke-width="2"/>
-
-  <!-- نورپردازی درون آیکون -->
-  <defs>
-    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#00c6ff;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#22c55e;stop-opacity:1" />
-    </linearGradient>
-  </defs>
-</svg>
-
-      <div class="glow"></div>
-    </div>
-    <h2 id="welcomeTitle">به <span class="brand">ناجی راه</span> خوش آمدید 🚨</h2>
-    <p id="welcomeMessage">
-      آماده‌ایم تا در هر زمان و هر مکان،  
-      <br> با خدمات <b>یدک‌کشی، مکانیکی و برق خودرو</b>،  
-      <br> همراه مطمئن شما در جاده‌ها باشیم 🚗💨
-    </p>
-    <button class="closeBtn" onclick="closeWelcome()">باشه، ادامه بده 🚀</button>
-  </div>
-</div>
-
-<!-- 🔊 صدای خوشامد -->
-<audio id="welcomeSound" src="https://cdn.pixabay.com/audio/2021/09/13/audio_8cc031c72a.mp3"></audio>
-
-<style>
-/* ===== پس‌زمینه مودال (شیشه‌ای و شفاف‌تر) ===== */
-.modal {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.5); /* شفاف‌تر */
-  backdrop-filter: blur(10px) saturate(130%); /* افکت شیشه‌ای */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-  overflow: hidden;
-  opacity: 0;
-  animation: fadeInBg 0.8s ease forwards;
-  will-change: opacity, backdrop-filter;
-}
-
-/* ===== بدنه مودال ===== */
-.modal-content {
-  background: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 28px;
-  padding: 50px 40px;
-  width: 90%;
-  max-width: 460px;
-  text-align: center;
-  color: #fff;
-  box-shadow: 0 0 40px rgba(0, 255, 204, 0.2), 0 15px 60px rgba(0, 0, 0, 0.5);
-  transform: scale(0.9) translateY(50px);
-  opacity: 0;
-  animation: modalIn 1s cubic-bezier(.23, 1, .32, 1) forwards;
-  will-change: transform, opacity;
-}
-
-/* ===== آیکون یدک‌کش ===== */
-.icon-wrap {
-  position: relative;
-  width: 120px; height: 120px;
-  margin: 0 auto 25px auto;
   border-radius: 50%;
   background: radial-gradient(circle at center, rgba(0, 255, 204, 0.3), rgba(59, 130, 246, 0.2));
   box-shadow: 0 0 60px rgba(0, 255, 204, 0.25);
@@ -541,14 +817,9 @@ function closeWelcome() {
 </script>
 
 <script src="js.js"></script>
+  </div>
+ </section>
+</div>
+</div>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
