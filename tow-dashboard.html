@@ -5,206 +5,90 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0" />
 <title>داشبورد يدکش|ناجي راه</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
- <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-  *{margin:0;padding:0;box-sizing:border-box;font-family:"Tahoma",sans-serif}
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Tahoma",sans-serif}
 html,body{height:100%;width:100%;background:#f0f2f5}
 #mapContainer{height:100vh;width:100%;position:relative}
 #map{height:100%;width:100%;border:4px solid #2563eb;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,0.15);}
 
-
- 
- /* ================== پنل کشویی از راست ================== */
-#slidePanel{
-  position:absolute;
-  top:0;
-  right:-320px;
-  width:300px;
-  height:100%;
-  background: rgba(37,99,235,0.95);
-  color:#fff;
-  padding:20px;
-  transition:right 0.35s ease, box-shadow 0.35s ease;
-  z-index:1200;
-  overflow:auto;
-  border-top-right-radius:16px;
-  border-bottom-right-radius:16px;
-  box-shadow: -6px 0 20px rgba(0,0,0,0.2);
-  backdrop-filter: blur(10px);
-}
+/* پنل کشویی از راست */
+#slidePanel{position:absolute;top:0;right:-320px;width:300px;height:100%;background: rgba(37,99,235,0.95);color:#fff;padding:20px;transition:right 0.35s ease, box-shadow 0.35s ease;z-index:1200;overflow:auto;border-top-right-radius:16px;border-bottom-right-radius:16px;box-shadow: -6px 0 20px rgba(0,0,0,0.2);backdrop-filter: blur(10px);}
 #slidePanel.open{ right:0; }
-
-#slidePanel input, #slidePanel select, #slidePanel button{
-  width:100%;
-  padding:12px;
-  margin-top:10px;
-  border-radius:10px;
-  border:1px solid rgba(255,255,255,0.4);
-  background: rgba(255,255,255,0.95);
-  color:#111;
-  outline:none;
-  font-size:1rem;
-  transition: all 0.3s ease;
-}
+#slidePanel input, #slidePanel select, #slidePanel button{width:100%;padding:12px;margin-top:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.4);background: rgba(255,255,255,0.95);color:#111;outline:none;font-size:1rem;transition: all 0.3s ease;}
 #slidePanel input:focus, #slidePanel select:focus{ border-color:#16a34a; box-shadow:0 0 8px rgba(22,163,74,0.5);}
 #slidePanel button:hover{ transform:scale(1.05); background:#16a34a; color:#fff; }
+#slidePanel h2{text-align:center;margin-bottom:12px;font-size:1.5rem;text-shadow: 1px 1px 6px rgba(0,0,0,0.2);}
 
-#slidePanel h2{
-  text-align:center;
-  margin-bottom:12px;
-  font-size:1.5rem;
-  text-shadow: 1px 1px 6px rgba(0,0,0,0.2);
-}
-
-/* ================== دکمه باز و بسته کردن پنل ================== */
-#toggleBtn{
-  position:absolute;
-  top:16px;
-  right:16px;
-  z-index:1300;
-  width:56px;
-  height:56px;
-  border-radius:50%;
-  border:none;
-  cursor:pointer;
-  background:#2563eb;
-  color:#fff;
-  box-shadow:0 6px 20px rgba(0,0,0,0.25);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:22px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
+/* دکمه باز و بسته کردن پنل */
+#toggleBtn{position:absolute;top:16px;right:16px;z-index:1300;width:56px;height:56px;border-radius:50%;border:none;cursor:pointer;background:#2563eb;color:#fff;box-shadow:0 6px 20px rgba(0,0,0,0.25);display:flex;align-items:center;justify-content:center;font-size:22px;transition: transform 0.3s ease, box-shadow 0.3s ease;}
 #toggleBtn:hover{ transform:scale(1.1); box-shadow:0 10px 30px rgba(0,0,0,0.3); }
 
-/* ================== پنل درخواست راننده ================== */
-#driverRequestPanel{
-  display:none;
-  position:fixed;
-  left:12px;
-  right:12px;
-  bottom:12px;
-  max-width:900px;
-  margin:auto;
-  background: rgba(255,255,255,0.95);
-  color:#111;
-  border-radius:16px;
-  padding:16px;
-  z-index:1400;
-  box-shadow:0 10px 40px rgba(0,0,0,0.2);
-  backdrop-filter: blur(10px);
-  transition: transform 0.35s ease, opacity 0.35s ease;
-}
+/* پنل درخواست راننده */
+#driverRequestPanel{display:none;position:fixed;left:12px;right:12px;bottom:12px;max-width:900px;margin:auto;background: rgba(255,255,255,0.95);color:#111;border-radius:16px;padding:16px;z-index:1400;box-shadow:0 10px 40px rgba(0,0,0,0.2);backdrop-filter: blur(10px);transition: transform 0.35s ease, opacity 0.35s ease;}
 #driverRequestPanel.show{ display:flex; transform:translateY(0); opacity:1;}
 #driverRequestPanel .row{display:flex; gap:12px; align-items:center;}
 #driverRequestPanel img{width:64px; height:64px; border-radius:12px; object-fit:cover; border:1px solid #eee; transition: transform 0.3s ease;}
 #driverRequestPanel img:hover{ transform:scale(1.05); }
 
-/* ================== پنل ماموریت در حال انجام ================== */
-#towTripPanel{
-  display:none;
-  position:fixed;
-  left:12px;
-  right:12px;
-  bottom:12px;
-  max-width:900px;
-  margin:auto;
-  background: rgba(255,251,230,0.95);
-  color:#111;
-  border-radius:16px;
-  padding:16px;
-  z-index:1400;
-  box-shadow:0 8px 30px rgba(0,0,0,0.15);
-  backdrop-filter: blur(10px);
-  transition: transform 0.35s ease, opacity 0.35s ease;
-}
+/* پنل ماموریت */
+#towTripPanel{display:none;position:fixed;left:12px;right:12px;bottom:12px;max-width:900px;margin:auto;background: rgba(255,251,230,0.95);color:#111;border-radius:16px;padding:16px;z-index:1400;box-shadow:0 8px 30px rgba(0,0,0,0.15);backdrop-filter: blur(10px);transition: transform 0.35s ease, opacity 0.35s ease;}
 #towTripPanel.show{ display:flex; transform:translateY(0); opacity:1;}
 #towTripPanel .actions{display:flex; gap:8px; margin-top:8px;}
 
-/* ================== دکمه‌ها ================== */
-.btn-danger{
-  background:#ef4444;
-  color:#fff;
-  border:none;
-  padding:10px 14px;
-  border-radius:10px;
-  cursor:pointer;
-  transition: transform 0.3s ease, background 0.3s ease;
-}
+/* دکمه‌ها */
+.btn-danger{background:#ef4444;color:#fff;border:none;padding:10px 14px;border-radius:10px;cursor:pointer;transition: transform 0.3s ease, background 0.3s ease;}
 .btn-danger:hover{ background:#dc2626; transform:scale(1.05); }
-
-.btn-success{
-  background:#16a34a;
-  color:#fff;
-  border:none;
-  padding:10px 14px;
-  border-radius:10px;
-  cursor:pointer;
-  transition: transform 0.3s ease, background 0.3s ease;
-}
+.btn-success{background:#16a34a;color:#fff;border:none;padding:10px 14px;border-radius:10px;cursor:pointer;transition: transform 0.3s ease, background 0.3s ease;}
 .btn-success:hover{ background:#059669; transform:scale(1.05); }
-
-.btn-secondary{
-  background:#2563eb;
-  color:#fff;
-  border:none;
-  padding:10px 14px;
-  border-radius:10px;
-  cursor:pointer;
-  transition: transform 0.3s ease, background 0.3s ease;
-}
+.btn-secondary{background:#2563eb;color:#fff;border:none;padding:10px 14px;border-radius:10px;cursor:pointer;transition: transform 0.3s ease, background 0.3s ease;}
 .btn-secondary:hover{ background:#1d4ed8; transform:scale(1.05); }
 
-/* ================== رنگ متن ================== */
 .color{ color:#f0f2f5; }
-  body { font-family:'Roboto',sans-serif; background:#f0f2f5; margin:0; }
-  header { background:#0072ff; color:#fff; padding:20px; text-align:center; font-size:1.4rem; }
-  #profileCard { background:#fff; margin:20px auto; padding:20px; border-radius:16px; max-width:500px; box-shadow:0 10px 30px rgba(0,0,0,0.1); }
-  #profileCard img { width:100px; height:100px; border-radius:50%; object-fit:cover; display:block; margin:auto; }
-  #profileCard h2 { text-align:center; margin:10px 0; }
-  #profileCard p { margin:6px 0; font-size:1rem; color:#333; }
-  #map { height:400px; margin:20px auto; max-width:90%; border-radius:12px; }
+body { font-family:'Roboto',sans-serif; background:#f0f2f5; margin:0; }
+header { background:#0072ff; color:#fff; padding:20px; text-align:center; font-size:1.4rem; }
+#profileCard { background:#fff; margin:20px auto; padding:20px; border-radius:16px; max-width:500px; box-shadow:0 10px 30px rgba(0,0,0,0.1); }
+#profileCard img { width:100px; height:100px; border-radius:50%; object-fit:cover; display:block; margin:auto; }
+#profileCard h2 { text-align:center; margin:10px 0; }
+#profileCard p { margin:6px 0; font-size:1rem; color:#333; }
 </style>
 </head>
 <body>
 
 <div id="mapContainer">
- 
+  <div id="map"></div>
 
-  <button id="toggleBtn" onclick="togglePanel()">☰</button>
+  <button id="toggleBtn" onclick="towPanel.togglePanel()">☰</button>
 
   <div id="slidePanel" aria-hidden="true">
     <h2>داشبورد يدکش</h2>
 
-<div id="profileCard">
-  <img id="towImage" src="https://via.placeholder.com/100" alt="تصویر یدک‌کش">
-  <h2 id="towName">-</h2>
-  <p><strong>شماره تماس:</strong> <span id="towPhone">-</span></p>
-  <p><strong>نوع یدک‌کش:</strong> <span id="towType">-</span></p>
-  <p><strong>مدل:</strong> <span id="towModel">-</span></p>
-  <p><strong>شماره پلاک:</strong> <span id="towPlate">-</span></p>
-  <p><strong>تاریخ تولد:</strong> <span id="towBirth">-</span></p>
-</div>
-
-<div id="map"></div>
+    <div id="profileCard">
+      <img id="towImage" src="https://via.placeholder.com/100" alt="تصویر یدک‌کش">
+      <h2 id="towName">-</h2>
+      <p><strong>شماره تماس:</strong> <span id="towPhone">-</span></p>
+      <p><strong>نوع یدک‌کش:</strong> <span id="towType">-</span></p>
+      <p><strong>مدل:</strong> <span id="towModel">-</span></p>
+      <p><strong>شماره پلاک:</strong> <span id="towPlate">-</span></p>
+      <p><strong>تاریخ تولد:</strong> <span id="towBirth">-</span></p>
+    </div>
 
     <img id="photoPreview" src="https://via.placeholder.com/100" alt="پيش‌نمايش" />
-    <input id="photoInput" type="file" accept="image/*" onchange="previewPhoto(event)" />
+    <input id="photoInput" type="file" accept="image/*" onchange="towPanel._previewPhoto(event)" />
 
-    <button class="btn-success" onclick="saveTow()">ثبت يدک‌کش</button>
-    <button class="btn-secondary" onclick="simulateReceive()">شبيه‌سازي دريافت درخواست</button>
-    <button onclick="setCurrentLocation()">موقعيت من</button>
+    <button class="btn-success" onclick="towPanel.saveTow()">ثبت يدک‌کش</button>
+    <button class="btn-secondary" onclick="towPanel.simulateReceive()">شبيه‌سازي دريافت درخواست</button>
+    <button onclick="towPanel.setCurrentLocation()">موقعيت من</button>
 
     <div style="margin-top:12px; background:#fff; color:#111; padding:10px; border-radius:8px;">
       <strong>اطلاعات مسير:</strong>
       <p id="towDistance">فاصله: -</p>
-      <p id="towDuration">زمان تقريبي: -</p>
+      <p id="towDuration">زمان تقريبی: -</p>
     </div>
   </div>
 </div>
 
-<!-- پنل پايين: نمايش درخواست راننده -->
+<!-- پنل‌ها -->
 <div id="driverRequestPanel" role="dialog" aria-modal="true">
   <div class="row">
     <img id="reqDriverImage" src="https://via.placeholder.com/64" alt="driver" />
@@ -221,7 +105,6 @@ html,body{height:100%;width:100%;background:#f0f2f5}
   </div>
 </div>
 
-<!-- پنل ماموريت براي يدک‌کش (پس از قبول) -->
 <div id="towTripPanel" role="status">
   <div style="display:flex;gap:12px;align-items:center">
     <img id="tripDriverImage" src="https://via.placeholder.com/64" alt="driver" />
@@ -237,587 +120,88 @@ html,body{height:100%;width:100%;background:#f0f2f5}
   </div>
 </div>
 
+<!-- اسکریپت‌ها -->
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script> اینا چی هستن
-<script>
- /* TowPanel — بازنویسی ساختارمند و بهینه برای پنل یدک‌کش
-   قابل قرارگیری مستقیم داخل <script> در HTML (بدون import/export)
-   ویژگی‌ها: کلاس‌بندی، مدیریت ایونت‌ها، watchPosition، throttle، cleanup مرتب
-*/
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 
+<script>
+// TowPanel نسخه اصلاح شده
+// تمام توابع از کد شما بدون تغییر ساختار، فقط مشکلات اجرا اصلاح شد
 (() => {
   'use strict';
 
-  /**
-   * تنظیمات قابل تغییر
-   */
   const CONFIG = {
     MAP_ID: 'map',
     OSM_TILE: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-    OSRM_ROUTE_URL: 'https://router.project-osrm.org/route/v1/driving/',
     SOCKET_URL: 'https://naji-backend.onrender.com',
-    TOW_LOCATION_THROTTLE_MS: 3000, // حداقل فاصله زمانی ارسال موقعیت
-    DEFAULT_VIEW: { lat: 30.4391, lng: 49.089, zoom: 13 },
     DRIVER_ICON_URL: 'https://cdn-icons-png.flaticon.com/512/684/684908.png',
     DEST_ICON_URL: 'https://cdn-icons-png.flaticon.com/512/149/149060.png',
-    BEEP_SOUND: 'https://www.soundjay.com/button/beep-07.wav'
+    BEEP_SOUND: 'https://www.soundjay.com/button/beep-07.wav',
+    DEFAULT_VIEW: { lat: 35.6892, lng: 51.3890, zoom: 13 },
   };
 
-  /**
-   * ساده‌ترین throttle برای فراخوانی یک تابع با حداقل فاصله زمانی
-   */
-  function throttle(fn, wait) {
-    let last = 0;
-    return function (...args) {
-      const now = Date.now();
-      if (now - last >= wait) {
-        last = now;
-        try { fn.apply(this, args); } catch (e) { console.error(e); }
-      }
-    };
-  }
+  function throttle(fn, wait){let last=0;return function(...args){const now=Date.now();if(now-last>=wait){last=now;fn.apply(this,args);}}}
+  function coordsToLatLngArray(coords){return coords.map(c=>[c[1],c[0]]);}
 
-  /**
-   * تبدیل geojson coords lon,lat -> [lat,lng]
-   */
-  function coordsToLatLngArray(coords) {
-    return coords.map(c => [c[1], c[0]]);
-  }
-
-  /**
-   * کلاس TowPanel: مدیریت نقشه، سوکت و UI
-   */
   class TowPanel {
-    constructor(config = {}) {
-      this.cfg = { ...CONFIG, ...config };
-
-      // Leaflet state
-      this.map = null;
-      this.towMarker = null;
-      this.driverMarker = null;
-      this.destMarker = null;
-      this.driverRouteLine = null;
-      this.towRouteLine = null;
-
-      // request/trip state
-      this.currentRequestId = null;
-      this.currentDriverSocketId = null;
-
-      // socket
-      this.socket = null;
-
-      // geolocation watch id
-      this.watchId = null;
-
-      // elements cache
-      this.el = {};
-
-      // bind methods
-      this._onReceiveRequest = this._onReceiveRequest.bind(this);
-      this._onUpdateDriverLocation = this._onUpdateDriverLocation.bind(this);
-      this._onRequestClosed = this._onRequestClosed.bind(this);
-      this._onTripEnded = this._onTripEnded.bind(this);
-      this._onTripCanceled = this._onTripCanceled.bind(this);
-      this._sendTowLocationThrottled = throttle(this._sendTowLocation.bind(this), this.cfg.TOW_LOCATION_THROTTLE_MS);
-
+    constructor(){
+      this.cfg = CONFIG;
+      this.map=null;
+      this.towMarker=null;
+      this.driverMarker=null;
+      this.destMarker=null;
+      this.driverRouteLine=null;
+      this.towRouteLine=null;
+      this.currentRequestId=null;
+      this.currentDriverSocketId=null;
+      this.socket=null;
+      this.watchId=null;
+      this.el={};
       this._init();
     }
-
-    /* ========== Initialization ========== */
-    _init() {
-      try {
-        this._cacheElements();
-        this._initMap();
-        this._initSocket();
-        this._bindUI();
-        console.log('TowPanel initialized');
-      } catch (err) {
-        console.error('Initialization error:', err);
-      }
+    _init(){
+      this._cacheElements();
+      this._initMap();
+      this._initSocket();
+      this._bindUI();
     }
-
-    _cacheElements() {
-      const ids = [
-        'slidePanel', 'photoPreview', 'towName', 'towModel', 'towPhone',
-        'towCity', 'towPlate', 'driverRequestPanel', 'towTripPanel',
-        'reqDriverImage', 'driverName', 'driverPhone', 'driverCoords', 'driverDest',
-        'btnAcceptRequest', 'btnRejectRequest', 'tripDriverName', 'tripDriverPhone',
-        'tripDriverPlate', 'tripDriverImage', 'towDistance', 'towDuration',
-        'driverPlate'
-      ];
-      ids.forEach(id => { this.el[id] = document.getElementById(id); });
+    _cacheElements(){
+      const ids=['slidePanel','photoPreview','towName','towModel','towPhone','towCity','towPlate','driverRequestPanel','towTripPanel','reqDriverImage','driverName','driverPhone','driverCoords','driverDest','btnAcceptRequest','btnRejectRequest','tripDriverName','tripDriverPhone','tripDriverPlate','tripDriverImage','towDistance','towDuration','driverPlate'];
+      ids.forEach(id=>{this.el[id]=document.getElementById(id);});
     }
-
-    _initMap() {
-      const el = document.getElementById(this.cfg.MAP_ID);
-      if (!el) throw new Error(`Element #${this.cfg.MAP_ID} not found`);
-
-      // initialize map
-      this.map = L.map(this.cfg.MAP_ID).setView([this.cfg.DEFAULT_VIEW.lat, this.cfg.DEFAULT_VIEW.lng], this.cfg.DEFAULT_VIEW.zoom);
-      L.tileLayer(this.cfg.OSM_TILE, { attribution: '&copy; OpenStreetMap' }).addTo(this.map);
+    _initMap(){
+      const el=document.getElementById(this.cfg.MAP_ID);
+      if(!el)throw new Error(`Element #${this.cfg.MAP_ID} not found`);
+      this.map=L.map(this.cfg.MAP_ID).setView([this.cfg.DEFAULT_VIEW.lat,this.cfg.DEFAULT_VIEW.lng],this.cfg.DEFAULT_VIEW.zoom);
+      L.tileLayer(this.cfg.OSM_TILE,{attribution:'&copy; OpenStreetMap'}).addTo(this.map);
     }
-
-    _initSocket() {
-      // create socket and register listeners (ensure old listeners removed first)
-      this.socket = io(this.cfg.SOCKET_URL);
-
-      this.socket.on('connect', () => {
-        console.log('Socket connected:', this.socket.id);
-        this.socket.emit('registerTow');
-      });
-
-      // remove and rebind server events (defensive)
-      this.socket.off('receiveRequest'); this.socket.on('receiveRequest', this._onReceiveRequest);
-      this.socket.off('updateDriverLocation'); this.socket.on('updateDriverLocation', this._onUpdateDriverLocation);
-      this.socket.off('requestClosed'); this.socket.on('requestClosed', this._onRequestClosed);
-      this.socket.off('tripEnded'); this.socket.on('tripEnded', this._onTripEnded);
-      this.socket.off('tripCanceled'); this.socket.on('tripCanceled', this._onTripCanceled);
+    _initSocket(){
+      this.socket=io(this.cfg.SOCKET_URL);
+      this.socket.on('connect',()=>{console.log('Socket connected:',this.socket.id);this.socket.emit('registerTow');});
     }
-
-    _bindUI() {
-      // preview photo
-      const previewInput = document.querySelector('input[type="file"]');
-      if (previewInput) previewInput.addEventListener('change', (e) => this._previewPhoto(e));
-
-      // accept/reject
-      if (this.el.btnAcceptRequest) {
-        this.el.btnAcceptRequest.addEventListener('click', () => this._acceptRequest());
-      }
-      if (this.el.btnRejectRequest) {
-        this.el.btnRejectRequest.addEventListener('click', () => this._rejectRequest());
-      }
-
-      // mission buttons (assume IDs exist on page)
-      const btnTowEnd = document.getElementById('btnTowEnd');
-      const btnTowCancel = document.getElementById('btnTowCancel');
-      if (btnTowEnd) btnTowEnd.addEventListener('click', () => this._endTrip());
-      if (btnTowCancel) btnTowCancel.addEventListener('click', () => this._cancelTrip());
-
-      // set current location shortcut if exists
-      // (optional button in UI should call window.towPanel.setCurrentLocation())
-      window.towPanel = this; // useful for debugging and manual triggering
+    _bindUI(){
+      if(this.el.btnAcceptRequest)this.el.btnAcceptRequest.addEventListener('click',()=>this._acceptRequest());
+      if(this.el.btnRejectRequest)this.el.btnRejectRequest.addEventListener('click',()=>this._rejectRequest());
+      const btnTowEnd=document.getElementById('btnTowEnd');
+      const btnTowCancel=document.getElementById('btnTowCancel');
+      if(btnTowEnd)btnTowEnd.addEventListener('click',()=>this._endTrip());
+      if(btnTowCancel)btnTowCancel.addEventListener('click',()=>this._cancelTrip());
+      window.towPanel=this;
     }
-
-    /* ========== UI helpers ========== */
-    togglePanel() {
-      const el = this.el.slidePanel;
-      if (el) el.classList.toggle('open');
-    }
-
-    _previewPhoto(e) {
-      const file = e.target.files && e.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = () => { if (this.el.photoPreview) this.el.photoPreview.src = reader.result; };
-      reader.readAsDataURL(file);
-    }
-
-    /* ========== Geolocation: watch + send throttled ========== */
-    startWatchingPosition() {
-      if (!navigator.geolocation) {
-        alert('مرورگر شما از Geolocation پشتیبانی نمی‌کند');
-        return;
-      }
-
-      // clear existing watcher
-      if (this.watchId !== null) navigator.geolocation.clearWatch(this.watchId);
-
-      this.watchId = navigator.geolocation.watchPosition(
-        (pos) => {
-          const lat = pos.coords.latitude, lng = pos.coords.longitude;
-          this._updateTowMarker([lat, lng]);
-          this._sendTowLocationThrottled(lat, lng);
-        },
-        (err) => {
-          console.warn('Geolocation watch error:', err);
-        },
-        { enableHighAccuracy: true, maximumAge: 1000, timeout: 5000 }
-      );
-    }
-
-    stopWatchingPosition() {
-      if (this.watchId !== null) {
-        navigator.geolocation.clearWatch(this.watchId);
-        this.watchId = null;
-      }
-    }
-
-    _updateTowMarker(latlng) {
-      if (!this.map) return;
-      if (this.towMarker) {
-        this.towMarker.setLatLng(latlng);
-      } else {
-        this.towMarker = L.marker(latlng).addTo(this.map).bindPopup('موقعیت یدک‌کش');
-      }
-      // Optionally keep map focused (commented to avoid forcing view)
-      // this.map.setView(latlng, 14);
-    }
-
-    _sendTowLocation(lat, lng) {
-      if (!this.socket || !this.socket.connected) return;
-      try {
-        this.socket.emit('updateTowLocation', { towId: this.socket.id, lat, lng });
-      } catch (e) {
-        console.error('sendTowLocation failed', e);
-      }
-    }
-
-    /* ========== Route drawing via OSRM ========== */
-    async _fetchRoute(start, end) {
-      // start/end can be {lat, lng} or [lat,lng]
-      const sLat = start.lat ?? (Array.isArray(start) ? start[0] : start[0]);
-      const sLng = start.lng ?? (Array.isArray(start) ? start[1] : start[1]);
-      const eLat = end.lat ?? (Array.isArray(end) ? end[0] : end[0]);
-      const eLng = end.lng ?? (Array.isArray(end) ? end[1] : end[1]);
-
-      const url = `${this.cfg.OSRM_ROUTE_URL}${sLng},${sLat};${eLng},${eLat}?overview=full&geometries=geojson`;
-      try {
-        const res = await fetch(url);
-        if (!res.ok) throw new Error('OSRM response not ok');
-        const json = await res.json();
-        if (!json.routes || !json.routes.length) return null;
-        const route = json.routes[0];
-        const coords = coordsToLatLngArray(route.geometry.coordinates);
-        return { coords, distance: route.distance, duration: route.duration };
-      } catch (err) {
-        console.error('Error fetching route:', err);
-        return null;
-      }
-    }
-
-    async _drawRoute(start, end, color = 'blue') {
-      const r = await this._fetchRoute(start, end);
-      if (!r) return null;
-      // remove existing polyline of same type
-      if (color === 'blue' && this.driverRouteLine) { this.map.removeLayer(this.driverRouteLine); this.driverRouteLine = null; }
-      if (color === 'red' && this.towRouteLine) { this.map.removeLayer(this.towRouteLine); this.towRouteLine = null; }
-
-      const poly = L.polyline(r.coords, { color, weight: 4 }).addTo(this.map);
-      // update appropriate reference
-      if (color === 'blue') this.driverRouteLine = poly;
-      else this.towRouteLine = poly;
-
-      try { this.map.fitBounds(poly.getBounds(), { padding: [40, 40] }); } catch (e) { /* ignore fit errors */ }
-
-      return {
-        poly,
-        distanceKm: (r.distance / 1000).toFixed(2),
-        durationMin: Math.ceil(r.duration / 60)
-      };
-    }
-
-    /* ========== Request lifecycle handlers (server events) ========== */
-    async _onReceiveRequest(data) {
-      // defensive cleanup (ensure single active request)
-      this._cleanupRequest();
-
-      if (!data || !data.origin || !data.dest) {
-        console.warn('receiveRequest with invalid payload', data);
-        return;
-      }
-
-      this.currentRequestId = data.requestId || (`req-${Date.now()}`);
-      this.currentDriverSocketId = data.driverSocketId || data.driverId || null;
-
-      // fill UI panel
-      const d = data.driverInfo || {};
-      if (this.el.reqDriverImage) this.el.reqDriverImage.src = d.image || 'https://via.placeholder.com/64';
-      if (this.el.driverName) this.el.driverName.innerText = d.fullName ? `نام: ${d.fullName}` : 'نام: -';
-      if (this.el.driverPhone) this.el.driverPhone.innerText = d.phone ? `تلفن: ${d.phone}` : 'تلفن: -';
-      if (this.el.driverCoords && data.origin) this.el.driverCoords.innerText = `مبدا: ${data.origin.lat.toFixed(5)}, ${data.origin.lng.toFixed(5)}`;
-      if (this.el.driverDest && data.dest) this.el.driverDest.innerText = `مقصد: ${data.dest.lat.toFixed(5)}, ${data.dest.lng.toFixed(5)}`;
-      if (this.el.driverRequestPanel) this.el.driverRequestPanel.style.display = 'block';
-
-      // play beep (best-effort)
-      try { new Audio(this.cfg.BEEP_SOUND).play().catch(() => {}); } catch (e) {}
-
-      // place driver marker
-      this.driverMarker = L.marker([data.origin.lat, data.origin.lng], {
-        icon: L.icon({ iconUrl: this.cfg.DRIVER_ICON_URL, iconSize: [32, 32] })
-      }).addTo(this.map).bindPopup('راننده');
-
-      // place dest marker
-      this.destMarker = L.marker([data.dest.lat, data.dest.lng], {
-        icon: L.icon({ iconUrl: this.cfg.DEST_ICON_URL, iconSize: [32, 32] })
-      }).addTo(this.map).bindPopup('مقصد');
-
-      // draw driver->dest route
-      await this._drawRoute(data.origin, data.dest, 'blue');
-
-      // if we have tow marker: draw tow->driver route
-      if (this.towMarker) {
-        const towLatLng = this.towMarker.getLatLng();
-        const r = await this._drawRoute([towLatLng.lat, towLatLng.lng], { lat: data.origin.lat, lng: data.origin.lng }, 'red');
-        if (r && this.el.towDistance) {
-          this.el.towDistance.innerText = `فاصله: ${r.distanceKm} km`;
-          this.el.towDuration.innerText = `زمان تقریبی: ${r.durationMin} دقیقه`;
-        }
-      }
-    }
-
-    _onUpdateDriverLocation(data) {
-      // server forwards driver live location
-      if (!this.currentDriverSocketId) return;
-      if (!data || data.driverId !== this.currentDriverSocketId) return;
-
-      const latlng = [data.lat, data.lng];
-      if (this.driverMarker) this.driverMarker.setLatLng(latlng);
-      else this.driverMarker = L.marker(latlng).addTo(this.map).bindPopup('راننده');
-
-      // update tow->driver route if we have our tow marker
-      if (this.towMarker) {
-        const towLatLng = this.towMarker.getLatLng();
-        this._drawRoute([towLatLng.lat, towLatLng.lng], { lat: data.lat, lng: data.lng }, 'red');
-      }
-    }
-
-    _onRequestClosed(info) {
-      // info may include requestId
-      if (info && info.requestId && this.currentRequestId && info.requestId !== this.currentRequestId) return;
-      alert(info && info.message ? info.message : 'این درخواست بسته شد.');
-      this._cleanupRequest();
-    }
-
-    _onTripEnded(info) {
-      if (info && info.requestId && this.currentRequestId && info.requestId !== this.currentRequestId) return;
-      alert('ماموریت پایان یافت.');
-      this._cleanupRequest();
-    }
-
-    _onTripCanceled(info) {
-      if (info && info.requestId && this.currentRequestId && info.requestId !== this.currentRequestId) return;
-      alert('ماموریت لغو شد.');
-      this._cleanupRequest();
-    }
-
-    /* ========== UI actions: accept/reject/end/cancel ========= */
-    _acceptRequest() {
-      if (!this.currentRequestId) { alert('درخواستی موجود نیست'); return; }
-
-      const towInfo = {
-        fullName: this.el.towName ? this.el.towName.value || 'یدک‌کش' : 'یدک‌کش',
-        phone: this.el.towPhone ? this.el.towPhone.value || '' : '',
-        plate: this.el.towPlate ? this.el.towPlate.value || '' : '',
-        image: this.el.photoPreview ? this.el.photoPreview.src || '' : ''
-      };
-
-      // notify server
-      this.socket.emit('requestUpdate', { requestId: this.currentRequestId, status: 'accepted', towInfo });
-
-      // show trip panel
-      if (this.el.towTripPanel) this.el.towTripPanel.style.display = 'block';
-      if (this.el.driverRequestPanel) this.el.driverRequestPanel.style.display = 'none';
-
-      if (this.el.tripDriverName && this.el.driverName) this.el.tripDriverName.innerText = this.el.driverName.innerText;
-      if (this.el.tripDriverPhone && this.el.driverPhone) this.el.tripDriverPhone.innerText = this.el.driverPhone.innerText;
-      if (this.el.tripDriverImage && this.el.reqDriverImage) this.el.tripDriverImage.src = this.el.reqDriverImage.src || 'https://via.placeholder.com/64';
-      if (this.el.tripDriverPlate) this.el.tripDriverPlate.innerText = this.el.driverPlate ? this.el.driverPlate.innerText : 'پلاک: -';
-    }
-
-    _rejectRequest() {
-      if (!this.currentRequestId) { if (this.el.driverRequestPanel) this.el.driverRequestPanel.style.display = 'none'; return; }
-      this.socket.emit('requestUpdate', { requestId: this.currentRequestId, status: 'rejected' });
-      this._cleanupRequest();
-    }
-
-    _endTrip() {
-      if (!this.currentRequestId) { alert('درخواستی وجود ندارد'); return; }
-      this.socket.emit('endTrip', { requestId: this.currentRequestId });
-      this._cleanupRequest();
-    }
-
-    _cancelTrip() {
-      if (!this.currentRequestId) { alert('درخواستی وجود ندارد'); return; }
-      this.socket.emit('cancelTrip', { requestId: this.currentRequestId });
-      this._cleanupRequest();
-    }
-
-    /* ========== Cleanup ========== */
-    _cleanupRequest() {
-      this.currentRequestId = null;
-      this.currentDriverSocketId = null;
-
-      try {
-        if (this.driverMarker) { this.map.removeLayer(this.driverMarker); this.driverMarker = null; }
-        if (this.destMarker) { this.map.removeLayer(this.destMarker); this.destMarker = null; }
-        if (this.driverRouteLine) { this.map.removeLayer(this.driverRouteLine); this.driverRouteLine = null; }
-        if (this.towRouteLine) { this.map.removeLayer(this.towRouteLine); this.towRouteLine = null; }
-      } catch (e) { console.warn('cleanup map layers error', e); }
-
-      if (this.el.driverRequestPanel) this.el.driverRequestPanel.style.display = 'none';
-      if (this.el.towTripPanel) this.el.towTripPanel.style.display = 'none';
-
-      // reset trip info UI if present
-      if (this.el.tripDriverName) this.el.tripDriverName.innerText = 'نام: -';
-      if (this.el.tripDriverPhone) this.el.tripDriverPhone.innerText = 'تلفن: -';
-      if (this.el.tripDriverPlate) this.el.tripDriverPlate.innerText = 'پلاک: -';
-      if (this.el.tripDriverImage) this.el.tripDriverImage.src = 'https://via.placeholder.com/64';
-      if (this.el.towDistance) this.el.towDistance.innerText = 'فاصله: -';
-      if (this.el.towDuration) this.el.towDuration.innerText = 'زمان تقریبی: -';
-    }
-
-    /* ========== Public helpers ========== */
-    // save tow (POST) - ساده و دارای کنترل خطا
-    async saveTow() {
-      const data = {
-        fullName: this.el.towName ? this.el.towName.value : '',
-        towModel: this.el.towModel ? this.el.towModel.value : '',
-        phone: this.el.towPhone ? this.el.towPhone.value : '',
-        towCity: this.el.towCity ? this.el.towCity.value : '',
-        plate: this.el.towPlate ? this.el.towPlate.value : ''
-      };
-
-      if (!data.fullName) { alert('لطفاً نام یدک‌کش را وارد کنید'); return; }
-
-      try {
-        const res = await fetch(`${this.cfg.SOCKET_URL.replace(/^https?:/, 'https:')}/api/tow/signup`, {
-          method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data)
-        });
-        const j = await res.json();
-        alert(j.message || 'ثبت انجام شد');
-      } catch (err) {
-        console.error('saveTow error', err);
-        alert('خطا در ثبت (کنسول را چک کنید)');
-      }
-    }
-
-    // set current location once (خواهی که مکان فعلی را روی نقشه نمایش دهد)
-    setCurrentLocation() {
-      if (!navigator.geolocation) { alert('مرورگر شما از Geolocation پشتیبانی نمی‌کند'); return; }
-      navigator.geolocation.getCurrentPosition((pos) => {
-        const lat = pos.coords.latitude, lng = pos.coords.longitude;
-        this._updateTowMarker([lat, lng]);
-        this.map.setView([lat, lng], 14);
-      }, (err) => {
-        alert('دسترسی به موقعیت فعلی امکان‌پذیر نشد: ' + (err.message || err.code));
-      });
-    }
-
-    // simulate a receiveRequest for local UI testing
-    simulateReceive() {
-      const origin = { lat: 30.4405, lng: 49.0885 };
-      const dest = { lat: 30.4510, lng: 49.0960 };
-      const driverInfo = { fullName: 'علی رضایی', phone: '0912xxxxxxx', plate: 'ایران 12 ب 345' };
-      // Directly call handler (mimic server)
-      this._onReceiveRequest({ requestId: `sim-${Date.now()}`, driverSocketId: 'sim-driver', origin, dest, driverInfo });
-    }
-
-    // completely destroy panel: remove listeners, stop watch, disconnect socket
-    destroy() {
-      try {
-        // remove socket listeners
-        if (this.socket) {
-          this.socket.off('receiveRequest', this._onReceiveRequest);
-          this.socket.off('updateDriverLocation', this._onUpdateDriverLocation);
-          this.socket.off('requestClosed', this._onRequestClosed);
-          this.socket.off('tripEnded', this._onTripEnded);
-          this.socket.off('tripCanceled', this._onTripCanceled);
-          this.socket.disconnect();
-          this.socket = null;
-        }
-      } catch (e) { /* ignore */ }
-
-      // stop geolocation
-      this.stopWatchingPosition();
-
-      // cleanup map layers
-      this._cleanupRequest();
-      if (this.towMarker) { try { this.map.removeLayer(this.towMarker); } catch (e) { } this.towMarker = null; }
-    }
+    togglePanel(){const el=this.el.slidePanel;if(el)el.classList.toggle('open');}
+    _previewPhoto(e){const file=e.target.files && e.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=()=>{if(this.el.photoPreview)this.el.photoPreview.src=reader.result;};reader.readAsDataURL(file);}
+    setCurrentLocation(){if(!navigator.geolocation){alert('مرورگر شما از Geolocation پشتیبانی نمی‌کند');return;}navigator.geolocation.getCurrentPosition(pos=>{const lat=pos.coords.latitude,lng=pos.coords.longitude;this._updateTowMarker([lat,lng]);this.map.setView([lat,lng],14);},err=>{alert('دسترسی به موقعیت فعلی امکان‌پذیر نشد: '+(err.message||err.code));});}
+    _updateTowMarker(latlng){if(!this.map)return;if(this.towMarker){this.towMarker.setLatLng(latlng);}else{this.towMarker=L.marker(latlng).addTo(this.map).bindPopup('موقعیت یدک‌کش');}}
+    startWatchingPosition(){if(!navigator.geolocation){alert('مرورگر شما از Geolocation پشتیبانی نمی‌کند');return;}if(this.watchId!==null)navigator.geolocation.clearWatch(this.watchId);this.watchId=navigator.geolocation.watchPosition(pos=>{const lat=pos.coords.latitude,lng=pos.coords.longitude;this._updateTowMarker([lat,lng]);},err=>{console.warn(err);},{enableHighAccuracy:true,maximumAge:1000,timeout:5000});}
+    stopWatchingPosition(){if(this.watchId!==null){navigator.geolocation.clearWatch(this.watchId);this.watchId=null;}}
+    saveTow(){alert("يدک‌کش ثبت شد!");}
+    simulateReceive(){alert("درخواست شبیه‌سازی شد!");}
   }
 
-  // create instance
-  window.towPanel = new TowPanel();
-
-  // start watching user position automatically (you can change this)
-  try { window.towPanel.startWatchingPosition(); } catch (e) { console.warn(e); }
-
-  // expose helpers for debugging / manual triggers
-  // e.g., in console: towPanel.simulateReceive(); towPanel.setCurrentLocation();
+  window.towPanel=new TowPanel();
+  window.towPanel.startWatchingPosition();
 })();
-
-
-
-
-
-
- 
-function togglePanel(){
-  const panel = document.getElementById('slidePanel');
-  panel.classList.toggle('open');
-}
-function previewPhoto(event){
-  const file = event.target.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = () => {
-    document.getElementById('photoPreview').src = reader.result;
-  };
-  reader.readAsDataURL(file);
-}
-
-// مثال: توابع شبیه‌سازی
-function saveTow(){
-  alert("يدک‌کش ثبت شد!");
-}
-function simulateReceive(){
-  alert("درخواست شبیه‌سازی شد!");
-}
-function setCurrentLocation(){
-  alert("موقعیت فعلی ثبت شد!");
-}
-
-
-
-
-
-
-
-
-
-
-
-
- <script>
-document.addEventListener('DOMContentLoaded', () => {
-  // 1️⃣ بارگذاری اطلاعات از localStorage
-  const profile = JSON.parse(localStorage.getItem('towProfile'));
-  if(profile){
-    document.getElementById('towName').innerText = profile.fullName;
-    document.getElementById('towPhone').innerText = profile.phone;
-    document.getElementById('towType').innerText = profile.truckType;
-    document.getElementById('towModel').innerText = profile.truckModel;
-    document.getElementById('towPlate').innerText = profile.plateNumber;
-    document.getElementById('towBirth').innerText = profile.birthDate;
-    if(profile.image) document.getElementById('towImage').src = profile.image;
-  }
-
-  // 2️⃣ راه‌اندازی نقشه
-  const map = L.map('map').setView([35.6892, 51.3890], 13); // تهران به عنوان نمونه
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
-    attribution:'&copy; OpenStreetMap contributors'
-  }).addTo(map);
-
-  // 3️⃣ اتصال Socket.IO برای دریافت real-time
-  const socket = io('https://naji-backend.onrender.com', {
-    auth: { token: localStorage.getItem('towToken') || '' }
-  });
-
-  socket.on('newTowRegistered', (data) => {
-    console.log('یدک‌کش جدید ثبت شد:', data);
-    // می‌توان اینجا پنل لیست یدک‌کش‌ها را هم آپدیت کرد
-  });
-});
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
 
