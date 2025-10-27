@@ -251,6 +251,19 @@ $(document).ready(function(){
         }
     });
 });
+  if(response.ok){
+    // ذخیره اطلاعات برای داشبورد
+    localStorage.setItem('towProfile', JSON.stringify(data));
+
+    // اگر سرور JWT برمی‌گرداند
+    const accessToken = result.accessToken || '';
+    if(accessToken) localStorage.setItem('towToken', accessToken);
+
+    showMessage(msgSuccess,result.message);
+    setTimeout(()=> window.location.href='tow-dashboard.html', 1500);
+}
+
 </script>
 </body>
 </html>
+
