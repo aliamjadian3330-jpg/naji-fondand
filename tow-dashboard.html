@@ -718,9 +718,41 @@ html,body{height:100%;width:100%;background:#f0f2f5}
 })();
 
 
+
+
+
+
+ 
+function togglePanel(){
+  const panel = document.getElementById('slidePanel');
+  panel.classList.toggle('open');
+}
+function previewPhoto(event){
+  const file = event.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    document.getElementById('photoPreview').src = reader.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+// مثال: توابع شبیه‌سازی
+function saveTow(){
+  alert("يدک‌کش ثبت شد!");
+}
+function simulateReceive(){
+  alert("درخواست شبیه‌سازی شد!");
+}
+function setCurrentLocation(){
+  alert("موقعیت فعلی ثبت شد!");
+}
+
+
 </script>
 </body>
 </html>
+
 
 
 
