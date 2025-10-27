@@ -260,81 +260,6 @@
   </div>
 </div>
 
-<script>
-  /* ساده‌ترین توابع کمکی UI که احتمالا در کد قبلی به‌صورت global بودند */
-  function togglePanel(){ document.getElementById('slidePanel')?.classList.toggle('open'); }
-
-  function previewPhoto(e){
-    const file = e.target.files && e.target.files[0];
-    if(!file) return;
-    const reader = new FileReader();
-    reader.onload = () => { document.getElementById('photoPreview').src = reader.result; };
-    reader.readAsDataURL(file);
-  }
-
-  /* سیستم Toast — جایگزین alert */
-  (function(){
-    const container = document.getElementById('toastContainer');
-
-    function createToast(message, variant='info', timeout=4200){
-      const t = document.createElement('div');
-      t.className = 'toast ' + (variant || 'info');
-
-      // icon (simple svg)
-      const icons = {
-        info: `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 9h.01M11 17h2v-6h-2v6z" stroke="rgba(255,255,255,0.95)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
-        success: `<svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="rgba(255,255,255,0.95)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
-        warn: `<svg viewBox="0 0 24 24" fill="none"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" stroke="rgba(255,255,255,0.95)" stroke-width="0.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
-        error: `<svg viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="rgba(255,255,255,0.95)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`
-      };
-
-      t.innerHTML = `${icons[variant] || icons.info}<div class="txt">${message}</div><div class="close" title="بستن">✕</div>`;
-      container.appendChild(t);
-
-      const closeBtn = t.querySelector('.close');
-      const remove = () => { t.style.opacity = 0; setTimeout(()=>t.remove(), 260); };
-      closeBtn?.addEventListener('click', remove);
-
-      // auto dismiss
-      setTimeout(remove, timeout);
-      return t;
-    }
-
-    // expose a simple API
-    window.showToast = function(message, type='info', timeout=4200){
-      createToast(String(message || ''), type, timeout);
-    };
-
-    // override native alert to nicer toast (keeps code compatibility)
-    window._nativeAlert = window.alert.bind(window);
-    window.alert = function(message){ window.showToast(message, 'info', 4200); console.log('alert:', message); };
-
-    // expose also success/error helpers
-    window.showSuccess = (m,t)=>window.showToast(m,'success',t||3800);
-    window.showError = (m,t)=>window.showToast(m,'error',t||4200);
-    window.showWarn = (m,t)=>window.showToast(m,'warn',t||4200);
-  })();
-
-  /* small helper: setCurrentLocation placeholder (existing JS will override behavior) */
-  function setCurrentLocation(){
-    if(navigator.geolocation){
-      navigator.geolocation.getCurrentPosition((pos)=>{
-        const lat = pos.coords.latitude, lng = pos.coords.longitude;
-        // If original script defines towPanel and setCurrentLocation, it will be used.
-        if(window.towPanel && typeof window.towPanel.setCurrentLocation === 'function'){
-          window.towPanel.setCurrentLocation();
-          return;
-        }
-        // otherwise a friendly toast
-        showToast('مکان فعلی به‌روزرسانی شد', 'success');
-      }, (err)=>{
-        showToast('دسترسی به موقعیت مقدور نیست: ' + (err.message || err.code), 'error', 6000);
-      });
-    } else {
-      showToast('مرورگر شما از Geolocation پشتیبانی نمی‌کند', 'warn');
-    }
-  }
-</script>
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
@@ -835,9 +760,97 @@
   // e.g., in console: towPanel.simulateReceive(); towPanel.setCurrentLocation();
 })();
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  /* ساده‌ترین توابع کمکی UI که احتمالا در کد قبلی به‌صورت global بودند */
+  function togglePanel(){ document.getElementById('slidePanel')?.classList.toggle('open'); }
+
+  function previewPhoto(e){
+    const file = e.target.files && e.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = () => { document.getElementById('photoPreview').src = reader.result; };
+    reader.readAsDataURL(file);
+  }
+
+  /* سیستم Toast — جایگزین alert */
+  (function(){
+    const container = document.getElementById('toastContainer');
+
+    function createToast(message, variant='info', timeout=4200){
+      const t = document.createElement('div');
+      t.className = 'toast ' + (variant || 'info');
+
+      // icon (simple svg)
+      const icons = {
+        info: `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 9h.01M11 17h2v-6h-2v6z" stroke="rgba(255,255,255,0.95)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+        success: `<svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="rgba(255,255,255,0.95)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+        warn: `<svg viewBox="0 0 24 24" fill="none"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" stroke="rgba(255,255,255,0.95)" stroke-width="0.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+        error: `<svg viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="rgba(255,255,255,0.95)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+      };
+
+      t.innerHTML = `${icons[variant] || icons.info}<div class="txt">${message}</div><div class="close" title="بستن">✕</div>`;
+      container.appendChild(t);
+
+      const closeBtn = t.querySelector('.close');
+      const remove = () => { t.style.opacity = 0; setTimeout(()=>t.remove(), 260); };
+      closeBtn?.addEventListener('click', remove);
+
+      // auto dismiss
+      setTimeout(remove, timeout);
+      return t;
+    }
+
+    // expose a simple API
+    window.showToast = function(message, type='info', timeout=4200){
+      createToast(String(message || ''), type, timeout);
+    };
+
+    // override native alert to nicer toast (keeps code compatibility)
+    window._nativeAlert = window.alert.bind(window);
+    window.alert = function(message){ window.showToast(message, 'info', 4200); console.log('alert:', message); };
+
+    // expose also success/error helpers
+    window.showSuccess = (m,t)=>window.showToast(m,'success',t||3800);
+    window.showError = (m,t)=>window.showToast(m,'error',t||4200);
+    window.showWarn = (m,t)=>window.showToast(m,'warn',t||4200);
+  })();
+
+  /* small helper: setCurrentLocation placeholder (existing JS will override behavior) */
+  function setCurrentLocation(){
+    if(navigator.geolocation){
+      navigator.geolocation.getCurrentPosition((pos)=>{
+        const lat = pos.coords.latitude, lng = pos.coords.longitude;
+        // If original script defines towPanel and setCurrentLocation, it will be used.
+        if(window.towPanel && typeof window.towPanel.setCurrentLocation === 'function'){
+          window.towPanel.setCurrentLocation();
+          return;
+        }
+        // otherwise a friendly toast
+        showToast('مکان فعلی به‌روزرسانی شد', 'success');
+      }, (err)=>{
+        showToast('دسترسی به موقعیت مقدور نیست: ' + (err.message || err.code), 'error', 6000);
+      });
+    } else {
+      showToast('مرورگر شما از Geolocation پشتیبانی نمی‌کند', 'warn');
+    }
+  }
 </script>
 </body>
 </html>
+
 
 
 
