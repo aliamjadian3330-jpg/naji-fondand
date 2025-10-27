@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0" />
 <title>داشبورد يدکش|ناجي راه</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+ <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   *{margin:0;padding:0;box-sizing:border-box;font-family:"Tahoma",sans-serif}
 html,body{height:100%;width:100%;background:#f0f2f5}
@@ -157,7 +158,13 @@ html,body{height:100%;width:100%;background:#f0f2f5}
 
 /* ================== رنگ متن ================== */
 .color{ color:#f0f2f5; }
-
+  body { font-family:'Roboto',sans-serif; background:#f0f2f5; margin:0; }
+  header { background:#0072ff; color:#fff; padding:20px; text-align:center; font-size:1.4rem; }
+  #profileCard { background:#fff; margin:20px auto; padding:20px; border-radius:16px; max-width:500px; box-shadow:0 10px 30px rgba(0,0,0,0.1); }
+  #profileCard img { width:100px; height:100px; border-radius:50%; object-fit:cover; display:block; margin:auto; }
+  #profileCard h2 { text-align:center; margin:10px 0; }
+  #profileCard p { margin:6px 0; font-size:1rem; color:#333; }
+  #map { height:400px; margin:20px auto; max-width:90%; border-radius:12px; }
 </style>
 </head>
 <body>
@@ -169,6 +176,18 @@ html,body{height:100%;width:100%;background:#f0f2f5}
 
   <div id="slidePanel" aria-hidden="true">
     <h2>داشبورد يدکش</h2>
+
+<div id="profileCard">
+  <img id="towImage" src="https://via.placeholder.com/100" alt="تصویر یدک‌کش">
+  <h2 id="towName">-</h2>
+  <p><strong>شماره تماس:</strong> <span id="towPhone">-</span></p>
+  <p><strong>نوع یدک‌کش:</strong> <span id="towType">-</span></p>
+  <p><strong>مدل:</strong> <span id="towModel">-</span></p>
+  <p><strong>شماره پلاک:</strong> <span id="towPlate">-</span></p>
+  <p><strong>تاریخ تولد:</strong> <span id="towBirth">-</span></p>
+</div>
+
+<div id="map"></div>
 
     <img id="photoPreview" src="https://via.placeholder.com/100" alt="پيش‌نمايش" />
     <input id="photoInput" type="file" accept="image/*" onchange="previewPhoto(event)" />
@@ -749,9 +768,50 @@ function setCurrentLocation(){
 }
 
 
+
+
+
+
+
+
+
+
+
+
+ <script>
+document.addEventListener('DOMContentLoaded', () => {
+  // 1️⃣ بارگذاری اطلاعات از localStorage
+  const profile = JSON.parse(localStorage.getItem('towProfile'));
+  if(profile){
+    document.getElementById('towName').innerText = profile.fullName;
+    document.getElementById('towPhone').innerText = profile.phone;
+    document.getElementById('towType').innerText = profile.truckType;
+    document.getElementById('towModel').innerText = profile.truckModel;
+    document.getElementById('towPlate').innerText = profile.plateNumber;
+    document.getElementById('towBirth').innerText = profile.birthDate;
+    if(profile.image) document.getElementById('towImage').src = profile.image;
+  }
+
+  // 2️⃣ راه‌اندازی نقشه
+  const map = L.map('map').setView([35.6892, 51.3890], 13); // تهران به عنوان نمونه
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+    attribution:'&copy; OpenStreetMap contributors'
+  }).addTo(map);
+
+  // 3️⃣ اتصال Socket.IO برای دریافت real-time
+  const socket = io('https://naji-backend.onrender.com', {
+    auth: { token: localStorage.getItem('towToken') || '' }
+  });
+
+  socket.on('newTowRegistered', (data) => {
+    console.log('یدک‌کش جدید ثبت شد:', data);
+    // می‌توان اینجا پنل لیست یدک‌کش‌ها را هم آپدیت کرد
+  });
+});
 </script>
 </body>
 </html>
+
 
 
 
