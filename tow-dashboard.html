@@ -3,134 +3,223 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-<title>داشبورد يدکش | نَجی راه</title>
+<title>داشبورد يدکش|ناجي راه</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 <style>
-  :root{
-    --bg:#0f1724;
-    --accent:#2563eb;
-    --accent-2:#7c3aed;
-    --glass: rgba(255,255,255,0.06);
-    --glass-strong: rgba(255,255,255,0.10);
-    --card-bg: rgba(255,255,255,0.98);
-    --muted: #94a3b8;
-    --success: #16a34a;
-    --danger: #ef4444;
-    --shadow: 0 10px 30px rgba(2,6,23,0.45);
-    --radius-lg: 14px;
-    --radius-md: 10px;
-    --radius-sm: 8px;
-    --glass-border: rgba(255,255,255,0.06);
-    --glass-blur: 8px;
-  }
-  *{box-sizing:border-box;margin:0;padding:0;font-family:Inter,"Tahoma","Vazir",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial}
-  html,body{height:100%;width:100%;background:linear-gradient(180deg,#f6f8fb 0%,#eef2f7 100%);direction:rtl;color:#0b1220}
-  a{color:inherit}
-  #mapContainer{height:100vh;width:100%;position:relative;padding:18px}
-  #map{height:calc(100vh - 36px);width:100%;border-radius:var(--radius-lg);overflow:hidden;border:2px solid rgba(15,23,36,0.06);box-shadow: var(--shadow);background:linear-gradient(180deg,#e9eef8 0%,#f7fbff 100%);}
-  /* دیگر استایل‌ها همان قبلی‌ها هستند… */
-  /* برای خلاصه بودن، استایل‌های پنل و Toast را می‌توان مشابه قبل گذاشت */
+  *{margin:0;padding:0;box-sizing:border-box;font-family:"Tahoma",sans-serif}
+html,body{height:100%;width:100%;background:#f0f2f5}
+#mapContainer{height:100vh;width:100%;position:relative}
+#map{height:100%;width:100%;border:4px solid #2563eb;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,0.15);}
+
+
+ 
+ /* ================== پنل کشویی از راست ================== */
+#slidePanel{
+  position:absolute;
+  top:0;
+  right:-320px;
+  width:300px;
+  height:100%;
+  background: rgba(37,99,235,0.95);
+  color:#fff;
+  padding:20px;
+  transition:right 0.35s ease, box-shadow 0.35s ease;
+  z-index:1200;
+  overflow:auto;
+  border-top-right-radius:16px;
+  border-bottom-right-radius:16px;
+  box-shadow: -6px 0 20px rgba(0,0,0,0.2);
+  backdrop-filter: blur(10px);
+}
+#slidePanel.open{ right:0; }
+
+#slidePanel input, #slidePanel select, #slidePanel button{
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,0.4);
+  background: rgba(255,255,255,0.95);
+  color:#111;
+  outline:none;
+  font-size:1rem;
+  transition: all 0.3s ease;
+}
+#slidePanel input:focus, #slidePanel select:focus{ border-color:#16a34a; box-shadow:0 0 8px rgba(22,163,74,0.5);}
+#slidePanel button:hover{ transform:scale(1.05); background:#16a34a; color:#fff; }
+
+#slidePanel h2{
+  text-align:center;
+  margin-bottom:12px;
+  font-size:1.5rem;
+  text-shadow: 1px 1px 6px rgba(0,0,0,0.2);
+}
+
+/* ================== دکمه باز و بسته کردن پنل ================== */
+#toggleBtn{
+  position:absolute;
+  top:16px;
+  right:16px;
+  z-index:1300;
+  width:56px;
+  height:56px;
+  border-radius:50%;
+  border:none;
+  cursor:pointer;
+  background:#2563eb;
+  color:#fff;
+  box-shadow:0 6px 20px rgba(0,0,0,0.25);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+#toggleBtn:hover{ transform:scale(1.1); box-shadow:0 10px 30px rgba(0,0,0,0.3); }
+
+/* ================== پنل درخواست راننده ================== */
+#driverRequestPanel{
+  display:none;
+  position:fixed;
+  left:12px;
+  right:12px;
+  bottom:12px;
+  max-width:900px;
+  margin:auto;
+  background: rgba(255,255,255,0.95);
+  color:#111;
+  border-radius:16px;
+  padding:16px;
+  z-index:1400;
+  box-shadow:0 10px 40px rgba(0,0,0,0.2);
+  backdrop-filter: blur(10px);
+  transition: transform 0.35s ease, opacity 0.35s ease;
+}
+#driverRequestPanel.show{ display:flex; transform:translateY(0); opacity:1;}
+#driverRequestPanel .row{display:flex; gap:12px; align-items:center;}
+#driverRequestPanel img{width:64px; height:64px; border-radius:12px; object-fit:cover; border:1px solid #eee; transition: transform 0.3s ease;}
+#driverRequestPanel img:hover{ transform:scale(1.05); }
+
+/* ================== پنل ماموریت در حال انجام ================== */
+#towTripPanel{
+  display:none;
+  position:fixed;
+  left:12px;
+  right:12px;
+  bottom:12px;
+  max-width:900px;
+  margin:auto;
+  background: rgba(255,251,230,0.95);
+  color:#111;
+  border-radius:16px;
+  padding:16px;
+  z-index:1400;
+  box-shadow:0 8px 30px rgba(0,0,0,0.15);
+  backdrop-filter: blur(10px);
+  transition: transform 0.35s ease, opacity 0.35s ease;
+}
+#towTripPanel.show{ display:flex; transform:translateY(0); opacity:1;}
+#towTripPanel .actions{display:flex; gap:8px; margin-top:8px;}
+
+/* ================== دکمه‌ها ================== */
+.btn-danger{
+  background:#ef4444;
+  color:#fff;
+  border:none;
+  padding:10px 14px;
+  border-radius:10px;
+  cursor:pointer;
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+.btn-danger:hover{ background:#dc2626; transform:scale(1.05); }
+
+.btn-success{
+  background:#16a34a;
+  color:#fff;
+  border:none;
+  padding:10px 14px;
+  border-radius:10px;
+  cursor:pointer;
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+.btn-success:hover{ background:#059669; transform:scale(1.05); }
+
+.btn-secondary{
+  background:#2563eb;
+  color:#fff;
+  border:none;
+  padding:10px 14px;
+  border-radius:10px;
+  cursor:pointer;
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+.btn-secondary:hover{ background:#1d4ed8; transform:scale(1.05); }
+
+/* ================== رنگ متن ================== */
+.color{ color:#f0f2f5; }
+
 </style>
 </head>
 <body>
 
-<!-- Map -->
 <div id="mapContainer">
   <div id="map"></div>
-</div>
 
-<!-- Inputs مورد نیاز TowPanel -->
-<input id="towName" placeholder="نام یدک‌کش" style="display:none"/>
-<input id="towPhone" placeholder="تلفن" style="display:none"/>
-<input id="towPlate" placeholder="پلاک" style="display:none"/>
-<input id="towModel" placeholder="مدل" style="display:none"/>
-<input id="towCity" placeholder="شهر" style="display:none"/>
+  <button id="toggleBtn" onclick="togglePanel()">☰</button>
 
-<!-- Slide Panel -->
-<div id="slidePanel" aria-hidden="true">
-  <div class="panel-header">
-    <div style="flex:1">
-      <h2>داشبورد يدک‌کش</h2>
-      <p class="lead muted">آماده به‌کار — درخواست‌های نزدیک را دریافت کن</p>
-    </div>
-    <div>
-      <button class="btn btn-ghost" onclick="togglePanel()">✕</button>
-    </div>
-  </div>
-  <div class="photo-box" style="margin-top:6px">
-    <img id="photoPreview" src="https://via.placeholder.com/100" alt="پیش‌نمایش" />
-    <div style="flex:1">
-      <input id="photoInput" type="file" accept="image/*" onchange="previewPhoto(event)" />
-      <div style="display:flex;gap:8px;margin-top:8px">
-        <button class="btn btn-success" onclick="towPanel.saveTow()">ثبت یدک‌کش</button>
-        <button class="btn btn-secondary" onclick="towPanel.simulateReceive()">شبیه‌سازی</button>
-      </div>
+  <div id="slidePanel" aria-hidden="true">
+    <h2>داشبورد يدکش</h2>
+
+    <img id="photoPreview" src="https://via.placeholder.com/100" alt="پيش‌نمايش" />
+    <input id="photoInput" type="file" accept="image/*" onchange="previewPhoto(event)" />
+
+    <button class="btn-success" onclick="saveTow()">ثبت يدک‌کش</button>
+    <button class="btn-secondary" onclick="simulateReceive()">شبيه‌سازي دريافت درخواست</button>
+    <button onclick="setCurrentLocation()">موقعيت من</button>
+
+    <div style="margin-top:12px; background:#fff; color:#111; padding:10px; border-radius:8px;">
+      <strong>اطلاعات مسير:</strong>
+      <p id="towDistance">فاصله: -</p>
+      <p id="towDuration">زمان تقريبي: -</p>
     </div>
   </div>
 </div>
 
-<!-- Driver Request Panel -->
-<div id="driverRequestPanel">
+<!-- پنل پايين: نمايش درخواست راننده -->
+<div id="driverRequestPanel" role="dialog" aria-modal="true">
   <div class="row">
-    <img id="reqDriverImage" src="https://via.placeholder.com/64" alt="driver"/>
-    <div class="info">
-      <div id="driverName" style="font-weight:700">نام: -</div>
-      <div id="driverPhone" class="muted">تلفن: -</div>
-      <div id="driverCoords" class="muted">مبدا: -</div>
-      <div id="driverDest" class="muted">مقصد: -</div>
+    <img id="reqDriverImage" src="https://via.placeholder.com/64" alt="driver" />
+    <div style="flex:1">
+      <div id="driverName"><strong>نام:</strong> -</div>
+      <div id="driverPhone"><strong>تلفن:</strong> -</div>
+      <div id="driverCoords" style="font-size:13px;color:#444"><strong>مبدا:</strong> -</div>
+      <div id="driverDest" style="font-size:13px;color:#444"><strong>مقصد:</strong> -</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <button id="btnAcceptRequest" class="btn-success">قبول</button>
+      <button id="btnRejectRequest" class="btn-danger">رد</button>
+    </div>
+  </div>
+</div>
+
+<!-- پنل ماموريت براي يدک‌کش (پس از قبول) -->
+<div id="towTripPanel" role="status">
+  <div style="display:flex;gap:12px;align-items:center">
+    <img id="tripDriverImage" src="https://via.placeholder.com/64" alt="driver" />
+    <div style="flex:1">
+      <div id="tripDriverName"><strong>نام:</strong> -</div>
+      <div id="tripDriverPhone"><strong>تلفن:</strong> -</div>
+      <div id="tripDriverPlate"><strong>پلاک:</strong> -</div>
     </div>
     <div class="actions">
-      <button id="btnAcceptRequest" class="btn btn-success">قبول</button>
-      <button id="btnRejectRequest" class="btn btn-danger">رد</button>
+      <button id="btnTowEnd" class="btn-success">پايان مأموريت</button>
+      <button id="btnTowCancel" class="btn-danger">لغو مأموريت</button>
     </div>
   </div>
 </div>
 
-<!-- Tow Trip Panel -->
-<div id="towTripPanel">
-  <div style="display:flex;gap:12px;align-items:center">
-    <img id="tripDriverImage" src="https://via.placeholder.com/64" alt="driver"/>
-    <div style="flex:1">
-      <div id="tripDriverName" style="font-weight:700">نام: -</div>
-      <div id="tripDriverPhone" class="muted">تلفن: -</div>
-      <div id="tripDriverPlate" class="muted">پلاک: -</div>
-    </div>
-    <div style="display:flex;gap:8px">
-      <button id="btnTowEnd" class="btn btn-success">پایان</button>
-      <button id="btnTowCancel" class="btn btn-danger">لغو</button>
-    </div>
-  </div>
-</div>
-
-<!-- Toast Container -->
-<div id="toastContainer"></div>
-
-<!-- Scripts -->
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  // ساده‌ترین تابع toggle panel
-  window.togglePanel = () => document.getElementById('slidePanel')?.classList.toggle('open');
-  window.previewPhoto = (e) => {
-    const file = e.target.files && e.target.files[0];
-    if(!file) return;
-    const reader = new FileReader();
-    reader.onload = () => { document.getElementById('photoPreview').src = reader.result; };
-    reader.readAsDataURL(file);
-  };
-
-  // TowPanel کلاس شما را همینجا اضافه کنید (همان کد TowPanel که ارسال کردید)
-  // پس از تعریف TowPanel:
-  window.towPanel = new TowPanel();
-  window.towPanel.startWatchingPosition();
-});
-</script>
-</body>
-</html>
-
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script> اینا چی هستن
 <script>
  /* TowPanel — بازنویسی ساختارمند و بهینه برای پنل یدک‌کش
    قابل قرارگیری مستقیم داخل <script> در HTML (بدون import/export)
@@ -632,6 +721,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 </body>
 </html>
+
 
 
 
